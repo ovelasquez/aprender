@@ -583,7 +583,7 @@ class CoursesController extends Controller {
             if ($request->request->get("app") !== null && $course->getStatus() === 0):
                 $course->setStatus(1);
                 //Enviar Email Notificando la Aprobacion o Rechazo del Curso            
-                $this->sendEmail("Lest Know: Postulación de Curso Aprobado", $course);
+                $this->sendEmail("Lest Know: Postulación de Curso Aprobado", $course, "marianamff@gmail.com");
 
             elseif ($request->request->get("disapp") !== null && $course->getStatus() === 0):
                 $course->setStatus(-1);
