@@ -1,0 +1,407 @@
+{% extends 'base_a.html.twig' %}
+{% block stylesheets %}
+    <!-- Datepicker -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <!-- Timepicker -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-timepicker.min.css') }}" rel="stylesheet">
+    <!-- Touchspin -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-touchspin.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body %} 
+
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('courses_index_list') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('courses_index_list') }}">Cursos</a></li>
+        <li class="breadcrumb-item active">{{ course.title|title }}</li>
+    </ol>   
+    <h1 class="page-heading h2">{{ course.title|title }}</h1>      
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="embed-responsive embed-responsive-16by9">
+
+                    {% if course.video is not null and course.video is not empty %}
+                        <iframe class="embed-responsive-item" src="{{ course.video }}" allowfullscreen=""></iframe>
+                        {% else %}                        
+                        <img src="{{ asset('uploads/photos') }}/{{ course.photo }}" alt="Avatar" style = "width:100%">
+                    {% endif %}
+
+                </div>                
+
+
+                <div class="card-block text-justify">
+                    {{ course.description|capitalize }}
+                </div>
+
+                <div class="card-block text-justify">
+                    <h4>Resumen</h4>
+                    {{ course.resume|capitalize }}
+                </div>
+
+                <div class="card-block text-justify">
+                    <h4>Categoría:</h4>
+                    {{ course.category|capitalize }}
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CANTIDAD DE ALUMNOS:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            Mínimos:
+                            <div class="input-group bootstrap-touchspin">                               
+                                {{ course.minstudent }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            Máximos:
+                            <div class="input-group bootstrap-touchspin">                                                              
+                                {{ course.maxstudent}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>    
+
+            <!-- Lessons -->
+            <ul class="card list-group list-group-fit">
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <div class="text-muted">1.</div>
+                        </div>
+                        <div class="media-body">
+                            <h4>Conocimiento Necesario</h4>
+                            <p>
+                                {{ course.knowledge }}
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <small class="text-muted-light"></small>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <div class="text-muted">2.</div>
+                        </div>
+                        <div class="media-body">
+                            <h4>Herramientas</h4>
+                            <p>
+                                {{ course.tool }}
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <small class="text-muted-light"></small>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">UBICACIÓN:</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+
+                    <ul class="list-group list-group-fit">
+                        <li class="list-group-item">
+                            <div class="media">
+                                <div class="media-left">
+                                    <i class="material-icons text-muted-light">location_city</i>
+                                </div>
+                                <div class="media-body media-middle">
+                                    Lugar: {{locations[course.place-1]}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="media">
+                                <div class="media-left">
+                                    <i class="material-icons text-muted-light">public</i>
+                                </div>
+                                <div class="media-body media-middle">
+                                    País: <span class="bfh-countries" data-country="{{course.country}}" data-flags="true"></span> <br>
+                                    Provincia: <span class="bfh-states" data-country="{{course.country}}" data-state="{{course.province}}"></span>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+
+
+                        <li class="list-group-item">
+                            <div class="media">
+                                <div class="media-left">
+                                    <i class="material-icons text-muted-light">place</i>
+                                </div>
+                                <div class="media-body media-middle">
+                                    Avenida: {{course.avenue}}<br>
+                                    Dirección: {{course.address}}
+                                </div>
+                            </div>
+                        </li>
+
+
+                    </ul>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-block text-xs-center">                   
+
+                    {%if course.status==-1%}
+                        <div class="text-danger m-1"><i class="material-icons ">clear</i> <span > Rechazado </span></div>    
+                        {{ form_start(edit_status_form, {'attr': {'id': 'form_course_review'}}) }}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
+                            <div class="dropdown-menu">
+                                <button type="submit" class=" dropdown-item" id="desact" name="desact">Desactivar</button>  
+                            </div>
+                        </div>
+
+                        {{ form_end(edit_status_form) }}  
+                    {%endif%}
+
+                    {%if course.status==2%}
+                        <div class="text-primary m-1"><i class="material-icons ">timer_off</i> <span > Finalizado </span></div>    
+
+                        {{ form_start(edit_status_form, {'attr': {'id': 'form_course_review'}}) }}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
+                            <div class="dropdown-menu">
+                                <button type="submit" class=" dropdown-item" id="desact" name="desact">Desactivar</button>  
+                            </div>
+                        </div>
+
+                        {{ form_end(edit_status_form) }}  
+
+                    {%endif%}
+
+                    {%if course.status==1%}
+                        <div class="text-success m-1"><i class="material-icons ">check</i> <span > Aprobado </span></div>  
+                        {{ form_start(edit_status_form, {'attr': {'id': 'form_course_review'}}) }}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
+                            <div class="dropdown-menu">
+                                <button type="submit" class=" dropdown-item" id="desact" name="desact">Desactivar</button>  
+                            </div>
+                        </div>
+
+                        {{ form_end(edit_status_form) }}  
+                    {%endif%}
+
+                    {%if course.status==0%}
+                        <div class="text-warning m-1 "><i class="material-icons ">warning</i> <span > Por aprobar {%if (not course.isActiveToRegister ) %} | Culminado{%endif%}  </span></div>    
+                        {{ form_start(edit_status_form, {'attr': {'id': 'form_course_review'}}) }}
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
+                            <div class="dropdown-menu">
+                                <button type="submit" class=" dropdown-item" id="app" name="app">Aprobar</button>  
+                                <button type="submit" class=" dropdown-item" id="disapp" name="disapp">Rechazar</button>  
+                            </div>
+                        </div>
+
+
+                        {{ form_end(edit_status_form) }}  
+                    {%endif%}
+
+
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            {% if course.user.photo!='' %}
+                                <img src="{{ asset('uploads/photos/') }}{{course.user.photo}}" width="80"  id="photo" />
+                            {% endif %}
+                        </div>
+                        <div class="media-body media-middle">
+                            <h4 class="card-title"><a href="{{ path('homepage') }}">{{course.user.name}} {{course.user.lastname}}</a></h4>
+                            <p class="card-subtitle">Instructor</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+
+                    <a href="{{course.user.website}}" class="">
+                        <i class="material-icons md-18 text-muted">language</i>  {{course.user.website}}                      
+                    </a>
+                    <hr>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{course.user.video}}" allowfullscreen=""></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <ul class="list-group list-group-fit">
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <i class="material-icons text-muted-light">assessment</i>
+                            </div>
+                            <div class="media-body media-middle">
+                                Inicio-Finalización | Hora
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <i class="material-icons text-muted-light">schedule</i>
+                            </div>
+                            <div class="media-body media-middle">
+                                {{course.startdate|date("d/m/Y")}} - {{course.enddate|date("d/m/Y")}} <br> {{course.hour}} 
+                            </div>
+                        </div>
+                    </li>
+
+
+
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <i class="material-icons text-muted-light">assessment</i>
+                            </div>
+                            <div class="media-body media-middle">
+                                Días
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media">
+
+                            <fieldset class="form-group">                        
+
+                                <div >
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="LU">LU</button></div>
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="MA">MA</button></div>
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="MI">MI</button></div>
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="JU">JU</button></div>
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="VI">VI</button></div>
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="SA">SA</button></div>
+                                    <div class="col-lg-1-7 "><button type="button" class="btn day-week inshow" id="DO">DO</button></div>
+                                </div>
+                            </fieldset> 
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">COSTO DEL CURSO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{course.cost}}                        
+                    </fieldset> 
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">TIPO DE PUBLICACIÓN:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">                    
+                    <fieldset class="form-group">
+                        {{course.type}}                          
+                    </fieldset>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">CALIFICACIÓN:</h4>
+                </div>
+                <div class="card-block">
+                    <div class="rating">
+                        <i class="material-icons inshow">{%if (course.review>=1)%}star{%else%}star_border{%endif%}</i>
+                        <i class="material-icons inshow">{%if (course.review>=2)%}star{%else%}star_border{%endif%}</i>
+                        <i class="material-icons inshow">{%if (course.review>=3)%}star{%else%}star_border{%endif%}</i>
+                        <i class="material-icons inshow">{%if (course.review>=4)%}star{%else%}star_border{%endif%}</i>
+                        <i class="material-icons inshow">{%if (course.review>=5)%}star{%else%}star_border{%endif%}</i>
+                    </div>
+                    <!--small class="text-muted">20 ratings</small-->  
+                </div>
+
+
+            </div>
+
+            <div class="text-lg-center">                       
+                <a href="{{ path('courses_edit', { 'id': course.id }) }}" class="btn btn-primary btn-lg">
+                    Editar
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        $(function () {
+
+
+            if ('{{course.days}}' !== '') {
+                var days = '{{course.days}}';
+                var ds = days.split(",");
+
+                for (i = 0; i < ds.length; i++) {
+                    $("#" + ds[i]).addClass("active");
+                }
+            }
+
+        });
+
+    </script>
+
+{% endblock %}

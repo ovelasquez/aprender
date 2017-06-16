@@ -1,0 +1,212 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title text-primary-light">Cuenta</h4>
+
+    </div>
+    <div class="card-block p-2 bg-white">
+        {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit','id': 'fos_user_profile_edit' } }) }}
+        {% if not form.vars.valid %}
+            <div class="alert alert-danger">
+
+                <ul>
+                    {# Loop through every form item #}
+                    {% for child in form.children %}
+                        {# Display the errors of the form item #}                    
+                        {%for error in child.vars.errors%}
+                            <li>{{error.message}}</li>
+                            {%endfor%}
+                        {%endfor%}
+                </ul>
+
+
+                {{form_errors(form)}}            
+            </div>
+        {%endif%}
+
+        <div class="form-group row">
+            <label for="avatar" class="col-sm-3 col-form-label">Foto de perfil</label>
+            <div class="col-sm-9">
+                <div class="media">
+                    <div class="media-left">
+                        <div class="icon-block rounded">
+                            <i class="material-icons text-muted-light md-36" id="icophoto" {% if app.user.photo!='' %} style="display: none" {% endif %}>photo</i>
+                            {% if app.user.photo!='' %}
+                                <img src="{{ asset('uploads/photos/') }}{{app.user.namephoto}}" width="80px"  id="photo" />
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="media-body media-middle">
+                        <label class="custom-file m-0">
+                            {{ form_widget(form.photo) }}
+                            <span class="custom-file-control"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-3 col-form-label">Nombre completo</label>
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_widget(form.name,{'attr': {'class': 'form-control','placeholder':"Nombre"}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.lastname,{'attr': {'class': 'form-control','placeholder':"Apellido"}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="email" class="col-sm-3 col-form-label">Correo</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <i class="material-icons md-18 text-muted">mail</i>
+                    </span>
+                    {{ form_widget(form.email,{'attr': {'class': 'form-control','placeholder':""}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="website" class="col-sm-3 col-form-label">Usuario</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="material-icons md-18 text-muted">person</i>
+                    </span>
+                    {{ form_widget(form.username,{'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-sm-3 col-form-label">Contraseña</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon3">
+                        <i class="material-icons md-18 text-muted">lock</i>
+                    </span>
+                    {{ form_widget(form.plainPassword.first,{'attr': {'class': 'form-control'}}) }}
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-sm-3 col-form-label">Confirmar Contraseña</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon3">
+                        <i class="material-icons md-18 text-muted">lock</i>
+                    </span>
+                    {{ form_widget(form.plainPassword.second,{'attr': {'class': 'form-control'}}) }}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="website" class="col-sm-3 col-form-label">Website</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="material-icons md-18 text-muted">language</i>
+                    </span>
+                    {{ form_widget(form.website,{'attr': {'class': 'form-control','placeholder':"http://www."}}) }}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="website" class="col-sm-3 col-form-label">Ingresa la url de un video en youtube o vimeo</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="material-icons md-18 text-muted">videocam</i>
+                    </span>
+                    {{ form_widget(form.video,{'attr': {'class': 'form-control','placeholder':"http://www."}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="website" class="col-sm-3 col-form-label">País</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="material-icons md-18 text-muted">public</i>
+                    </span>
+                    {# form_widget(form.country,{'attr': {'class': 'form-control'}}) #}
+                    {{ form_widget(form.country,{'attr':{ 'class':'form-control bfh-countries', 'id':'fos_user_registration_form_country', 'required':'required', 'data-country': app.user.country ,  'style':' padding: 0.1rem;' } }) }}
+                </div>
+            </div>
+        </div>
+
+        <div id="province" class="form-group row">
+            <label for="website" class="col-sm-3 col-form-label">Provincia</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="material-icons md-18 text-muted">place</i>
+                    </span>
+                    {# form_widget(form.province,{'attr': {'class': 'form-control'}}) #}
+                    {{ form_widget(form.province,{'attr':{ 'class':'form-control input-medium  bfh-states', 'required':'required', 'data-country':'fos_user_registration_form_country',  'data-state': app.user.province , 'style':' padding: 0.1rem;' } }) }}
+                    <select class="form-control input-medium  bfh-states" required="required" id="province" name="fos_user_profile_form[province]" data-country="fos_user_profile_form_country"  data-state={{ app.user.province }} style=" padding: 0.1rem;"></select>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group row">
+            <label for="coursecategories" class="col-sm-3 col-form-label">Categorías de Interes</label>
+            <div class="col-sm-8 col-md-8">{{ form_widget(form.coursecategories,{'attr': {'class': 'contControl'}}) }}</div>
+        </div>      
+
+
+        <div class="form-group text-xs-center">
+            <label class="custom-control custom-checkbox m-0">
+                {{ form_widget(form.subnews,{'attr': {'class': 'custom-control-input','placeholder':"www."}}) }}
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Subscribirse al boletín</span>
+            </label>  
+        </div>
+
+        <div class="form-group row">
+            <label for="website" class="col-sm-3 col-form-label">Contraseña Actual</label>
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="material-icons md-18 text-muted">lock</i>
+                    </span>
+                    {{ form_widget(form.current_password,{'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-4 offset-lg-4">
+                <div class="">
+                    <div >
+                        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" id="save"  class="btn  btn-primary btn-block" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        {{ form_end(form) }}
+
+    </div>
+
+
+</div>

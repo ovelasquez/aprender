@@ -1,0 +1,75 @@
+{% extends 'base_i.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('courses_show_users_ini') }}">Estudiante Postulado</a></li>
+        <li class="breadcrumb-item active">Calificar</li>
+    </ol>   
+    <div class="row mb-2">
+        <div class="col-lg-6">
+            <h1>Estudiante calificado</h1>
+            Estudiante: 
+        </div>
+
+    </div>
+
+
+    <div class="row mb-2">
+        <div class="text-xs-center">
+            {% if userStudent.photo!='' %}
+                <a href="#"><img src="{{ asset('uploads/photos/') }}{{userStudent.photo}}" width="110px"  class="rounded-circle" id="photo" /></a>
+                {% endif %}
+            <h1 class="h2 mb-0 mt-1">{{ userStudent.name }} {{ userStudent.lastname }}</h1>
+            <p class="lead text-muted mb-0">{{ userStudent.province }}, {{ userStudent.country | country_name |upper }}</p>
+            <hr>
+
+
+
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-lg-12 col-md-12 text-xs-center">
+
+            <fieldset class="form-group">                        
+                <label>Calificación del Estudiante</label>
+                <div class="rating">
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                </div>              
+            </fieldset>
+
+
+            <fieldset class="form-group">     
+                {{ review.comment }}                      
+            </fieldset>
+            <a href="{{ path('courses_show_users_ini') }}" class="btn btn-primary btn-md">Volver</a>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+
+        $(function () {
+
+            var id = {{ review.score }};
+            $(".rating i").filter(function (index) {
+                return index < id;
+            }).removeClass("text-muted-light").addClass("text-success").addClass("active").html("star");
+
+            $(".rating i").filter(function (index) {
+                return index >= id;
+            }).removeClass("text-success").removeClass("active").addClass("text-muted-light").html("star_border");
+        });
+
+    </script>
+
+{% endblock %}

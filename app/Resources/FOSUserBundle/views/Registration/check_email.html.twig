@@ -1,0 +1,14 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}    
+    <div class="bg-white">
+        <div class="p-2 bg-white">
+            <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+        </div>
+        <div class="card-footer text-xs-center bg-white">
+            ¿Ya estas registrado? <a href="{{ path('fos_user_security_login') }}">Iniciar</a> 
+        </div>
+    </div>
+{% endblock fos_user_content %}

@@ -1,0 +1,140 @@
+{% extends 'base_e.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Inicio</li>
+
+    </ol>   
+    {%if (countToApprove>0)%}
+        <div class="card card-stats-primary">
+            <div class="card-block">
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <i class="material-icons {%if (countToApprove>0)%}text-success{%else%} text-muted-light {%endif%}">star_half</i>
+                    </div>
+                    <div class="media-body media-middle">
+                        Tiene <strong>{{countToApprove}}</strong> cursos por calificar
+                    </div>
+                    <div class="media-right">
+                        <a class="btn btn-md btn-success btn-rosa" href="{{ path('courses_indexcompleted_qualify') }}">Calificar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%endif%}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">Mis cursos</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                        <div class="media-right media-middle">
+                            {%if (userCourses|length>0)%}
+                                <a class="btn btn-md btn-white" href="{{ path('courses_indexmycourses') }}">Ver todos</a>
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>
+                {%if (userCourses|length==0)%}
+                    <p class="m-1"> Aún no tienes cursos realizados  </p>
+                {%endif%}
+                <ul class="list-group list-group-fit mb-0">
+
+                    {% for course in userCourses %}
+                        <li class="list-group-item">
+                            <div class="media">
+                                <div class="media-body media-middle">
+                                    <a href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.title|title }} </a>
+                                </div>
+                                <div class="media-right media-middle">
+                                    <div class="text-xs-center" style=" width: 150px;">
+                                        <div class="rating">
+                                            <i class="material-icons">{%if (course.review>=1)%}star{%else%}star_border{%endif%}</i>
+                                            <i class="material-icons">{%if (course.review>=2)%}star{%else%}star_border{%endif%}</i>
+                                            <i class="material-icons">{%if (course.review>=3)%}star{%else%}star_border{%endif%}</i>
+                                            <i class="material-icons">{%if (course.review>=4)%}star{%else%}star_border{%endif%}</i>
+                                            <i class="material-icons">{%if (course.review>=5)%}star{%else%}star_border{%endif%}</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                    {% endfor %}
+
+
+                </ul>
+            </div>
+
+        </div>
+        <div class="col-lg-12">
+            <h1 class="page-heading h2">Nuevos Cursos</h1>
+            <div class="">
+                {% set i=0 %}
+                {% for course in courses %}
+                    {% if 1 == course.status and course.isActiveToRegister() %}
+                        {% set i=1 %}
+                        <div class="card ">
+                            <div class="card-header bg-white">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        {% if course.photo!='' %}
+                                            <a href="{{ path('courses_show', { 'id': course.id }) }}"><img src="{{ asset('uploads/photos/') }}{{course.photo}}" height="200" width="200" class="rounded"/></a>
+                                            {% endif %}
+                                    </div>
+                                    <div class="media-body media-top">
+                                        <h3 class="card-title "><a class="text-primary h3 " href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.title|title }}</a></h3>
+                                        <p>
+                                            {{ course.description|capitalize }}
+                                        </p>
+
+                                        <h4 class="card-title text-primary">Dirección</h4>
+                                        <p>
+                                            {{ course.address |title }}
+                                        </p>
+
+                                        <h4 class="card-title text-primary">Categoría</h4>
+                                        <p>
+                                            {{ course.category |title }}
+                                        </p>
+
+                                    </div>
+                                    <div class="media-right media-bottom">
+                                        <div style="height:100px" class="text-lg-center media-bottom" ><h2 style="padding-top: 2rem;"> {{ course.currency.name }} {{ course.cost.price }}</h2></div>
+                                        <div  style="height:50px; width: 150px;" class="text-xs-center">
+                                            <div class="rating">
+                                                <i class="material-icons">{%if (course.review>=1)%}star{%else%}star_border{%endif%}</i>
+                                                <i class="material-icons">{%if (course.review>=2)%}star{%else%}star_border{%endif%}</i>
+                                                <i class="material-icons">{%if (course.review>=3)%}star{%else%}star_border{%endif%}</i>
+                                                <i class="material-icons">{%if (course.review>=4)%}star{%else%}star_border{%endif%}</i>
+                                                <i class="material-icons">{%if (course.review>=5)%}star{%else%}star_border{%endif%}</i>
+                                            </div>
+                                        </div>
+                                        <div style="height:50px" >
+                                            <a href="{{ path('courses_show', { 'id': course.id }) }}" class="btn btn-primary btn-md btn-block">Ver más </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if 0 == i %}
+                    No hay cursos
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+

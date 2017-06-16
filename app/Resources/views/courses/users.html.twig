@@ -1,0 +1,89 @@
+{% extends 'base_i.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Estudiantes Postulados</li>
+    </ol>   
+    <div class="row mb-2">
+        <div class="col-lg-6">
+            <h1>Seleccione el curso</h1>
+        </div>
+        <div class="col-lg-6 fields-filter">
+            <div class="col-lg-12" style=" padding: 0.1rem;"><select class="form-control" id="course" style=" padding: 0.1rem;">
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {%if (id==course.id) %}selected="selected"{% endif %}>{{ course.title }}</option>
+                    {% endfor %}
+            </select></div>
+            
+        </div>
+        
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                
+                <ul class="list-group list-group-fit mb-0">
+                    {% for user in users %}
+                        <li class="list-group-item">
+                            <div class="media">
+                                <div class="media-body media-middle">
+                                    <a href="{{ path('usercourses_edit',{ 'id': user.idr }) }}">{{ user['name'] }} {{ user['lastName'] }}</a> 
+                                </div>     
+                                <div class="media-right media-middle">
+                                    <div class="text-xs-center" style=" width: 150px;">
+
+                                        {%if user.status==1%}
+                                            <div class="list-status"><i class="material-icons ">check</i> <span > Aprobado </span></div>  
+                                        {%endif%}
+
+                                        {%if user.status==0%}
+                                            <div class="list-status text-warning"><i class="material-icons ">warning</i> <span > Por aprobar </span></div>    
+                                        {%endif%}
+
+                                        {%if user.status==-1%}
+                                            <div class="list-status text-danger"><i class="material-icons ">clear</i> <span > Rechazado </span></div>    
+                                        {%endif%}
+
+                                        {%if user.status==2%}
+                                            <div class="list-status text-primary"><i class="material-icons ">timer_off</i> <span > Finalizado </span></div>    
+                                        {%endif%}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+  
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        $(function () {
+
+
+            $("#course").change(function(){
+                location.href="{{ path('courses_show_users_ini',{ 'id': null }) }}/"+$(this).val();
+            });
+
+        });
+
+    </script>
+
+{% endblock %}
+
+
+
+
+

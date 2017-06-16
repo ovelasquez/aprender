@@ -1,0 +1,48 @@
+/*
+ * --------------------------------------------
+ * Default Theme Style
+ * --------------------------------------------
+ */
+
+@font-face {
+    font-family: Open Sans Light;
+    src: url(../fonts/opensans/OpenSans-Light.ttf);
+    font-weight: 300;
+} 
+@font-face {
+    font-family: Open Sans Regular;
+    src: url(../fonts/opensans/OpenSans-Regular.ttf);
+    font-weight: 400;
+} 
+@font-face {
+    font-family: Open Sans Bold;
+    src: url(../fonts/opensans/OpenSans-Bold.ttf);
+    font-weight: 700;
+} 
+
+body{
+    margin: 0;
+    padding: 0;
+    background: #E8EDF0;
+    font-family: Open Sans Regular;
+}
+
+.boxed{
+    max-width: 1170px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+.full{
+    width: 100%;
+    margin: 30px 0;
+}
+.dc-sect-hding{
+    text-align: center;
+    margin: 0;
+}
+.dc-sect-desc{
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}

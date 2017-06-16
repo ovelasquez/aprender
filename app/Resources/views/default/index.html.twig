@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-8 push-sm-1 col-md-4 push-md-4 col-lg-4 push-lg-4">
+            <div class="text-xs-center m-2">
+                <div class="icon-block rounded-circle">
+                    <i class="material-icons md-36 text-muted">lock</i>
+                </div>  
+            </div>
+            <div class="card bg-transparent">
+                <div class="card-header bg-white text-xs-center">
+                    <h4 class="card-title">Iniciar</h4>
+                    <p class="card-subtitle">Acceder a su cuenta</p>
+                </div>
+                <div class="p-2">
+                    <p>Bienvenido, descubre Let's Know conoce todos los cursos que tenemos para ti, conectate con nuevas personas y aprende algo distinto todos los días. </p>
+                    <a href="{{ path('fos_user_security_login') }}"  class="btn  btn-primary btn-block">Iniciar</a> 
+                </div>
+                <div class="card-footer text-xs-center bg-white">
+                    <a href="{{ path('fos_user_registration_register') }}">Resgistrarse</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,114 @@
+{% extends 'base_i.html.twig' %}
+{% block stylesheets %}
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/morris.min.css') }}">
+    
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Inicio</a></li>
+        <li class="breadcrumb-item">Pagos</li>
+    </ol>   
+    <h4  class="page-heading">Historial de pagos</h4>
+    <div class="card">
+        <div class="card-block">
+            <div class="chart" id="bar" style="width: 100%; height:230px;"></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header text-xs-center bg-white"><h5  class="text-capitalize">Total <span class="text-primary">{{total|price}}</span></h5></div>       
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-capitalize">Cursos</th>
+                    <th class="text-xs-center text-capitalize">Total</th>
+
+                </tr>
+            </thead> 
+            <tbody>
+                {% for payment in payments %}
+                    <tr>                     
+                        <td>
+                            <div class="media">
+                                <div class="media-left media-middle">
+
+                                    {% if payment['course'].photo!='' %}
+                                        <a href="{{ path('courses_show', { 'id': payment['course'].id }) }}"><img src="{{ asset('uploads/photos/') }}{{payment['course'].photo}}" width="100" class="rounded"/></a>
+                                        {% endif %}
+
+                                </div>
+
+                                <div class="media-body media-middle">
+                                    <h4 class="card-title "><a class="text-primary" href="{{ path('courses_show', { 'id': payment['course'].id }) }}">{{ payment['course'].title }}</a></h4>
+                                    <p>
+                                        Número de ventas: {{ payment['tots'] }}
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-xs-center">{{ payment['tots']|price }}</td>
+                    </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Theme Colors -->
+    <script src="{{ asset('bundles/app/js/colors.js') }}"></script>
+    <!-- Required by CHART (morrisjs) -->
+    <script src="{{ asset('bundles/app/vendor/raphael.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/morris.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ asset('bundles/app/vendor/Chart.min.js') }}"></script>
+
+
+    <script>
+
+        {%set valMonths=paymentsbyMonth|getsalesmonth%}
+    
+        $(function () {
+
+            if ($('#bar').length) {
+                new Morris.Bar({
+                    element: 'bar',
+                    data: [
+                        {y: 'Jan.', a: {{valMonths[0]}} },
+                        {y: 'Feb.', a: {{valMonths[1]}} },
+                        {y: 'Mar.', a: {{valMonths[2]}} },
+                        {y: 'Apr.', a: {{valMonths[3]}} },
+                        {y: 'May', a: {{valMonths[4]}} },
+                        {y: 'Jun.', a: {{valMonths[5]}} },
+                        {y: 'Jul.', a: {{valMonths[6]}} },
+                        {y: 'Aug.', a: {{valMonths[7]}} },
+                        {y: 'Sept.', a: {{valMonths[8]}} },
+                        {y: 'Oct.', a: {{valMonths[9]}} },
+                        {y: 'Nov.', a: {{valMonths[10]}} },
+                        {y: 'Dec.', a: {{valMonths[11]}} }
+                    ],
+                    xkey: 'y',
+                    ykeys: ['a'],
+                    labels: ['Sales'],
+                    barColors: [colors[ 'chart-primary' ]],
+                    barShape: 'soft',
+                    xLabelMargin: 10,
+                    resize: true
+                });
+            }
+
+        });
+
+    </script>
+
+{% endblock %}
+
+
+

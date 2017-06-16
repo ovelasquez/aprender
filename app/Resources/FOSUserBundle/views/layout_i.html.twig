@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Lets Know{% endblock %}</title>
+
+        <!-- Prevent the demo from appearing in search engines (REMOVE THIS) -->
+        <meta name="robots" content="noindex">
+
+        <!-- Material Design Icons  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!-- Roboto Web Font -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+
+        <!-- MDK -->
+        <link type="text/css" href="{{ asset('bundles/app/vendor/material-design-kit.css') }}" rel="stylesheet">
+
+        <!-- Sidebar Collapse -->
+        <link type="text/css" href="{{ asset('bundles/app/vendor/sidebar-collapse.min.css') }}" rel="stylesheet">
+
+        <!-- App CSS -->
+        <link type="text/css" href="{{ asset('bundles/app/css/style.css') }}" rel="stylesheet">
+        
+         <!-- App CSS -->
+        <link type="text/css" href="{{ asset('bundles/app/css/bootstrap-formhelpers.css') }}" rel="stylesheet">
+
+    {% block stylesheets %}{% endblock %}
+
+</head>
+<body class="top-navbar">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary navbar-full navbar-fixed-top">
+
+        <!-- Toggle sidebar -->
+        <button class="navbar-toggler" type="button" data-toggle="sidebar"></button>
+
+        <!-- Brand -->
+        <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+
+        <!-- Search -->
+        <form class="navbar-search-form hidden-sm-down"  method="post" action="{{ path('courses_indexall') }}">
+            <input type="text" class="form-control" style="width: 250px; margin-left: 20px" name="q" placeholder="Buscar" value="">
+            <button class="btn" type="submit"><i class="material-icons">search</i></button>
+        </form>
+        <!-- // END Search -->
+        <ul class="nav navbar-nav hidden-sm-down">
+            <li class="nav-item offset-xs-1">
+                <a class="nav-link" href="#">Nosotros</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('help') }}">Ayuda</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('courses_new') }}" class="btn btn-success" style="background-color: #FFB609; border-color: #FFB609;">
+                    Postular curso <!--i class="material-icons btn__icon--right">help_outline</i-->
+                </a>
+            </li>
+        </ul>
+        <div class="navbar-spacer"></div>
+
+
+        <!-- Menu --> 
+        <ul class="nav navbar-nav hidden-sm-down">
+            <!--li class="nav-item">
+                <a class="nav-link" href="instructor-forum.html">Forum</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="instructor-help-center.html">Get Help</a>
+            </li-->
+        </ul>
+
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <!-- Menu -->
+            <ul class="nav navbar-nav">
+                <!-- User dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="false"><img src="{{ asset('uploads/photos') }}/{{app.user.namephoto}}" alt="Avatar" class="rounded-circle" height="40"></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="Preview">
+
+                        
+                        <a class="dropdown-item" href="{{ path('fos_user_profile_edit') }}">
+                            <i class="material-icons">person</i> Editar Cuenta
+                        </a>
+                        <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}">
+                            <i class="material-icons">lock</i> Salir
+                        </a>
+                    </div>
+                </li>
+                <!-- // END User dropdown -->
+            </ul>
+        {% endif %}
+
+    </nav>
+    <!-- // END Navbar -->
+
+    <div class="mdk-drawer-layout mdk-js-drawer-layout" push has-scrolling-region>
+        <div class="mdk-drawer-layout__content">
+            <div class="container-fluid">
+
+
+                {% if app.request.hasPreviousSession %}
+                    {% for type, messages in app.session.flashbag.all() %}
+                        {% for message in messages %}
+                            <div class=" alert alert-success flash-{{ type }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+
+                <div>
+                    {% block fos_user_content %}
+                    {% endblock fos_user_content %}
+                </div>
+
+
+            </div>
+        </div>
+        <!-- Sidebar -->
+        <div class="mdk-drawer mdk-js-drawer" id="default-drawer">
+            <div class="mdk-drawer__content ">
+                <div class="sidebar sidebar-left sidebar-light sidebar-transparent-sm-up sidebar-p-y">
+                    <div class="sidebar-heading">Aplicación</div>
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-menu-item ">
+                            <a class="sidebar-menu-button" href="{{ path('homepage') }}">
+                                <i class="sidebar-menu-icon material-icons">local_library</i> Recibir curso
+                            </a>
+                        </li>
+                        <li class="sidebar-menu-item active">
+                            <a class="sidebar-menu-button" href="{{ path('instructor') }}">
+                                <i class="sidebar-menu-icon material-icons">supervisor_account</i> Dar curso
+                            </a>
+                        </li>
+                    </ul>
+
+                     <!--<div class="sidebar-heading">Instructor</div>
+                    <ul class="sidebar-menu">
+
+                        <li class="sidebar-menu-item">
+                            <a class="sidebar-menu-button" href="{{ path('courses_new') }}">
+                                <i class="sidebar-menu-icon material-icons">queue</i> Postular curso
+                            </a>
+                        </li>
+                        <li class="sidebar-menu-item">
+                            <a class="sidebar-menu-button" href="{{ path('courses_index') }}">
+                                <i class="sidebar-menu-icon material-icons">library_books</i> Cursos postulados
+
+                            </a>
+                        </li>
+                        <li class="sidebar-menu-item">
+                            <a class="sidebar-menu-button" href="#">
+                                <i class="sidebar-menu-icon material-icons">group</i> Estudiantes postulados
+
+                            </a>
+                        </li>
+
+                       
+
+                        <li class="sidebar-menu-item">
+                            <a class="sidebar-menu-button" href="#">
+                                <i class="sidebar-menu-icon material-icons">monetization_on</i> Estado de cuentas 
+                                <span class="sidebar-menu-label tag tag-default">$25</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-menu-item">
+                            <a class="sidebar-menu-button" href="{{ path('fos_user_profile_show') }}">
+                                <i class="sidebar-menu-icon material-icons">person_pin</i> Perfil Público
+                            </a>
+                        </li>                        
+
+                    </ul>
+
+                    // END Components Menu -->
+                </div>
+            </div>
+        </div>
+        <!-- // END Sidebar -->
+    </div>
+
+    <!-- jQuery -->
+    <script src="{{ asset('bundles/app/vendor/jquery.min.js') }}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{{ asset('bundles/app/vendor/tether.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/bootstrap-formhelpers.min.js') }}"></script>
+
+    <!-- MDK -->
+    <script src="{{ asset('bundles/app/vendor/dom-factory.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/material-design-kit.js') }}"></script>
+
+    <!-- Sidebar Collapse -->
+    <script src="{{ asset('bundles/app/vendor/sidebar-collapse.js') }}"></script>
+
+    <!-- Modal -->
+    <script src="{{ asset('bundles/app/vendor/bootbox.min.js') }}"></script>
+
+    <!-- App JS -->
+    <script src="{{ asset('bundles/app/js/main.min.js') }}"></script>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>
+
+
+
+
+

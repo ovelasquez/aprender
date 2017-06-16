@@ -1,0 +1,29 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+
+    <div class="card-header text-xs-center">
+        <h4 class="card-title">Inicia sesión</h4>
+        <p class="card-subtitle">Olvido de contraseña</p>
+    </div>
+    <div class="p-2 bg-white">
+
+        <div class="col-lg-8 push-lg-2">
+            <p>
+                {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime,'%email%':app.request.attributes.get('_route_params[username]')}) }}
+            </p>
+
+        </div>
+
+        <div style="clear:both"></div>
+    </div>
+    <div class="card-footer text-xs-center bg-white">
+
+        ¿Ya estas registrado? <a href="{{ path('fos_user_security_login') }}">Iniciar</a> | <a href="{{ path('fos_user_registration_register') }}">Registrarse</a> 
+    </div>
+
+
+{% endblock %}
+

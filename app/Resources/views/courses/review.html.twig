@@ -1,0 +1,524 @@
+{% extends 'base_a.html.twig' %}
+{% block stylesheets %}
+    <!-- Datepicker -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <!-- Timepicker -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-timepicker.min.css') }}" rel="stylesheet">
+    <!-- Touchspin -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-touchspin.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body %} 
+    <!-- set up the modal to start hidden and fade in and out -->
+    <div id="savModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- dialog body -->
+                <div class="modal-body">                    
+                    Guardando
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- set up the modal to start hidden and fade in and out -->
+    <div id="delModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- dialog body -->
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- dialog buttons -->
+                <div class="modal-footer"><button type="button" class="btn btn-primary">OK</button></div>
+            </div>
+        </div>
+    </div>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Postular Curso</li>
+    </ol>   
+    <div class="row m-15-0">
+        <div class="form-group">
+            <div class="offset-sm-11 col-sm-1">
+                <div  class="text-xs-right">
+                    {{ form_start(delete_form, {'attr': {'id': 'form_course_delete'}}) }}
+                    <button type="button" class=" btn btn-danger btn-sm " id="delete">Eliminar</button>  
+                    {{ form_end(delete_form) }}                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{ form_start(edit_form, {'attr': {'id': 'form_course_edit'}}) }}
+    {% if not edit_form.vars.valid %} 
+        <div class="row m-15-0">
+            {{ form_errors(edit_form) }}
+        </div>
+    {%endif%}
+    {% if app.session.flashbag is not empty %}
+        <div class="row m-15-0">
+            {% for msg in app.session.flashBag.get('success') %}
+                <div class="alert alert-success"> {{ msg }} </div>       
+            {% endfor %}
+
+            {% for msgs in app.session.flashBag.get('error') %}
+                <div class="alert alert-danger">
+                    {% for msg in msgs %}
+                        <p>{{ msg }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {%endif%}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">TIPO DE CURSO:</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        <strong>Categoría:</strong><br>
+                        {{ course.category}}
+                    </fieldset>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">DESCRIPCIÓN DEL CURSO:</h4>                                                       
+                        </div>
+                    </div>
+                    <fieldset class="form-group">                        
+                        <strong>Título del curso:</strong><br>
+                        {{ course.title}}                      
+                    </fieldset>
+                    <fieldset class="form-group">                        
+                        <strong>Descripsión breve del curso:</strong><br>
+                        {{ course.description }}
+
+                    </fieldset>
+                    <fieldset class="form-group">                        
+                        <strong>Resumen del curso:</strong><br>
+                        {{ course.resume}}
+
+                    </fieldset>
+                    <fieldset class="form-group">   
+                        <strong>Imagen:</strong><br>
+                        <div class="media">
+                            {% if course.photo!='' %}
+                                <img src="{{ asset('uploads/photos/') }}{{course.photo}}" width="100%"  id="photo" />
+                            {% endif %}
+
+                        </div>
+
+                    </fieldset>
+                    <fieldset class="form-group">                        
+                        <strong>Video de youtube o vimeo descriptivo del curso:</strong><br>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="{{course.video}}" allowfullscreen=""></iframe>
+                        </div>
+                    </fieldset>                                       
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">UBICACIÓN:</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+
+                    <fieldset class="form-group">                        
+                        <strong>País</strong><br>
+                        <span class="bfh-countries" data-country="{{course.country}}" data-flags="true"></span>
+                    </fieldset>
+
+                    <fieldset class="form-group">                        
+                        <strong>Provincia</strong><br>
+                        <span class="bfh-states" data-country="{{course.country}}" data-state="{{course.province}}"></span>
+
+                    </fieldset>                                        
+
+                    <fieldset class="form-group">                        
+                        <strong>Avenida</strong><br>
+                        {{ course.avenue }}                                                  
+                    </fieldset>
+
+                    <fieldset class="form-group">                        
+                        <strong>Dirección</strong><br>
+                        {{ course.address }}                  
+                    </fieldset>
+                    <fieldset class="form-group">  
+                        <strong>Seleccione el tipo de lugar:</strong><br>                        
+                        {{ course.place }}
+
+                    </fieldset> 
+                    {#
+                    <fieldset class="form-group">
+                        <label for="exampleInputEmail1">**Carga tu dirección de Google Maps:</label>
+                        <input class="form-control" id="exampleInputEmail1" type="text">                        
+                    </fieldset> 
+                    #}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6"> 
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            {% if course.user.photo!='' %}
+                                <img src="{{ asset('uploads/photos/') }}{{course.user.photo}}" width="80"  id="photo" />
+                            {% endif %}
+                        </div>
+                        <div class="media-body media-middle">
+                            <h4 class="card-title"><a href="{{ path('homepage') }}">{{course.user.name}} {{course.user.lastname}}</a></h4>
+                            <p class="card-subtitle">Instructor</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+
+                    <a href="{{course.user.website}}" class="">
+                        <i class="material-icons md-18 text-muted">language</i>  {{course.user.website}}                      
+                    </a>
+                    <hr>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{course.user.video}}" allowfullscreen=""></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CANTIDAD DE ALUMNOS:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            <strong>Mínimos:</strong><br>
+                            <div class="input-group bootstrap-touchspin">                               
+                                {{ course.minstudent }}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            <strong>Máximos:</strong><br>
+                            <div class="input-group bootstrap-touchspin">                                                              
+                                {{ course.maxstudent }}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-12 alert-danger errorMax' style="display: none">El máximo numero de estudiantes debe ser mayor al mínimo</div>        
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">REQUISITOS PREVIOS PARA REALIZAR CURSO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">                    
+                    <fieldset class="form-group">  
+                        <strong>Conocimientos:</strong><br>                        
+                        {{ course.knowledge }}
+
+                    </fieldset> 
+                    <fieldset class="form-group">  
+                        <strong>Herramientas:</strong><br>                        
+                        {{ course.tool }}
+
+                    </fieldset> 
+                </div>
+            </div>
+
+
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">FECHA / DURACIÓN / HORA:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class='col-lg-8 p-0'>
+                        <div class="input-daterange" id="datepicker">
+                            <div class='col-lg-6 p-0'>
+                                <fieldset class="form-group" style="padding-right: 10px">
+                                    <strong>Inicio:</strong><br>
+                                    {{ course.startdate }}
+                                </fieldset>
+                            </div>
+                            <div class='col-lg-6 p-0'>
+                                <fieldset class="form-group " style="padding-right: 10px">                       
+                                    <strong>Final:</strong><br>
+                                    {% if course.enddate %}{{ course.enddate|date('d/m/y') }}{% endif %}
+                                </fieldset>
+                            </div>                                                     
+
+                        </div>
+                    </div>
+
+                    <div class='col-lg-4'>
+                        <fieldset class="form-group">                       
+                            <strong>Hora:</strong><br>
+                            {{course.hour}}  
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        <strong>Dias:</strong><br>
+                        {{ course.days }}
+
+                        <!--div >
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="LU">LU</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="MA">MA</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="MI">MI</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="JU">JU</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="VI">VI</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="SA">SA</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="DO">DO</button></div>
+                        </div-->
+                    </fieldset> 
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">COSTO DEL CURSO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        <strong>Costo:</strong><br>
+                        {{ course.cost }}
+
+                    </fieldset> 
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">TIPO DE PUBLICACIÓN:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">                    
+                    <fieldset class="form-group">
+                        <strong>Tipo de publicación:</strong><br>
+                        {{ course.type }}
+
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="text-xs-right">
+
+                <button type="submit" class="btn btn-rosa btn-lg" id="save">Guardar curso</button>
+
+            </div>
+        </div>        
+    </div>
+
+    {{ form_end(edit_form) }}
+
+
+
+
+
+
+{% endblock %}
+{% block javascripts %}
+    <!-- Vendor JS -->
+    <script src="{{ asset('bundles/app/vendor/jquery.bootstrap-touchspin.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/bootstrap-timepicker.js') }}"></script>    
+
+    <!-- Init -->
+    <script src="{{ asset('bundles/app/examples/js/date-time.js') }}"></script>    
+    <script src="{{ asset('bundles/app/examples/js/touchspin.js') }}"></script>
+    <script src="{{ asset('bundles/app/locales/bootstrap-datepicker.es.min.js') }}" charset="UTF-8"></script>
+    <script>
+
+        $(function () {
+
+            $("#appbundle_courses_photo").change(function () {
+                $("#icophoto").show();
+                $("#photo").remove();
+
+                var str = $('#appbundle_courses_photo').val();
+                var n = str.indexOf("\\");
+                if (n !== -1) {
+                    str = str.split('\\');
+                } else {
+                    n = str.indexOf('/');
+                    if (n !== -1) {
+                        str = str.split('/');
+                    } else {
+                        str = [str];
+                    }
+                }
+                $(".custom-file-control").addClass("custom-file-control-o");
+                $(".custom-file-control").html(str[str.length - 1]);
+
+
+            });
+
+            $(".day-week").click(function () {
+                if (!$(this).hasClass("active")) {
+                    $(this).addClass('active');
+                } else {
+                    $(this).removeClass('active');
+                }
+                var days = [];
+
+                $(".day-week.active").each(function () {
+                    days.push($(this).html());
+                });
+
+                $("#appbundle_courses_days").val(days.join(','));
+            });
+
+
+
+            if ($("#appbundle_courses_days").val() !== '') {
+                var ds = $("#appbundle_courses_days").val().split(",");
+
+                for (i = 0; i < ds.length; i++) {
+                    $("#" + ds[i]).addClass("active");
+                }
+            }
+
+            $("#save").click(function () {
+
+                if ($("#photo").attr("src") !== undefined) {
+                    $('#appbundle_courses_photo').prop("required", "");
+                } else {
+                    $('#appbundle_courses_photo').prop("required", "required");
+                }
+
+                $('#appbundle_courses_photoupdate').val('{{course.photo}}');
+
+                //$("#form_course_edit").submit();
+
+                var inpObj = document.getElementById("form_course_edit");
+                var err = false;
+                if ($("#appbundle_courses_minstudent").val() >= $("#appbundle_courses_maxstudent").val()) {
+                    $("#appbundle_courses_maxstudent").parent(".input-group").addClass("has-danger");
+                    $("#appbundle_courses_maxstudent").focus();
+                    $(".errorMax").show();
+                    err = true;
+                }
+
+                if (inpObj.checkValidity() === false || err) {
+                    $("#form_course_edit input,#form_course_edit select,#form_course_edit textarea").each(function () {
+                        if ($(this)[0].checkValidity() === false) {
+                            $(this).parent(".form-group").addClass("has-danger");
+                            $(this).parent(".input-group").addClass("has-danger");
+                        }
+                    });
+                    if (err)
+                        return false;
+                } else {
+                    $("#savModal").modal('show');
+                }
+
+
+
+
+
+            });
+
+            $("#delete").click(function () {
+
+                bootbox.alert("Seguro que desea eliminar el curso");
+
+            });
+
+            $('#appbundle_courses_photoupdate').val('{{course.photo}}');
+
+            $("#delModal").on("show", function () {    // wire up the OK button to dismiss the modal when shown
+                $("#delModal a.btn").on("click", function (e) {
+                    $("#form_course_delete").submit();
+                    $("#delModal").modal('hide');     // dismiss the dialog
+
+                });
+            });
+            $("#delModal").on("hide", function () {    // remove the event listeners when the dialog is dismissed
+                $("#delModal a.btn").off("click");
+            });
+
+            $("#delModal").on("hidden", function () {  // remove the actual elements from the DOM when fully hidden
+                $("#delModal").remove();
+            });
+
+            $("#delModal").modal({// wire up the actual modal functionality and show the dialog
+                "backdrop": "static",
+                "keyboard": true,
+                "show": false                     // ensure the modal is shown immediately
+            });
+
+            $('#datepicker').datepicker({
+                language: "es",
+                format: "dd/mm/yyyy",
+            });
+            $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+
+            $("#form_course_edit input,#form_course_edit select,#form_course_edit textarea").click(function () {
+                if ($(this).parent(".form-group").hasClass("has-danger")) {
+                    $(this).parent(".form-group").removeClass("has-danger")
+                }
+                if ($(this).parent(".input-group").hasClass("has-danger")) {
+                    $(this).parent(".input-group").removeClass("has-danger")
+                }
+                $(".errorMax").hide();
+            });
+
+            $('#appbundle_courses_country').find("option:first").html("País");
+            $('#appbundle_courses_country').change(function () {
+                $('#province').find("option:first").html("Provincia");
+
+                if ($('#province option').length <= 1) {
+                    $('#province').removeProp("required");
+                } else {
+                    $('#province').prop("required", "required");
+                }
+            });
+            $('#province').find("option:first").html("Provincia");
+            $("#appbundle_courses_province").remove();
+
+
+        });
+
+    </script>
+
+{% endblock %}

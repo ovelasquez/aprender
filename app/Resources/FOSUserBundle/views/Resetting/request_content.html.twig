@@ -1,0 +1,32 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="card-header text-xs-center">
+    <h4 class="card-title">Inicia sesión</h4>
+    <p class="card-subtitle">Olvido de contraseña</p>
+</div>
+<div class="p-2 bg-white">
+
+    <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+        <div class="col-lg-4 push-lg-4">
+            {% if error is defined %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <div class="form-group">
+                
+                <input type="text"  class="form-control"  id="username"  placeholder="Email Address"  name="username" required="required" />
+            </div>
+            <div class="text-xs-center">
+                <input type="submit"  class="btn  btn-primary btn-block" value="{{ 'resetting.request.submit'|trans }}" />
+            </div>
+        </div>
+    </form>
+
+
+    <div style="clear:both"></div>
+</div>
+<div class="card-footer text-xs-center bg-white">
+
+    ¿Ya estas registrado? <a href="{{ path('fos_user_security_login') }}">Iniciar</a> | <a href="{{ path('fos_user_registration_register') }}">Registrarse</a> 
+</div>
+
+

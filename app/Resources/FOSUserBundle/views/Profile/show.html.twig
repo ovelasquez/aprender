@@ -1,0 +1,15 @@
+{% extends "FOSUserBundle::layout_i.html.twig" %}
+
+{% block fos_user_content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Perfil Público</li>
+    </ol>   
+    <div class="row">
+        <div class="col-lg-12">
+            {% include "FOSUserBundle:Profile:show_content.html.twig" %}
+        </div>
+    </div>
+{% endblock fos_user_content %}
+
+

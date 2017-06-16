@@ -1,0 +1,131 @@
+{% extends 'base_public.html.twig' %}
+{% block stylesheets %}
+    <!--importing third party style-->
+    <!--font awesome-->        
+
+{% endblock %}
+{% block body %}
+    <div class="row m-3">
+        <div class="col-sm-4">
+            <div class="text-xs-center">
+                <h1 class='text-primary'>Descubre<br><span class='title-home'>Let's Know</span></h1>
+            </div>            
+        </div>
+        <div class="col-sm-8">
+            <p>
+                Somos un lugar donde se conectan personas que quieren aprender algo nuevo con aquellas que quieren enseñar algo distinto.
+            </p>         <p>
+                Todos se convierten en instructores o alumnos, las materias se dan en parques, plazas, salones o casas y lo que se estudia es tan diverso como la imaginación de cada uno de nosotros.
+            </p>         <p>
+                Aprende siempre algo nuevo, visita lugares nunca vistos, 
+                y conoce personas que jamás pensaste que ibas a conocer.
+            </p>            
+        </div>
+    </div>
+
+    <div class="pt-3 bg-white">
+        <section class="boxed bg-white">
+            <h2 class="dc-sect-hding text-xs-center">
+                Conoce todos los cursos que tenemos para ti<br />
+                <small>
+                    Conéctate con nuevas personas y aprende algo distinto todos los días
+                </small>
+            </h2>
+            <p class="dc-sect-desc text-xs-center">
+                Categorías
+            </p>
+
+            <div class="dc-pfolio">
+                <div id="dc-pfbox" class="dc-pfbox"> <!-- portfolio controller -->
+
+                    {%if (courses|length==0)%}
+                        <p class="alert alert-warning"> No hay cursos
+                        </p>
+                    {%else%}
+
+                        {% for course in courses %}
+
+                            <div class="dc-pfitem" data-dc-pfsec="{{ course.category.name }}"> <!-- categories controller -->
+                                <div class="dc-pf-img">
+                                    {% if course.photo!='' %}
+                                        <img src="{{ asset('uploads/photos/') }}{{course.photo}}" alt='{{ course.title }}'/>
+                                    {% endif %}
+                                    <!--img src="{{ asset('bundles/app/images/portfolio/thumbs/01.jpg') }}" alt="" > <!-- portfolio img -->
+                                    <div class="dc-pf-info">  <!-- portfolio info -->
+                                        <h3>
+                                            <a href="{{ path('default_course_show', { 'id': course.id }) }}">{{ course.title }}</a>
+                                        </h3>
+                                        <div class="dc-pf-link">
+                                            <ul>
+                                                <li><a href="{{ path('default_course_show', { 'id': course.id }) }}"><i class="fa fa-link"></i></a></li>
+                                                <li><a href="{{ asset('uploads/photos/') }}{{course.photo}}" class="dc-lbimg-lnk"><i class="fa fa-search"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="p-3 bg-gray">
+        <div class="row">
+            <div class="text-xs-center">
+                <h2 class='text-primary'>Toma un curso<br></h2>
+                <h3 class='text-gray'>Es más fácil de lo que parece</h3>
+            </div>            
+        </div>
+        <div class="row">
+            <div class=" col-sm-8 offset-sm-2 ">
+                <div class="col-md-4 col-sm-12 text-xs-center">
+                    <img src='{{ asset('bundles/app/images/tc_lk_descubre.jpg') }}' class="img-fluid" />
+
+                    <h3 class='text-primary'>Descubre cursos únicos</h3><br><p>
+                        Esos que no se dan en la
+                        escuela o la universidad y
+                        que siempre quisiste hacer.
+                    </p>            
+                </div>
+                <div class="col-md-4 col-sm-12 text-xs-center">
+                    <img src='{{ asset('bundles/app/images/tc_lk_guarda.jpg') }}'  class="img-fluid"/>
+
+                    <h3 class='text-primary'>Guarda tu cupo</h3><br><p>
+                        Reserva tu puesto en el curso. 
+                        Él instructor te contactará para
+                        detallar el lugar del encuentro.
+                    </p>            
+                </div>
+                <div class="col-md-4 col-sm-12 text-xs-center">
+                    <img src='{{ asset('bundles/app/images/tc_lk_vive.jpg') }}' class="img-fluid" />
+
+                    <h3 class='text-primary'>Vive una experiencia distinta</h3><br><p>
+                        Y diviértete aprendiendo algo 
+                        totalmente distinto y 
+                        conociendo nuevas personas
+                    </p>            
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(function () {
+
+            $('#country').find("option:first").html("País").change(function () {
+                $('#state').find("option:first").html("Provincia");
+            });
+            $('#state').find("option:first").html("Provincia");
+
+        });
+    </script>
+
+{% endblock %}

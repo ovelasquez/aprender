@@ -1,0 +1,74 @@
+{% extends 'base_e.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('courses_indexall',{ 'id': null }) }}">Cursos</a></li>
+        <li class="breadcrumb-item active">{{ payment.course.title }}</li>
+    </ol>   
+    <div id="invoice">
+        <div class="card">
+            <div class="card__options">
+                <a href="javascript:window.print()" class="btn btn-primary btn-sm hidden-print">
+                    <i class="material-icons btn__icon--left">print</i> Print
+                </a>
+            </div>
+            <div class="card-header bg-white">
+                <h2 class="text-xs-center page-heading"><strong>Invoice #{{payment.id}}</strong></h2>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <strong>MOSAICPRO LTD</strong><br/>
+                        No. 12121<br/>
+                        21 Address Street, Miami, FL
+                    </div>
+                    <div class="col-xs-6">
+                        <strong>Client:</strong> <br/>
+                        {{invoce.payer.payer_info.first_name}} {{invoce.payer.payer_info.last_name}} <br/>
+                        {{invoce.payer.payer_info.shipping_address.line1}} {{invoce.payer.payer_info.shipping_address.city}}, {{invoce.payer.payer_info.shipping_address.state}} - {{invoce.payer.payer_info.shipping_address.country_code}}<br/>
+                        {{invoce.payer.payer_info.shipping_address.postal_code}}
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-fit mb-0">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Cantidad</th>
+                        <th>Unit Price</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{invoce.transactions[0].description}}</td>
+                        <td>1</td>
+                        <td>${{invoce.transactions[0].amount.total}}</td>
+                        <td>${{invoce.transactions[0].amount.total}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br><br><br><br>
+            <hr class="mb-0">
+            <div class="card-block">
+                <div class="row text-xs-center">
+                    <div class="col-xs-4"><strong>Subtotal:</strong><br>${{invoce.transactions[0].amount.total}}</div>
+                    <div class="col-xs-4"><!--strong>TAX:</strong><br>20%--></div>
+                    <div class="col-xs-4">
+                        <strong>Total:</strong><br>
+                        <span class="text-primary h2"><strong>${{invoce.transactions[0].amount.total}}</strong></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                {{invoce.create_time|date('d-m-Y H:i:s')}}
+            </div>
+        </div>
+    </div>
+
+    <div class="text-xs-right">
+        <a href="{{ path('payments_index') }}" class="btn btn-primary ">Ir al historial</a>
+        <a href="{{ path('courses_show', { 'id': payment.course.id }) }}" class="btn btn-primary" style="background-color: #FFB609; border-color: #FFB609;">Ir al curso</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,648 @@
+{% extends 'base_i.html.twig' %}
+{% form_theme form 'form/form_errors.html.twig' %}
+
+{% block stylesheets %}
+    <!-- Bootstrap 
+    <link type="text/css" href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet">-->
+    <!-- Datepicker -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <!-- Timepicker -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-timepicker.min.css') }}" rel="stylesheet">
+    <!-- Touchspin -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/bootstrap-touchspin.min.css') }}" rel="stylesheet">
+
+{% endblock %}
+{% block body %} 
+
+    {% set tooltips = absolute_url(asset('bundles/app/js/tooltip_form.json'))|loadjson %}
+
+
+
+    <!-- set up the modal to start hidden and fade in and out -->
+    <div id="savModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- dialog body -->
+                <div class="modal-body">                    
+                    Guardando
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Postular Curso</li>
+    </ol>   
+    {{ form_start(form,{'attr':{ 'id':'createc'} } ) }}
+    {{ form_errors(form) }}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">ELIGE QUÉ TIPO DE CURSO QUIERES DAR:</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="card" style="border: none;">
+                        <fieldset class="form-group">  
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.category, 'Seleccione la categoría:') }}
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right"  style="padding: 10px;">
+                                            <p>{{tooltips.category|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div></div>
+
+                            {{ form_errors(form.category) }}
+                            {{ form_widget(form.category) }}
+                        </fieldset></div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">DESCRIBE TU CURSO:</h4>                                                       
+                        </div>
+                    </div>
+                    <div class="card" style="border: none;">
+                        <fieldset class="form-group">  
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.title, 'Título del curso:') }}
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;" >
+                                            <p>{{tooltips.title|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div></div>
+                                {{ form_errors(form.title) }}
+                                {{ form_widget(form.title,{'attr':{'maxlength':255} }) }}                      
+                        </fieldset>
+                    </div>
+                    <div class="card" style="border: none;">
+                        <fieldset class="form-group"> 
+
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.description, 'Describe brevemente el curso:') }}
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;" >
+                                            <p>{{tooltips.description|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div></div>
+
+                            {{ form_errors(form.description) }}
+                            {{ form_widget(form.description,{ 'attr': {'class': 'form-control col-md-10','maxlength':140,'size':10,'style':'height: 120px;','placeholder':'Escribe algo distinto,  que llame la atención.'} }) }}   
+
+                        </fieldset> 
+                    </div>
+                    <div class="card" style="border: none;">
+                        <fieldset class="form-group">       
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.resume, 'Resumen del curso:') }}
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;">
+                                            {{tooltips.resume|raw}}
+                                        </div>
+                                    </div>
+                                </div></div>
+
+                            {{ form_errors(form.resume) }}
+                            {{ form_widget(form.resume,{ 'attr': {'class': 'form-control col-md-10','maxlength':500,'size':10,'style':'height: 200px;','placeholder':'Este es el momento que todos esperan, en 500 caracteres dinos más sobre todo lo que quieres dar.'} }) }}                   
+                        </fieldset></div>
+                    <div class="card" style="border: none; box-shadow: none"><fieldset class="form-group">   
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.photo, 'Carga una imagen:') }}
+                                <span class="small">La imagen a cargar debe ser cuadrada y </br>no mayor a 800x800 pixeles, no debe ser mayor a 1024kb y del tipo .jpg o .png</span>
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;" >
+                                            <p>{{tooltips.photo|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div></div>
+
+
+                            <div class="media">
+                                <div class="media-left">
+                                    <div class="icon-block rounded">
+
+                                        <i class="material-icons text-muted-light md-36" id="icophoto" >photo</i>                                    
+                                    </div>
+
+                                </div>
+                                <div class="media-body media-middle">
+                                    <label class="custom-file m-0">
+                                        {{ form_widget(form.photo,{'attr':{'class':'w-75'} }) }}         
+                                        <span class="custom-file-control  w-75"></span>
+                                    </label>
+                                </div>
+                            </div>   
+                            {{ form_errors(form.photo) }}
+                        </fieldset></div>
+                    <div class="card" style="border: none;"><fieldset class="form-group">   
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.video, 'Video de youtube o vimeo descriptivo del curso (opcional):') }}
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;">
+                                            <p >{{tooltips.video|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{ form_errors(form.video) }}
+                            {{ form_widget(form.video) }} 
+                        </fieldset>  </div>                                     
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">UBICACIÓN:</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                    </div>
+                    <div class="card__options">
+                        <div class="dropdown tt">
+                            <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                            <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;">
+                                <p >{{tooltips.location|raw}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+
+
+                    <fieldset class="form-group">     
+                        {{ form_label(form.country, 'País:') }}                        
+                        {{ form_errors(form.country) }}
+                        {{ form_widget(form.country,{'attr':{ 'class':'form-control bfh-countries', 'id':'appbundle_courses_country', 'required':'required', 'data-country':'VE','data-available':'ES,VE',  'style':' padding: 0.1rem;' } }) }}
+                        <!--select class="form-control bfh-countries" id="appbundle_courses_country"  required="required" name="appbundle_courses[country]" style=" padding: 0.1rem;" data-country="" ></select-->
+                    </fieldset>
+
+                    <fieldset class="form-group">     
+                        {{ form_label(form.province, 'Provincia:') }}                        
+                        {{ form_errors(form.province) }}
+                        {{ form_widget(form.province,{'attr':{ 'class':'form-control input-medium  bfh-states', 'required':'required', 'data-country':'appbundle_courses_country',  'data-state':'', 'style':' padding: 0.1rem;' } }) }}
+                        <select class="form-control input-medium  bfh-states" required="required" id="province" name="appbundle_courses[province]" data-country="appbundle_courses_country"  data-state="" style=" padding: 0.1rem;"></select>
+                    </fieldset>                                        
+
+                    <fieldset class="form-group">     
+                        {{ form_label(form.avenue, 'Avenida:') }}           
+                        {{ form_errors(form.avenue) }}
+                        {{ form_widget(form.avenue) }}                                                  
+                    </fieldset>
+
+                    <fieldset class="form-group">       
+                        {{ form_label(form.address, 'Datos adicionales:') }}           
+                        {{ form_errors(form.address) }}
+                        {{ form_widget(form.address) }}                  
+                    </fieldset>
+
+                    <fieldset class="form-group">  
+                        {{ form_label(form.place, 'Seleccione el tipo de lugar:') }}                        
+                        {{ form_errors(form.place) }}
+                        {{ form_widget(form.place) }}
+                    </fieldset> 
+
+                    {#
+                    <fieldset class="form-group">
+                        <label for="exampleInputEmail1">**Carga tu dirección de Google Maps:</label>
+                        <input class="form-control" id="exampleInputEmail1" type="text">                        
+                    </fieldset> 
+                    #}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">           
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CANTIDAD DE ALUMNOS:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+                        <div class="dropdown tt">
+                            <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                            <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;" >
+                                <p>{{tooltips.minmax|raw}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            {{ form_label(form.minstudent, 'Mínimos:') }}
+                            <div class="input-group bootstrap-touchspin">                                  
+                                {{ form_errors(form.minstudent) }}
+                                {{form_widget(form.minstudent,{ 'attr': {'data-toggle':'touch-spin','data-max':'100','data-min':'1','data-step':'1', 'style':'display: none'} } ) }}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            {{ form_label(form.maxstudent, 'Máximos:') }}
+                            <div class="input-group bootstrap-touchspin">                                  
+                                {{ form_errors(form.maxstudent) }}
+                                {{form_widget(form.maxstudent,{ 'attr': {'data-toggle':'touch-spin','data-max':'100','data-min':'1','data-step':'1', 'class': 'form-control', 'required': 'required','style':'display: none'} } ) }}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-12 alert-danger errorMax' style="display: none">El máximo número de estudiantes debe ser mayor al mínimo</div>        
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">REQUISITOS PREVIOS PARA REALIZAR CURSO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">                    
+                    <div class="card" style="border: none;"><fieldset class="form-group">  
+
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.knowledge, 'Conocimientos:') }}  
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right"  style="padding: 10px;">
+                                            <p>{{tooltips.knowledge|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                            {{ form_widget(form.knowledge,{ 'attr': {'class': 'form-control col-md-10','maxlength':140,'size':10,'style':'height: 120px;','placeholder':'Escribe los que los alumnos deberían conocer'} }) }}   
+                            {{ form_widget(form.knowledge) }}
+                        </fieldset>  </div>
+                    <div class="card" style="border: none;"><fieldset class="form-group">  
+                            <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
+                                {{ form_label(form.tool, 'Herramientas:') }}               
+                                <div class="card__options">
+                                    <div class="dropdown tt">
+                                        <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                                        <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;" >
+                                            <p>{{tooltips.tools|raw}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{ form_errors(form.tool) }}
+                            {{ form_widget(form.tool,{ 'attr': {'class': 'form-control col-md-10','maxlength':140,'size':10,'style':'height: 120px;','placeholder':'Escribe los que los alumnos deberían tener'} }) }}
+                        </fieldset>  </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">FECHA / DURACIÓN / HORA:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class='col-lg-8 p-0'>
+                        <div class="input-daterange" id="datepicker">
+                            <div class='col-lg-6 p-0'>
+                                <fieldset class="form-group" style="padding-right: 10px">
+                                    {{ form_label(form.startdate, 'Inicio:') }}
+                                    {{form_widget(form.startdate,{ 'attr': {'class': 'datepicker form-control','data-date-format':'dd/mm/yyyy','data-date-start-date':'now'} } ) }}
+                                </fieldset>
+                            </div>
+                            <div class='col-lg-6 p-0'>
+                                <fieldset class="form-group " style="padding-right: 10px">                       
+                                    {{ form_label(form.enddate, 'Final:') }}
+                                    {{form_widget(form.enddate,{ 'attr': {'class': 'datepicker form-control','data-date-format':'dd/mm/yyyy','data-date-start-date':'now'} } ) }}     
+                                </fieldset>
+                            </div>                                                     
+
+                        </div>
+                    </div>
+
+                    <div class='col-lg-4'>
+                        <fieldset class="form-group">                       
+                            {{ form_label(form.hour, 'Hora:') }}
+                            {{form_widget(form.hour,{ 'attr': {'class': 'form-control'} } ) }}  
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{ form_label(form.days, 'Selecciona los dias:') }}
+                        {{ form_errors(form.days) }}
+                        {{ form_widget(form.days,{'attr': {'class': 'form-control'}}) }}
+                        <div >
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="LU">LU</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="MA">MA</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="MI">MI</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="JU">JU</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="VI">VI</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="SA">SA</button></div>
+                            <div class="col-lg-1-7 "><button type="button" class="btn day-week" id="DO">DO</button></div>
+                        </div>
+                    </fieldset> 
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">TIPO MONEDA:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+                        <div class="dropdown tt">
+                            <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                            <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;">
+                                <p >{{tooltips.currency|raw}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+
+                        {{ form_errors(form.currency) }}
+                        {{ form_widget(form.currency,{'attr': {'class': 'form-control'}}) }} 
+                    </fieldset> 
+                </div>
+
+            </div>
+
+            <div id="cost" class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">COSTO DEL CURSO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+                        <div class="dropdown tt">
+                            <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
+                            <div class="dropdown-menu  dropdown-menu-right" style="padding: 10px;">
+                                <p >{{tooltips.cost|raw}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+
+                        {{ form_errors(form.cost) }}
+                        {{ form_widget(form.cost,{'attr': {'class': 'form-control'}}) }} 
+                    </fieldset> 
+                </div>
+            </div>
+
+
+            <div id="cost2" class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">ELIGE UN TIPO DE PUBLICACIÓN:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">                    
+                    <fieldset class="form-group">
+
+                        {{ form_errors(form.type) }}
+                        {{ form_widget(form.type,{'attr': {'class': 'form-control'}}) }}                        
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="text-xs-right">                
+                <button type="submit" class="btn btn-rosa btn-lg" id="save">Crear curso</button>               
+            </div>
+        </div>        
+    </div>
+
+
+
+    {{ form_end(form) }}
+{% endblock %}
+{% block javascripts %}
+    <!-- Vendor JS -->
+    <script src="{{ asset('bundles/app/vendor/jquery.bootstrap-touchspin.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/bootstrap-timepicker.js') }}"></script>    
+
+    <!-- Init -->
+    <script src="{{ asset('bundles/app/examples/js/date-time.js') }}"></script>    
+    <script src="{{ asset('bundles/app/examples/js/touchspin.js') }}"></script>
+
+    <script>
+
+        function orderSelect($element) {
+            var options = $element.find('option'),
+                    n_options = options.length,
+                    temp = [],
+                    parts,
+                    i;
+
+            for (i = n_options; i--; ) {
+                temp[i] = options[i].text + "," + options[i].value;
+            }
+
+            temp.sort();
+
+            for (i = n_options; i--; ) {
+                parts = temp[i].split(',');
+
+                options[i].text = parts[0];
+                options[i].value = parts[1];
+            }
+        }
+
+
+        $(function () {
+
+            orderSelect($("#appbundle_courses_category"))
+
+            $(".day-week").click(function () {
+                if (!$(this).hasClass("active")) {
+                    $(this).addClass('active');
+                } else {
+                    $(this).removeClass('active');
+                }
+                var days = [];
+
+                $(".day-week.active").each(function () {
+                    days.push($(this).html());
+                });
+
+                $("#appbundle_courses_days").val(days.join(','));
+            });
+
+
+
+            if ($("#appbundle_courses_days").val() !== '') {
+                var ds = $("#appbundle_courses_days").val().split(",");
+
+                for (i = 0; i < ds.length; i++) {
+                    $("#" + ds[i]).addClass("active");
+                }
+            }
+
+            $("#appbundle_courses_photo").change(function () {
+
+                var str = $('#appbundle_courses_photo').val();
+                var n = str.indexOf("\\");
+                if (n !== -1) {
+                    str = str.split('\\');
+                } else {
+                    n = str.indexOf('/');
+                    if (n !== -1) {
+                        str = str.split('/');
+                    } else {
+                        str = [str];
+                    }
+                }
+                $(".custom-file-control").addClass("custom-file-control-o");
+                $(".custom-file-control").html(str[str.length - 1]);
+            });
+
+
+            $('.input-daterange').datepicker({
+                language: "es"
+            });
+
+            $("#save").click(function () {
+                var inpObj = document.getElementById("createc");
+
+                if (inpObj.checkValidity() === false) {
+                    $("#createc input,#createc select,#createc textarea").each(function () {
+                        if ($(this)[0].checkValidity() === false) {
+                            $(this).parent(".form-group").addClass("has-danger");
+                            $(this).parent(".input-group").addClass("has-danger");
+                        }
+                    });
+                }
+
+                if ($("#appbundle_courses_minstudent").val() > $("#appbundle_courses_maxstudent").val()) {
+                    $("#appbundle_courses_minstudent").parent(".input-group").addClass("has-danger");
+                    return false;
+                }
+
+                if ($("#appbundle_courses_minstudent").val() >= $("#appbundle_courses_maxstudent").val()) {
+                    $("#appbundle_courses_maxstudent").parent(".input-group").addClass("has-danger");
+                    $("#appbundle_courses_maxstudent").focus();
+                    $(".errorMax").show();
+                    return false;
+                }
+
+                //    $("#savModal").modal('show');
+
+            });
+            $("#createc input,#createc select,#createc textarea").click(function () {
+                if ($(this).parent(".form-group").hasClass("has-danger")) {
+                    $(this).parent(".form-group").removeClass("has-danger")
+                }
+                if ($(this).parent(".input-group").hasClass("has-danger")) {
+                    $(this).parent(".input-group").removeClass("has-danger")
+                }
+                $(".errorMax").hide();
+            });
+
+            $('#appbundle_courses_country').find("option:first").html("País");
+            $('#appbundle_courses_country').change(function () {
+                $('#province').find("option:first").html("Provincia");
+
+                if ($('#province option').length <= 1) {
+                    $('#province').prop("required", "");
+                } else {
+                    $('#province').prop("required", "required");
+                }
+            });
+            $('#province').find("option:first").html("Seleccione");
+            $("#appbundle_courses_province").remove();
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#cost').hide();
+            $('#cost2').hide();
+            $("#appbundle_courses_currency").change(function () {
+                if ($('#appbundle_courses_currency').val() === '') {
+                    $('#appbundle_courses_cost').val(null);
+                    $('#cost').hide();
+                } else {
+                    $('#cost').show();                   
+                    // Ajax                                                 
+                    var dataString = 'id=' + $('#appbundle_courses_currency').val();
+                    $.ajax
+                            ({
+                                type: "POST",
+                                url: "{{ path ('ajax_cost') }}",
+                                data: dataString,
+                                cache: false,
+                                success: function (html)
+                                {
+                                    $('#appbundle_courses_cost option ').remove();
+                                    $('#appbundle_courses_cost').append(html);                                    
+                                }
+                            });
+                }
+                 });
+                
+                $("#appbundle_courses_currency").change(function () {
+                if ($('#appbundle_courses_currency').val() === '') {
+                    $('#appbundle_courses_type').val(null);
+                    $('#cost2').hide();
+                } else {
+                    $('#cost2').show();                   
+                    // Ajax                                                 
+                    var dataString = 'id=' + $('#appbundle_courses_currency').val();
+                    $.ajax
+                            ({
+                                type: "POST",
+                                url: "{{ path ('ajax_typespublications') }}",
+                                data: dataString,
+                                cache: false,
+                                success: function (html)
+                                {
+                                    $('#appbundle_courses_type option ').remove();
+                                    $('#appbundle_courses_type').append(html);                                    
+                                }
+                            });
+                }
+                
+            });
+        });
+    </script>
+
+{% endblock %}

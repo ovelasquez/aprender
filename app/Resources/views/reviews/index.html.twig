@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reviews list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Comment</th>
+                <th>Score</th>
+                <th>Evaluator</th>
+                <th>Evaluated</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr>
+                <td><a href="{{ path('reviews_show', { 'id': review.id }) }}">{{ review.id }}</a></td>
+                <td>{{ review.comment }}</td>
+                <td>{{ review.score }}</td>
+                <td>{{ review.evaluator }}</td>
+                <td>{{ review.evaluated }}</td>
+                <td>{{ review.type }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('reviews_show', { 'id': review.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('reviews_edit', { 'id': review.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reviews_new') }}">Create a new review</a>
+        </li>
+    </ul>
+{% endblock %}

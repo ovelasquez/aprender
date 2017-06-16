@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Typespublications list</h1>
+
+   <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Currency</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for typespublication in typespublications %}
+            <tr>
+                <td><a href="{{ path('typespublications_show', { 'id': typespublication.id }) }}">{{ typespublication.id }}</a></td>
+                <td>{{ typespublication.name }}</td>
+                <td>{{ typespublication.currency }}</td>     
+                <td>{{ typespublication.price }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('typespublications_show', { 'id': typespublication.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('typespublications_edit', { 'id': typespublication.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('typespublications_new') }}">Create a new typespublication</a>
+        </li>
+    </ul>
+{% endblock %}

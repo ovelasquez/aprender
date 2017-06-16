@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Lets Know{% endblock %}</title>
+
+        <!-- Prevent the demo from appearing in search engines (REMOVE THIS) -->
+        <meta name="robots" content="noindex">
+
+        <!-- Material Design Icons  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!-- Roboto Web Font -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+
+        <!-- MDK -->
+        <link type="text/css" href="{{ asset('bundles/app/vendor/material-design-kit.css') }}" rel="stylesheet">
+
+        <!-- Sidebar Collapse -->
+        <link type="text/css" href="{{ asset('bundles/app/vendor/sidebar-collapse.min.css') }}" rel="stylesheet">
+
+        <!-- App CSS -->
+        <link type="text/css" href="{{ asset('bundles/app/css/style.css') }}" rel="stylesheet">
+
+        <!-- App CSS -->
+        <link type="text/css" href="{{ asset('bundles/app/css/bootstrap-formhelpers.css') }}" rel="stylesheet">
+
+        <style>
+            /* jssor slider bullet navigator skin 05 css */
+            /*
+            .jssorb05 div           (normal)
+            .jssorb05 div:hover     (normal mouseover)
+            .jssorb05 .av           (active)
+            .jssorb05 .av:hover     (active mouseover)
+            .jssorb05 .dn           (mousedown)
+            */
+            .jssorb05 {
+                position: absolute;
+            }
+            .jssorb05 div, .jssorb05 div:hover, .jssorb05 .av {
+                position: absolute;
+                /* size of bullet elment */
+                width: 16px;
+                height: 16px;
+                background: url('{{ asset('bundles/app/img/b05.png') }}') no-repeat;
+                overflow: hidden;
+                cursor: pointer;
+            }
+            .jssorb05 div { background-position: -7px -7px; }
+            .jssorb05 div:hover, .jssorb05 .av:hover { background-position: -37px -7px; }
+            .jssorb05 .av { background-position: -67px -7px; }
+            .jssorb05 .dn, .jssorb05 .dn:hover { background-position: -97px -7px; }
+
+            /* jssor slider arrow navigator skin 22 css */
+            /*
+            .jssora22l                  (normal)
+            .jssora22r                  (normal)
+            .jssora22l:hover            (normal mouseover)
+            .jssora22r:hover            (normal mouseover)
+            .jssora22l.jssora22ldn      (mousedown)
+            .jssora22r.jssora22rdn      (mousedown)
+            */
+            .jssora22l, .jssora22r {
+                display: block;
+                position: absolute;
+                /* size of arrow element */
+                width: 40px;
+                height: 58px;
+                cursor: pointer;
+                background: url('{{ asset('bundles/app/img/a22.png') }}') center center no-repeat;
+                overflow: hidden;
+            }
+            .jssora22l { background-position: -10px -31px; }
+            .jssora22r { background-position: -70px -31px; }
+            .jssora22l:hover { background-position: -130px -31px; }
+            .jssora22r:hover { background-position: -190px -31px; }
+            .jssora22l.jssora22ldn { background-position: -250px -31px; }
+            .jssora22r.jssora22rdn { background-position: -310px -31px; }
+        </style>
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/fonts/font-awesome/css/font-awesome.min.css') }}" media="all">
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/css/animate.min.css') }}" media="all">
+        <!--plugin style-->    
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/css/dc-portfolio.css') }}"  media="all">
+
+
+    {% block stylesheets %}{% endblock %}
+
+
+
+</head>
+
+<body class="ls-top-navbar-p">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary navbar-full navbar-fixed-top" style="margin-bottom: 0px; box-shadow: none;">
+
+        <!-- Toggle sidebar -->
+        <button class="navbar-toggler" type="button" data-toggle="sidebar"></button>
+
+        <!-- Brand -->
+        <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+
+        <ul class="nav navbar-nav hidden-sm-down">
+
+        </ul>
+
+        <div class="navbar-spacer"></div>
+
+
+        <!-- Menu --> 
+        <ul class="nav navbar-nav hidden-sm-down">
+            {% if is_granted("ROLE_USUARIO") %}    
+                <li class="nav-item">
+                    <a href="{{ path('courses_new') }}" class="btn btn-success" style="background-color: #FFB609; border-color: #FFB609;">
+                        Postular curso <!--i class="material-icons btn__icon--right">help_outline</i-->
+                    </a>
+                </li>
+            {% else %}    
+                <li class="nav-item offset-xs-1">
+                    <a href="{{ path('fos_user_security_login') }}"  class="btn btn-success" style="background-color: #FFB609; border-color: #FFB609;">Acceder</a> 
+                </li>
+            {% endif %}    
+            <!--li class="nav-item">
+                <a class="nav-link" href="{{ path('help') }}">Ayuda</a>
+            </li-->
+
+        </ul>
+
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <!-- Menu -->
+            <ul class="nav navbar-nav">
+                <!-- User dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="false"><img src="{{ asset('uploads/photos') }}/{{app.user.namephoto}}" alt="Avatar" class="rounded-circle" height="40"></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="Preview">
+
+                        {% if is_granted("ROLE_USUARIO") %}   
+
+                            <a class="dropdown-item" href="{{ path('fos_user_profile_edit') }}">
+                                <i class="material-icons">person</i> Editar Cuenta
+                            </a>
+                        {% endif %}    
+                        <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}">
+                            <i class="material-icons">lock</i> Salir
+                        </a>
+
+                    </div>
+                </li>
+                <!-- // END User dropdown -->
+            </ul>
+        {% endif %}
+
+
+    </nav>
+    <!-- // END Navbar -->
+    <!-- Banner -->
+    <div >
+        <div id="jssor_1" style="position:relative;margin:0 auto;top:0px;left:0px;width:1300px;height:500px;overflow:hidden;visibility:hidden;">
+            <!-- Loading Screen -->
+            <div data-u="loading" style="position:absolute;top:0px;left:0px;background-color:rgba(0,0,0,0.7);">
+                <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%;"></div>
+                <div style="position:absolute;display:block;background:url('{{ asset('bundles/app/img/loading.gif') }}') no-repeat center center;top:0px;left:0px;width:100%;height:100%;"></div>
+            </div>
+            <div data-u="slides" style="cursor:default;position:relative;top:0px;left:0px;width:1300px;height:500px;overflow:hidden;">
+                <!--div>
+                    <img data-u="image" src="{{ asset('bundles/app/img/red.jpg') }}" />
+                    <div style="position:absolute;top:30px;left:30px;width:480px;height:120px;z-index:0;font-size:50px;color:#ffffff;line-height:60px;">TOUCH SWIPE SLIDER</div>
+                    <div style="position:absolute;top:300px;left:30px;width:480px;height:120px;z-index:0;font-size:30px;color:#ffffff;line-height:38px;">Build your slider with anything, includes image, content, text, html, photo, picture</div>
+                    <div data-u="caption" data-t="0" style="position:absolute;top:100px;left:600px;width:445px;height:300px;z-index:0;">
+                        <img style="position:absolute;top:0px;left:0px;width:445px;height:300px;z-index:0;" src="{{ asset('bundles/app/img/c-phone.png') }}" />
+                        <img data-u="caption" data-t="1" style="position:absolute;top:70px;left:130px;width:102px;height:78px;z-index:0;" src="{{ asset('bundles/app/img/c-jssor-slider.png') }}" />
+                        <img data-u="caption" data-t="2" style="position:absolute;top:153px;left:163px;width:80px;height:53px;z-index:0;" src="{{ asset('bundles/app/img/c-text.png') }}" />
+                        <img data-u="caption" data-t="3" style="position:absolute;top:60px;left:220px;width:140px;height:90px;z-index:0;" src="{{ asset('bundles/app/img/c-fruit.png') }}" />
+                        <img data-u="caption" data-t="4" style="position:absolute;top:-123px;left:121px;width:200px;height:155px;z-index:0;" src="{{ asset('bundles/app/img/c-navigator.png') }}" />
+                    </div>
+                    <div data-u="caption" data-t="5" style="position:absolute;top:120px;left:650px;width:470px;height:220px;z-index:0;">
+                        <img style="position:absolute;top:0px;left:0px;width:470px;height:220px;z-index:0;" src="{{ asset('bundles/app/img/c-phone-horizontal.png') }}" />
+                        <div style="position:absolute;top:4px;left:45px;width:379px;height:213px;z-index:0; overflow:hidden;">
+                            <img data-u="caption" data-t="6" style="position:absolute;top:0px;left:0px;width:379px;height:213px;z-index:0;" src="{{ asset('bundles/app/img/c-slide-1.jpg') }}" />
+                            <img data-u="caption" data-t="7" style="position:absolute;top:0px;left:379px;width:379px;height:213px;z-index:0;" src="{{ asset('bundles/app/img/c-slide-3.jpg') }}" />
+                        </div>
+                        <img style="position:absolute;top:4px;left:45px;width:379px;height:213px;z-index:0;" src="{{ asset('bundles/app/img/c-navigator-horizontal.png') }}" />
+                        <img data-u="caption" data-t="8" style="position:absolute;top:740px;left:1600px;width:257px;height:300px;z-index:0;" src="{{ asset('bundles/app/img/c-finger-pointing.png') }}" />
+                    </div>
+                </div-->
+                <div>
+                    <img data-u="image" src="{{ asset('bundles/app/img/banner_lk_0001.jpg') }}" />
+                    <div style="position:absolute;top:120px;left:196px;width:600px;height:120px;z-index:0;font-size:50px;color:#ffffff;line-height:60px;">¿Qué quieres aprender hoy?</div>
+                    <div style="position:absolute;top:180px;left:196px;width:600px;height:120px;z-index:0;font-size:24px;color:#ffffff;line-height:28px;">Toma cursos presenciales, conoce nuevos lugares y personas </div>
+                    <div style="position:absolute;top:300px;left:196px;width:600px;height:120px;z-index:0;font-size:24px;color:#ffffff;line-height:28px;"><a class="btn btn-lg btn-secondary btn-bg-transparent" href='' >Conoce cómo </a> </div>
+                </div>
+                <div>
+                    <img data-u="image" src="{{ asset('bundles/app/img/banner_lk_0002.jpg') }}" />
+                </div>
+            </div>
+            <!-- Bullet Navigator -->
+            <div data-u="navigator" class="jssorb05" style="bottom:100px;right:16px;" data-autocenter="1">
+                <!-- bullet navigator item prototype -->
+                <div data-u="prototype" style="width:16px;height:16px;"></div>
+            </div>
+            <!-- Arrow Navigator -->
+            <span data-u="arrowleft" class="jssora22l" style="top:0px;left:12px;width:40px;height:58px;" data-autocenter="2"></span>
+            <span data-u="arrowright" class="jssora22r" style="top:0px;right:12px;width:40px;height:58px;" data-autocenter="2"></span>
+        </div>
+    </div>
+    <!-- // END Banner -->
+    <!-- Filter -->
+    <div class="filters row p-1 m-0" style=" ">
+        <form class="" action="{{ path('courses_list_home') }}" method="post" >
+            <div class="col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12 offset-sm-0">
+                <div class="col-md-2 col-xs-12 p-0">
+                    <div class="styled-select slate first">
+                        <select  name="category"  >
+                            <option value=''>Categoría</option>
+                            {% for category in coursesCategories %}
+                                <option value="{{category.id}}" {%if category.id== selCategory%}selected{%endif%}>{{category.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2 col-xs-12 p-0  " ><div class="styled-select slate"><select class="bfh-countries" id="country" name="country"  data-country="{{selCountry}}" data-available="ES,VE" ></select></div></div>
+                <div class="col-md-2 col-xs-12 p-0  " ><div class="styled-select slate"><select class="bfh-states" name="province" data-country="country"  id="state" data-state="{{selState}}" ></select></div></div>
+                <div class="col-md-2 col-xs-12 p-0 " ><div class="styled-select slate last"><select class="" name="cost" >
+                            <option value=''>Costo</option>
+                            {% for cost in courseCosts %}
+                                <option value="{{cost.id}}" {%if cost.id== selCost%}selected{%endif%}>{{cost.name}}</option>
+                            {% endfor %}
+                        </select></div></div>
+                <div class="col-md-2 col-xs-12 navbar-light input-filter p-0">
+                    <!-- Search -->
+                    <div class="">
+                        <input type="text" class="q" name="q" placeholder="Curso" value="{{q}}">                        
+                    </div>
+                    <!-- // END Search -->
+                </div>
+                <div class="col-md-2 col-xs-12 navbar-light input-filter p-0">
+                    <button class="btn btn-success" type="submit" id="btn_s"><i class="material-icons">search</i>Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>    
+    <!-- // END Filter -->  
+    <!-- Content -->           
+{% block body %}{% endblock %}
+<!-- // END Content -->     
+<!-- Content -->         
+<div class="footer bg-primary pt-3 pb-2">
+    <div class="row m-0" >
+        <div class=" col-sm-8 offset-sm-2 ">
+            <div class="col-sm-4 text-xs-center">
+
+                <h3 class='text-white'>Let's Know</h3><br><p class='text-white'>
+                    Somos un lugar donde se conectan personas que quieren aprender algo nuevo con aquellas que quieren enseñar algo distinto.
+                    <br>
+                    Todos se convierten en instructores o alumnos, las materias se dan en parques, plazas, salones o casas y lo que se estudia es tan diverso como la imaginación de cada uno de nosotros.
+                    <br>
+                    Aprende siempre algo nuevo, visita lugares nunca vistos, 
+                    y conoce personas que jamás pensaste que ibas a conocer.
+                </p> 
+                <div class="material-icons">
+                    <div class="col-xs-3"><a href="https://www.facebook.com/letsknow" class=" text-lg-center" ><i class="fa fa-facebook-square fa-1x text-white "></i></a></div>
+                    <div class="col-xs-3"><a href="https://www.instagram.com/letsknow" class=" text-lg-center" ><i class="fa fa-instagram fa-1x text-white"></i></a></div>
+                    <div class="col-xs-3"><a href="https://es.pinterest.com/letsknow" class=" text-lg-center" ><i class="fa fa-pinterest-square fa-1x text-white"></i></a></div>
+                    <div class="col-xs-3"><a href="https://twitter.com/letsknow" class=" text-lg-center" ><i class="fa fa-twitter-square fa-1x text-white"></i></a></div>
+                </div>
+            </div>
+            <div class="col-sm-4 text-xs-center">
+                <h3 class='text-white'>Boletín Informativo</h3><br><p class='text-white'>
+                    ¿Quieres estar actualizado de nuestros nuevos cursos? <br>
+                    Suscríbete a nuestro boletín y recibe toda la información de importancia para potenciar y compartir tus conocimientos.      
+                </p> 
+            </div>
+            <div class="col-sm-4 text-xs-center">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://vimeo.com/21460434" allowfullscreen=""></iframe>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // END Content --> 
+<!-- Sidebar -->
+<div class="mdk-drawer mdk-js-drawer" id="default-drawer">
+    <div class="mdk-drawer__content ls-top-navbar-xs-up">
+        <div class="sidebar sidebar-left sidebar-light bg-white sidebar-p-y">
+            <div class="sidebar-heading">Cursos</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item active">
+                    <a class="sidebar-menu-button" href="{{ path('frontpage') }}">
+                        <i class="sidebar-menu-icon material-icons">local_library</i> Nuestros cursos
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="{{ path('courses_new') }}">
+                        <i class="sidebar-menu-icon material-icons">queue</i> Postular curso
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-heading">Iniciar</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="{{ path('fos_user_security_login') }}">
+                        <i class="sidebar-menu-icon material-icons">person</i> Acceder
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="{{ path('fos_user_registration_register') }}">
+                        <i class="sidebar-menu-icon material-icons">person_add</i> Registrarse
+
+                    </a>
+                </li>
+            </ul>
+            <!-- // END Components Menu -->
+        </div>
+    </div>
+</div>
+<!-- // END Sidebar -->
+
+
+<!-- jQuery -->
+<script src="{{ asset('bundles/app/vendor/jquery.min.js') }}"></script>
+
+<!-- Bootstrap -->
+<script src="{{ asset('bundles/app/vendor/tether.min.js') }}"></script>
+<script src="{{ asset('bundles/app/vendor/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/app/js/bootstrap-formhelpers.min.js') }}"></script>
+
+<!-- MDK -->
+<script src="{{ asset('bundles/app/vendor/dom-factory.js') }}"></script>
+<script src="{{ asset('bundles/app/vendor/material-design-kit.js') }}"></script>
+
+<!-- Sidebar Collapse -->
+<script src="{{ asset('bundles/app/vendor/sidebar-collapse.js') }}"></script>
+
+
+<!-- Modal -->
+<script src="{{ asset('bundles/app/vendor/bootbox.min.js') }}"></script>
+
+
+<!-- App JS -->
+<script src="{{ asset('bundles/app/js/main.min.js') }}"></script>
+
+<!-- #region Jssor Slider Begin -->
+<script src="{{ asset('bundles/app/js/jssor.slider-23.0.0.min.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    jssor_1_slider_init = function () {
+
+        var jssor_1_SlideoTransitions = [
+            [{b: 5500, d: 3000, o: -1, r: 240, e: {r: 2}}],
+            [{b: -1, d: 1, o: -1, c: {x: 51.0, t: -51.0}}, {b: 0, d: 1000, o: 1, c: {x: -51.0, t: 51.0}, e: {o: 7, c: {x: 7, t: 7}}}],
+            [{b: -1, d: 1, o: -1, sX: 9, sY: 9}, {b: 1000, d: 1000, o: 1, sX: -9, sY: -9, e: {sX: 2, sY: 2}}],
+            [{b: -1, d: 1, o: -1, r: -180, sX: 9, sY: 9}, {b: 2000, d: 1000, o: 1, r: 180, sX: -9, sY: -9, e: {r: 2, sX: 2, sY: 2}}],
+            [{b: -1, d: 1, o: -1}, {b: 3000, d: 2000, y: 180, o: 1, e: {y: 16}}],
+            [{b: -1, d: 1, o: -1, r: -150}, {b: 7500, d: 1600, o: 1, r: 150, e: {r: 3}}],
+            [{b: 10000, d: 2000, x: -379, e: {x: 7}}],
+            [{b: 10000, d: 2000, x: -379, e: {x: 7}}],
+            [{b: -1, d: 1, o: -1, r: 288, sX: 9, sY: 9}, {b: 9100, d: 900, x: -1400, y: -660, o: 1, r: -288, sX: -9, sY: -9, e: {r: 6}}, {b: 10000, d: 1600, x: -200, o: -1, e: {x: 16}}]
+        ];
+
+        var jssor_1_options = {
+            $AutoPlay: 1,
+            $SlideDuration: 800,
+            $SlideEasing: $Jease$.$OutQuint,
+            $CaptionSliderOptions: {
+                $Class: $JssorCaptionSlideo$,
+                $Transitions: jssor_1_SlideoTransitions
+            },
+            $ArrowNavigatorOptions: {
+                $Class: $JssorArrowNavigator$
+            },
+            $BulletNavigatorOptions: {
+                $Class: $JssorBulletNavigator$
+            }
+        };
+
+        var jssor_1_slider = new $JssorSlider$("jssor_1", jssor_1_options);
+
+        /*responsive code begin*/
+        /*remove responsive code if you don't want the slider scales while window resizing*/
+        function ScaleSlider() {
+            var refSize = jssor_1_slider.$Elmt.parentNode.clientWidth;
+            if (refSize) {
+                refSize = Math.min(refSize, 1920);
+                jssor_1_slider.$ScaleWidth(refSize);
+            }
+            else {
+                window.setTimeout(ScaleSlider, 30);
+            }
+        }
+        ScaleSlider();
+        $Jssor$.$AddEvent(window, "load", ScaleSlider);
+        $Jssor$.$AddEvent(window, "resize", ScaleSlider);
+        $Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
+        /*responsive code end*/
+    };
+
+    $(function () {
+        $('#country').find("option:first").html("País");
+        $('#country').change(function () {
+            $('#state').find("option:first").html("Provincia");
+
+        });
+        $('#state').find("option:first").html("Provincia");
+    });
+
+
+</script>
+
+<script type="text/javascript">jssor_1_slider_init();</script>
+
+<script src="{{ asset('bundles/app/js/dc-portfolio.js') }}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#dc-pfbox').dcPfolio({
+            column: 3,
+            animation: 'classic',
+            borderstyle: 'none',
+            appearance: 'zoomIn'
+        });
+
+        /*
+         $('pre.code').highlight({
+         source: 1,
+         zebra: 1,
+         indent: 'space',
+         list: 'ol',
+         attribute: 'data-language'
+         });
+         */
+        //$(document).scrollTop($("#btn_s").scrollTop());
+        var x = $(".filters").position();
+        //$(document).scrollTop(( parseInt(x.top)+parseInt($(".filters").height())-200));
+
+    });
+</script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>
+

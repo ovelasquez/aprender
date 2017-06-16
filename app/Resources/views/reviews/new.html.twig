@@ -1,0 +1,130 @@
+{% extends 'base_i.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('courses_show_users_ini') }}">Estudiante Postulado</a></li>
+        <li class="breadcrumb-item active">Calificar</li>
+    </ol>   
+    <div class="row mb-2">
+        <div class="col-lg-6">
+            <h1>Defina calificación</h1>
+            Estudiante: 
+        </div>
+
+    </div>
+
+
+    <div class="row mb-2">
+        <div class="text-xs-center">
+            {% if userStudent.photo!='' %}
+                <a href="#"><img src="{{ asset('uploads/photos/') }}{{userStudent.photo}}" width="110px"  class="rounded-circle" id="photo" /></a>
+                {% endif %}
+            <h1 class="h2 mb-0 mt-1">{{ userStudent.name |title }} {{ userStudent.lastname |title }}</h1>
+            <p class="lead text-muted mb-0">{{ userStudent.province }}, {{ userStudent.country | country_name |upper }}</p>
+            <hr>
+
+
+
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-lg-12 col-md-12 text-xs-center">
+
+            <fieldset class="form-group">                        
+                <label>Calificación del Estudiante</label>
+                <div class="rating">
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                    <i class="material-icons text-muted-light">star_border</i>
+                </div>              
+            </fieldset>
+
+           
+            {{ form_start(form, { 'attr': {'id':'calificar'} }) }} 
+
+            <fieldset class="form-group">     
+                {{ form_label(form.comment, 'Comentario', {
+                'label_attr': {'class': 'wh'}
+                    }) }}
+                {{ form_errors(form.comment, {'attr': {'class': 'form-control wh'}}) }}
+                {{ form_widget(form.comment) }}                      
+            </fieldset>
+
+            <a href="{{ path('courses_show_users_ini') }}" class="btn btn-primary btn-md">Volver</a>
+
+            <input type="submit" onClick="removeReadonly()" class="btn btn-rosa btn-md " value="Guardar">
+
+            {{ form_widget(form.evaluator, {'value' : course}) }}    
+            {{ form_widget(form.evaluated, {'value' : userStudent.id}) }}        
+
+            {{ form_end(form) }}
+
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+
+        $(function () {
+
+            $(".rating i").hover(
+                    function () {
+                        var id = $(this).index();
+                        $(".rating i").filter(function (index) {
+                            return index <= id;
+                        }).removeClass("text-muted-light").addClass("text-success").html("star");
+                    }, function () {
+
+                var id = $(this).index();
+                $(".rating i").filter(function (index) {
+                    return index <= id && !$(this).hasClass("active");
+                }).removeClass("text-success").addClass("text-muted-light").html("star_border");
+
+            }).click(function () {
+                $("#appbundle_reviews_score").val($(this).index() + 1);
+
+                var id = $(this).index();
+
+                $(".rating i").filter(function (index) {
+                    return index <= id;
+                }).removeClass("text-muted-light").addClass("text-success").addClass("active").html("star");
+
+                $(".rating i").filter(function (index) {
+                    return index > id;
+                }).removeClass("text-success").removeClass("active").addClass("text-muted-light").html("star_border");
+            });
+        });
+
+
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#calificar").submit(function () {
+                var x =  $("#appbundle_reviews_score").val();
+                if (x === "") {
+                    alert("Valor introducido en la Calificación del Estudiante no es válido");
+                    return false;
+                } else
+                    return true;
+            });
+        });
+    </script>
+
+
+
+{% endblock %}

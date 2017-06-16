@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Coursecategories list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for coursecategory in coursecategories %}
+            <tr>
+                <td><a href="{{ path('coursecategories_show', { 'id': coursecategory.id }) }}">{{ coursecategory.id }}</a></td>
+                <td>{{ coursecategory.name }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('coursecategories_show', { 'id': coursecategory.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('coursecategories_edit', { 'id': coursecategory.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('coursecategories_new') }}">Create a new coursecategory</a>
+        </li>
+    </ul>
+{% endblock %}

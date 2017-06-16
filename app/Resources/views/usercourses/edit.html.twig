@@ -1,0 +1,51 @@
+{% extends 'base_i.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Estudiante Postulado</li>
+    </ol>   
+    <div class="row mb-2">
+        <div class="col-lg-6">
+            <h1>Defina estatus</h1>
+            Curso: <span class="bg-success text-white" style="padding: 2px 5px"> {{ userCourse.course.title }} </span>
+        </div>
+
+    </div>
+
+
+    <div class="row mb-2">
+        <div class="text-xs-center">
+            {% if userCourse.user.photo!='' %}
+                <a href="#"><img src="{{ asset('uploads/photos/') }}{{userCourse.user.photo}}" width="110px"  class="rounded-circle" id="photo" /></a>
+                {% endif %}
+            <h1 class="h2 mb-0 mt-1">{{ userCourse.user.name }} {{ userCourse.user.lastname }}</h1>
+            <p class="lead text-muted mb-0">{{ userCourse.user.username }}, USA</p>
+            <hr>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="">
+
+                {{ form_start(edit_form) }}
+                {{ form_label(edit_form.status, 'Estatus', {
+                'label_attr': {'class': 'wh'}
+                    }) }}
+                {{ form_errors(edit_form.status) }}
+                {{ form_widget(edit_form.status, {'attr': {'class': 'form-control wh'}}) }}
+                <div class="mt-1">
+                    <a href="{{ path('courses_show_users_ini',{ 'id': userCourse.course.id }) }}" class="btn btn-primary btn-md">Volver</a>
+                    <input type="submit" class="btn btn-rosa btn-md " value="Guardar" />
+                </div>
+                {{ form_end(edit_form) }}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'base_e.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Mis cursos</li>
+    </ol>   
+    <div class="row mb-2 filters">
+        <div class="col-lg-3">
+            <h1>Mis cursos</h1>
+        </div>
+        <div class="col-lg-6 fields-filter">
+            <div class="col-lg-4" style=" padding: 0.1rem;"><select class="form-control" style=" padding: 0.1rem;"><option>Categoría</option></select></div>
+            <div class="col-lg-4" style=" padding: 0.1rem;"><select class="form-control" style=" padding: 0.1rem;"><option>Ubicación</option></select></div>
+            <div class="col-lg-4" style=" padding: 0.1rem;"><select class="form-control" style=" padding: 0.1rem;"><option>Costo</option></select></div>
+        </div>
+        <div class="col-lg-3 navbar-light input-filter">
+            <!-- Search -->
+            <form class="navbar-search-form hidden-sm-down">
+                <input type="text" class="form-control" placeholder="Nombre">
+                <button class="btn" type="button"><i class="material-icons">search</i></button>
+            </form>
+            <!-- // END Search -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div >
+                <!--div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">Cursos Postulados</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+
+                    </div>
+                </div-->
+
+                {% for course in courses %}
+               
+                    <div class="card ">
+                        <div class="card-header bg-white">
+                            <div class="media">
+                                <div class="media-left media-middle">
+                                    {% if course.photo!='' %}
+                                        <a href="{{ path('courses_show', { 'id': course.id }) }}"><img src="{{ asset('uploads/photos/') }}{{course.photo}}" width="200" class="rounded"/></a>
+                                        {% endif %}
+                                </div>
+                                <div class="media-body media-middle">
+                                    <h4 class="card-title "><a class="text-primary" href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.title }}</a></h4>
+                                    <p>
+                                        {{ course.resume }}
+                                    </p>
+
+                                </div>
+                                <div class="media-right media-bottom">
+                                    <div style="height:100px" class="text-lg-center media-bottom" ><h2 style="padding-top: 2rem;"><!--Bs.-->$ {{ course.cost.price }}</h2></div>
+                                    <div  style="height:50px; width: 150px;" class="text-xs-center">
+                                        <div class="rating">
+                                            <i class="material-icons">star</i>
+                                            <i class="material-icons">star_half</i>
+                                            <i class="material-icons">star_border</i>
+                                            <i class="material-icons">star_border</i>
+                                            <i class="material-icons">star_border</i>
+                                        </div>
+                                    </div>
+                                    <div style="height:50px" >
+                                        <a href="{{ path('courses_show', { 'id': course.id }) }}" class="btn btn-primary btn-md btn-block">Ver más </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="display:none">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Resume</th>
+                    <th>Photo</th>
+                    <th>Video</th>
+                    <th>Place</th>
+                    <th>Province</th>
+                    <th>Avenue</th>
+                    <th>Address</th>
+                    <th>Minstudent</th>
+                    <th>Maxstudent</th>
+                    <th>Startdate</th>
+                    <th>Enddate</th>
+                    <th>Hour</th>
+                    <th>Days</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td><a href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.id }}</a></td>
+                        <td>{{ course.title }}</td>
+                        <td>{{ course.description }}</td>
+                        <td>{{ course.resume }}</td>
+                        <td>{{ course.photo }}</td>
+                        <td>{{ course.video }}</td>
+                        <td>{{ course.place }}</td>
+                        <td>{{ course.province }}</td>
+                        <td>{{ course.avenue }}</td>
+                        <td>{{ course.address }}</td>
+                        <td>{{ course.minstudent }}</td>
+                        <td>{{ course.maxstudent }}</td>
+                        <td>{% if course.startdate %}{{ course.startdate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{% if course.enddate %}{{ course.enddate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{{ course.hour }}</td>
+                        <td>{{ course.days }}</td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('courses_show', { 'id': course.id }) }}">show</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('courses_edit', { 'id': course.id }) }}">edit</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <ul>
+            <li>
+                <a href="{{ path('courses_new') }}">Create a new course</a>
+            </li>
+        </ul>
+
+
+    </div>
+{% endblock %}
+
+
+
+
+

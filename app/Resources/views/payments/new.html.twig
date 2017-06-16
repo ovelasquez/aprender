@@ -1,0 +1,114 @@
+{% extends 'base_e.html.twig' %}
+
+{% block stylesheets %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css">{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('courses_indexall',{ 'id': null }) }}">Cursos</a></li>
+        <li class="breadcrumb-item active"><a href="{{ path('courses_show',{ 'id': payment.course.id }) }}">{{ payment.course.title }}</a></li>
+        <li class="breadcrumb-item active">Pago</li>
+    </ol>   
+
+    <h4 class="page-heading text-xs-center">Hacer Pago</h4>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <ul class="card list-group list-group-fit">               
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="btn btn-white btn-circle">
+                                <i class="fa fa-paypal"></i>
+                            </span>
+                        </div>
+                        <div class="media-body media-middle">
+                            MercadoPago
+                        </div>
+                        <div class="media-right media-middle">
+                            <div ></div>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="btn btn-white btn-circle">
+                                <i class="fa fa-paypal"></i>
+                            </span>
+                        </div>
+                        <div class="media-body media-middle">
+                            PayPal
+                        </div>
+                        <div class="media-right media-middle">
+                            <div id="paypal-button"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>   
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>
+        paypal.Button.render({
+            env: 'sandbox', // Specify 'sandbox' for the test environment
+
+            client: {
+                sandbox: 'ARvOCmpyGYFcaMCM3-FeCLi7hia0G51JLCoeGzBJeybvtlUgpmef-5B6PRBZFHH8BJvqiYdsiV2WjjE8'
+
+            },
+            payment: function () {
+
+                var env = this.props.env;
+                var client = this.props.client;
+
+                return paypal.rest.payment.create(env, client, {
+                    transactions: [
+                        {
+                            amount: {total: '1.00', currency: 'USD'},
+                            description: "{{payment.course.title}}"
+                        }
+                    ],
+                    redirect_urls: {
+                        "return_url": "{{ path('payments_registerpay',{ 'course_id': payment.course.id }) }}",
+                        "cancel_url": "{{ path('payments_new',{ 'course_id': payment.course.id }) }}"
+                    }
+                });
+            },
+            commit: true, // Optional: show a 'Pay Now' button in the checkout flow
+
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute().then(function () {
+                    //actions.payment.get().then(function(data) {
+                    //$.post("{{ path('payments_registerpay',{ 'course_id': payment.course.id }) }}", data).done(function (data) {
+                    //alert("data");
+                    //return actions.redirect();
+                    //});
+                    //alert(data.state);
+                    //});
+                    return actions.redirect();
+                });
+
+                /*
+                 // Optional: display a confirmation page here
+                 return actions.payment.execute().then(function () {
+                 // Show a success page to the buyer
+                 alert(data);
+                 console.log(data);
+                 });
+                 */
+            },
+            onError: function (err) {
+                console.log(err);
+                // Show an error page here, when an error occurs
+            }
+
+        }, '#paypal-button');
+    </script>
+
+{% endblock %}

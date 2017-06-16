@@ -1,0 +1,91 @@
+{% extends "FOSUserBundle::layout_i.html.twig" %}
+
+{% block fos_user_content %}
+    {% if is_granted("ROLE_USUARIO") %}    
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+            <li class="breadcrumb-item active">Editar Cuenta</li>
+        </ol>   
+        <div class="row">
+            <div class="col-lg-12">
+                {% include "FOSUserBundle:Profile:edit_content.html.twig" %}
+            </div>
+        </div>
+    {% else %} 
+        <script>window.location.href = '{{ path('courses_index_list') }}'</script>
+    {% endif %}            
+{% endblock fos_user_content %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $("#fos_user_profile_form_coursecategories input[type=checkbox]").addClass("custom-control-input").wrap("<label class='custom-control custom-checkbox m-0'></label>");
+            $("#fos_user_profile_form_coursecategories input[type=checkbox]").after('<span class="custom-control-indicator"></span><span class="custom-control-description">Subscribe to Newsletter</span>');
+            $("#fos_user_profile_form_coursecategories label.custom-checkbox").each(function () {
+                $(this).addClass("col-lg-3 col-md-6 col-sm-12");
+                $(this).find(".custom-control-description").html($(this).next("label").html());
+                $(this).prop("id", $(this).next("label").prop("id"));
+                $(this).next("label").remove();
+            });
+            $("#fos_user_profile_form_photo").change(function () {
+                $("#icophoto").show();
+                $("#photo").remove();
+
+                var str = $('#fos_user_profile_form_photo').val();
+                var n = str.indexOf("\\");
+                if (n !== -1) {
+                    str = str.split('\\');
+                } else {
+                    n = str.indexOf('/');
+                    if (n !== -1) {
+                        str = str.split('/');
+                    } else {
+                        str = [str];
+                    }
+                }
+                $(".custom-file-control").addClass("custom-file-control-o");
+                $(".custom-file-control").html(str[str.length - 1]);
+
+
+            });
+
+            $("#save").click(function () {
+
+                if ($("#photo").attr("src") !== undefined) {
+                    $('#fos_user_profile_form_photo').prop("required", "");
+                } else {
+                    $('#fos_user_profile_form_photo').prop("required", "required");
+                }
+
+                $('#fos_user_profile_form_photoupdate').val('{{app.user.namephoto}}');
+
+                //$("#form_course_edit").submit();
+
+            });
+
+
+            $('#fos_user_profile_form_photoupdate').val('{{app.user.namephoto}}');
+
+
+
+            //Pais
+            $('#fos_user_profile_form_country').find("option:first").html("País");
+            $('#fos_user_profile_form_country').change(function () {
+                $('#province').find("option:first").html("Provincia");
+                
+                if ($('#province option').length <= 1) {
+                    $('#province').prop("required", "");
+                } else {
+                    $('#province').prop("required", "required");
+                }
+            });
+            $('#province').find("option:first").html("Seleccione");
+            $("#fos_user_profile_form_province").remove();
+            
+            
+
+
+        });
+    </script>
+
+
+{% endblock %}

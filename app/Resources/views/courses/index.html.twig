@@ -1,0 +1,190 @@
+{% extends 'base_i.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Cursos Postulados</li>
+    </ol>   
+    <div class="row mb-2 filters">
+        <div class="col-lg-{%if (courses|length>0)%}3{%else%}12{%endif%}">
+            <h1>Cursos Postulados</h1>
+        </div>
+        {%if (courses|length>0)%}
+            <form class="" action="{{ path('courses_index') }}" method="post" >
+                <div class="col-lg-6 fields-filter">
+                    <div class="col-lg-3" style=" padding: 0.1rem;"><select class="form-control"  name="category"  style=" padding: 0.1rem;">
+                            <option value=''>Categoría</option>
+                            {% for category in coursesCategories %}
+                                <option value="{{category.id}}" {%if category.id== selCategory%}selected{%endif%}>{{category.name}}</option>
+                            {% endfor %}
+                        </select></div>
+                    <div class="col-lg-3" style=" padding: 0.1rem;"><select class="form-control bfh-countries" id="country" name="country" style=" padding: 0.1rem;" data-country="{{selCountry}}" data-available="ES,VE" ></select></div>
+                    <div class="col-lg-3" style=" padding: 0.1rem;"><select class="form-control input-medium  bfh-states" name="province" data-country="country"  id="state" data-state="{{selState}}" style=" padding: 0.1rem;"></select></div>
+                    <div class="col-lg-3" style=" padding: 0.1rem;"><select class="form-control" name="cost" style=" padding: 0.1rem;">
+                            <option value=''>Costo</option>
+                            {% for cost in courseCosts %}
+                                <option value="{{cost.id}}" {%if cost.id== selCost%}selected{%endif%}>{{cost.name}}</option>
+                            {% endfor %}
+                        </select></div>
+
+                </div>
+                <div class="col-lg-3 navbar-light input-filter">
+                    <!-- Search -->
+                    <div class="navbar-search-form hidden-sm-down">
+                        <input type="text" class="form-control" name="q" placeholder="Nombre" value="{{q}}">
+                        <button class="btn" type="submit"><i class="material-icons">search</i></button>
+                    </div>
+                    <!-- // END Search -->
+                </div>
+            </form>
+        {%endif%}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <!--div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">Cursos Postulados</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+
+                    </div>
+                </div-->
+                {%if (courses|length==0)%}
+                    <p class="alert alert-warning"> Aun no tienes cursos postulados 
+                        <a href="{{ path('courses_new') }}" class="btn btn-success" style=" position: absolute; right: 10px;  background-color: #FFB609; border-color: #FFB609;">
+                            Postular curso <!--i class="material-icons btn__icon--right">help_outline</i-->
+                        </a> 
+                    </p>
+                {%else%}
+                    <ul class="list-group list-group-fit mb-0">
+                        {% for course in courses %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body media-middle">
+                                        <a href="{{ path('courses_show_ins', { 'id': course.id }) }}">{{ course.title }}</a> 
+                                    </div>     
+                                    <div class="media-right media-middle">
+                                        <div class="text-xs-center" style=" width: 150px;">
+
+                                            {%if course.status==1%}
+                                                <div class="list-status"><i class="material-icons ">check</i> <span > Aprobado </span></div>  
+                                            {%endif%}
+
+                                            {%if course.status==0%}
+                                                <div class="list-status text-warning"><i class="material-icons ">warning</i> <span > Por aprobar </span></div>    
+                                            {%endif%}
+
+                                            {%if course.status==-1%}
+                                                <div class="list-status text-danger"><i class="material-icons ">clear</i> <span > Rechazado </span></div>    
+                                            {%endif%}
+
+                                            {%if course.status==2%}
+                                                <div class="list-status text-primary"><i class="material-icons ">timer_off</i> <span > Finalizado </span></div>    
+                                            {%endif%}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+
+
+                    </ul>
+                {%endif%}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="display:none">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Resume</th>
+                    <th>Photo</th>
+                    <th>Video</th>
+                    <th>Place</th>
+                    <th>Province</th>
+                    <th>Avenue</th>
+                    <th>Address</th>
+                    <th>Minstudent</th>
+                    <th>Maxstudent</th>
+                    <th>Startdate</th>
+                    <th>Enddate</th>
+                    <th>Hour</th>
+                    <th>Days</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td><a href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.id }}</a></td>
+                        <td>{{ course.title }}</td>
+                        <td>{{ course.description }}</td>
+                        <td>{{ course.resume }}</td>
+                        <td>{{ course.photo }}</td>
+                        <td>{{ course.video }}</td>
+                        <td>{{ course.place }}</td>
+                        <td>{{ course.province }}</td>
+                        <td>{{ course.avenue }}</td>
+                        <td>{{ course.address }}</td>
+                        <td>{{ course.minstudent }}</td>
+                        <td>{{ course.maxstudent }}</td>
+                        <td>{% if course.startdate %}{{ course.startdate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{% if course.enddate %}{{ course.enddate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{{ course.hour }}</td>
+                        <td>{{ course.days }}</td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('courses_show', { 'id': course.id }) }}">show</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('courses_edit', { 'id': course.id }) }}">edit</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <ul>
+            <li>
+                <a href="{{ path('courses_new') }}">Create a new course</a>
+            </li>
+        </ul>
+
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+
+        $(function () {
+
+            $('#country').find("option:first").html("País").change(function () {
+                $('#state').find("option:first").html("Provincia");
+            });
+            $('#state').find("option:first").html("Provincia");
+
+        });
+
+    </script>
+
+{% endblock %}
+
+
+
+
+
+

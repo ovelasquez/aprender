@@ -1,0 +1,93 @@
+{% extends 'base_i.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Inicio</li>
+
+    </ol>   
+    {%if (countToApprove>0)%}    
+        <div class="card card-stats-primary">
+            <div class="card-block">
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <i class="material-icons {%if (countToApprove>0)%}text-success{%else%} text-muted-light {%endif%}">star_half</i>
+                    </div>
+                    <div class="media-body media-middle">
+                        Tiene <strong>{{countToApprove}}</strong> estudiantes por calificar
+                    </div>
+                    <div class="media-right">
+                        <a class="btn btn-md btn-success btn-rosa" href="{{ path('courses_indexcompletedst_qualify') }}">Calificar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%endif%}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="card-title">Cursos Postulados</h4>
+                            <p class="card-subtitle"></p>
+                        </div>
+                        <div class="media-right media-middle">
+                            {%if (courses|length>0)%}
+                                <a class="btn btn-md btn-white" href="{{ path('courses_index') }}">Ver todos</a>
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>
+                {%if (courses|length==0)%}
+                    <p class="m-1"> Aun no tienes cursos postulados  <a href="{{ path('courses_new') }}" class="btn btn-success" style=" position: absolute; right: 10px;  background-color: #FFB609; border-color: #FFB609;">
+                            Postular curso <!--i class="material-icons btn__icon--right">help_outline</i-->
+                        </a></p>
+                    {%endif%}
+                <ul class="list-group list-group-fit mb-0">
+
+                    {% for course in courses %}
+                        <li class="list-group-item">
+
+                            <div class="media">
+                                <div class="media-body media-middle">
+                                    {% if (1!=course.status and not course.isCompleted) %}
+                                        <a href="{{ path('courses_edit', { 'id': course.id }) }}">{{ course.title | title }}</a> 
+                                    {% else%}
+                                        <a href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.title | title }}</a> 
+                                    {% endif%}
+                                </div>
+                                <div class="media-right media-middle">
+                                    <div class="text-xs-center" style=" width: 150px;">
+                                        {%if course.status==1%}
+                                            <div class="list-status"><i class="material-icons ">check</i> <span > Aprobado </span></div>  
+                                        {%endif%}
+
+                                        {%if course.status==0%}
+                                            <div class="list-status text-warning"><i class="material-icons ">warning</i> <span > Por aprobar </span></div>    
+                                        {%endif%}
+
+                                        {%if course.status==-1%}
+                                            <div class="list-status text-danger"><i class="material-icons ">clear</i> <span > Rechazado </span></div>    
+                                        {%endif%}
+
+                                        {%if course.status==2%}
+                                            <div class="list-status text-primary"><i class="material-icons ">timer_off</i> <span > Finalizado </span></div>    
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+
