@@ -1,5 +1,7 @@
 {% extends 'base_i.html.twig' %}
-
+{% block stylesheets %}
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/sweetalert.min.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
 
     <ol class="breadcrumb">
@@ -44,7 +46,7 @@
                 </div>              
             </fieldset>
 
-           
+
             {{ form_start(form, { 'attr': {'id':'calificar'} }) }} 
 
             <fieldset class="form-group">     
@@ -74,39 +76,41 @@
 {% endblock %}
 
 {% block javascripts %}
+    <!-- sweetalert JS -->
+    <script src="{{ asset('bundles/app/vendor/sweetalert.min.js') }}"></script>          
 
     <script>
 
 
-        $(function () {
+                $(function () {
 
-            $(".rating i").hover(
-                    function () {
+                    $(".rating i").hover(
+                            function () {
+                                var id = $(this).index();
+                                $(".rating i").filter(function (index) {
+                                    return index <= id;
+                                }).removeClass("text-muted-light").addClass("text-success").html("star");
+                            }, function () {
+
                         var id = $(this).index();
                         $(".rating i").filter(function (index) {
+                            return index <= id && !$(this).hasClass("active");
+                        }).removeClass("text-success").addClass("text-muted-light").html("star_border");
+
+                    }).click(function () {
+                        $("#appbundle_reviews_score").val($(this).index() + 1);
+
+                        var id = $(this).index();
+
+                        $(".rating i").filter(function (index) {
                             return index <= id;
-                        }).removeClass("text-muted-light").addClass("text-success").html("star");
-                    }, function () {
+                        }).removeClass("text-muted-light").addClass("text-success").addClass("active").html("star");
 
-                var id = $(this).index();
-                $(".rating i").filter(function (index) {
-                    return index <= id && !$(this).hasClass("active");
-                }).removeClass("text-success").addClass("text-muted-light").html("star_border");
-
-            }).click(function () {
-                $("#appbundle_reviews_score").val($(this).index() + 1);
-
-                var id = $(this).index();
-
-                $(".rating i").filter(function (index) {
-                    return index <= id;
-                }).removeClass("text-muted-light").addClass("text-success").addClass("active").html("star");
-
-                $(".rating i").filter(function (index) {
-                    return index > id;
-                }).removeClass("text-success").removeClass("active").addClass("text-muted-light").html("star_border");
-            });
-        });
+                        $(".rating i").filter(function (index) {
+                            return index > id;
+                        }).removeClass("text-success").removeClass("active").addClass("text-muted-light").html("star_border");
+                    });
+                });
 
 
 
@@ -115,9 +119,12 @@
     <script>
         $(document).ready(function () {
             $("#calificar").submit(function () {
-                var x =  $("#appbundle_reviews_score").val();
+                var x = $("#appbundle_reviews_score").val();
                 if (x === "") {
-                    alert("Valor introducido en la Calificación del Estudiante no es válido");
+                    swal('Recuerde!',
+                            'Para Calificar, seleccione las estrellas!',
+                            'info'
+                            )
                     return false;
                 } else
                     return true;

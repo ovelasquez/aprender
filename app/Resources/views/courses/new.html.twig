@@ -52,7 +52,9 @@
                     <div class="card" style="border: none;">
                         <fieldset class="form-group">  
                             <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
-                                {{ form_label(form.category, 'Seleccione la categoría:') }}
+
+                                {{ form_label(form.category, 'Categoría:') }}
+
                                 <div class="card__options">
                                     <div class="dropdown tt">
                                         <a href="#" class="card__options-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons" style="color: #2b936c;">help_outline</i></a>
@@ -60,11 +62,19 @@
                                             <p>{{tooltips.category|raw}}</p>
                                         </div>
                                     </div>
-                                </div></div>
+                                </div>
+                            </div>
 
                             {{ form_errors(form.category) }}
-                            {{ form_widget(form.category) }}
-                        </fieldset></div>
+                            {{ form_widget(form.category,{'attr': {'class': 'form-control'}}) }}        
+
+
+                        </fieldset>
+                    </div>
+
+
+
+
                     <div class="media">
                         <div class="media-body">
                             <h4 class="card-title">DESCRIBE TU CURSO:</h4>                                                       
@@ -441,7 +451,7 @@
                         {{ form_widget(form.type,{'attr': {'class': 'form-control'}}) }}                        
                     </fieldset>
                 </div>
-            </div>
+            </div>            
 
             <div class="text-xs-right">                
                 <button type="submit" class="btn btn-rosa btn-lg" id="save">Crear curso</button>               
@@ -489,7 +499,7 @@
 
         $(function () {
 
-            orderSelect($("#appbundle_courses_category"))
+          //  orderSelect($("#appbundle_courses_category"))
 
             $(".day-week").click(function () {
                 if (!$(this).hasClass("active")) {
@@ -601,7 +611,7 @@
                     $('#appbundle_courses_cost').val(null);
                     $('#cost').hide();
                 } else {
-                    $('#cost').show();                   
+                    $('#cost').show();
                     // Ajax                                                 
                     var dataString = 'id=' + $('#appbundle_courses_currency').val();
                     $.ajax
@@ -613,18 +623,18 @@
                                 success: function (html)
                                 {
                                     $('#appbundle_courses_cost option ').remove();
-                                    $('#appbundle_courses_cost').append(html);                                    
+                                    $('#appbundle_courses_cost').append(html);
                                 }
                             });
                 }
-                 });
-                
-                $("#appbundle_courses_currency").change(function () {
+            });
+
+            $("#appbundle_courses_currency").change(function () {
                 if ($('#appbundle_courses_currency').val() === '') {
                     $('#appbundle_courses_type').val(null);
                     $('#cost2').hide();
                 } else {
-                    $('#cost2').show();                   
+                    $('#cost2').show();
                     // Ajax                                                 
                     var dataString = 'id=' + $('#appbundle_courses_currency').val();
                     $.ajax
@@ -636,11 +646,11 @@
                                 success: function (html)
                                 {
                                     $('#appbundle_courses_type option ').remove();
-                                    $('#appbundle_courses_type').append(html);                                    
+                                    $('#appbundle_courses_type').append(html);
                                 }
                             });
                 }
-                
+
             });
         });
     </script>

@@ -1,4 +1,7 @@
 {% extends 'base_e.html.twig' %}
+{% block stylesheets %}
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/sweetalert.min.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
 
@@ -41,7 +44,7 @@
                 </div>              
             </fieldset>
 
-             {{ form_start(form, { 'attr': {'id':'calificar'} }) }} 
+            {{ form_start(form, { 'attr': {'id':'calificar'} }) }} 
 
             <fieldset class="form-group">     
                 {{ form_label(form.comment, 'Comentario', {
@@ -51,7 +54,7 @@
                 {{ form_widget(form.comment, {'attr': {'class': 'form-control wh'}}) }}                      
             </fieldset>
             <a href="{{ path('courses_indexmycourses') }}" class="btn btn-primary btn-md">Volver</a>
-            
+
             <input type="submit" onClick="removeReadonly()" class="btn btn-rosa btn-md " value="Guardar">
 
             {{ form_widget(form.evaluator, {'value' : userStudent.id}) }}    
@@ -71,45 +74,50 @@
 
 {% block javascripts %}
 
+    <!-- sweetalert JS -->
+    <script src="{{ asset('bundles/app/vendor/sweetalert.min.js') }}"></script>  
+
     <script>
+                $(function () {
 
+                    $(".rating i").hover(
+                            function () {
+                                var id = $(this).index();
+                                $(".rating i").filter(function (index) {
+                                    return index <= id;
+                                }).removeClass("text-muted-light").addClass("text-success").html("star");
+                            }, function () {
 
-        $(function () {
+                        var id = $(this).index();
+                        $(".rating i").filter(function (index) {
+                            return index <= id && !$(this).hasClass("active");
+                        }).removeClass("text-success").addClass("text-muted-light").html("star_border");
 
-            $(".rating i").hover(
-                    function () {
+                    }).click(function () {
+                        $("#appbundle_reviews_score").val($(this).index() + 1);
                         var id = $(this).index();
                         $(".rating i").filter(function (index) {
                             return index <= id;
-                        }).removeClass("text-muted-light").addClass("text-success").html("star");
-                    }, function () {
+                        }).removeClass("text-muted-light").addClass("text-success").addClass("active").html("star");
 
-                var id = $(this).index();
-                $(".rating i").filter(function (index) {
-                    return index <= id && !$(this).hasClass("active");
-                }).removeClass("text-success").addClass("text-muted-light").html("star_border");
-
-            }).click(function () {
-                $("#appbundle_reviews_score").val($(this).index() + 1);
-                var id = $(this).index();
-                $(".rating i").filter(function (index) {
-                    return index <= id;
-                }).removeClass("text-muted-light").addClass("text-success").addClass("active").html("star");
-
-                $(".rating i").filter(function (index) {
-                    return index > id;
-                }).removeClass("text-success").removeClass("active").addClass("text-muted-light").html("star_border");
-            });
-        });
+                        $(".rating i").filter(function (index) {
+                            return index > id;
+                        }).removeClass("text-success").removeClass("active").addClass("text-muted-light").html("star_border");
+                    });
+                });
 
     </script>
-    
-     <script>
+
+    <script>
         $(document).ready(function () {
             $("#calificar").submit(function () {
-                var x =  $("#appbundle_reviews_score").val();
+                var x = $("#appbundle_reviews_score").val();
                 if (x === "") {
-                    alert("Valor introducido en la Calificación del Curso no es válido");
+                    swal('Recuerde!',
+                            'Para Calificar, seleccione las estrellas!',
+                            'info'
+                            )
+
                     return false;
                 } else
                     return true;
