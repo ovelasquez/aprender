@@ -48,7 +48,7 @@ class Courses {
     private $title;
 
     /**
-     * @ORM\Column(name="description", type="string",  nullable=false) 
+     * @ORM\Column(name="description", type="string", nullable=false) 
      */
     protected $description;
 
@@ -223,6 +223,31 @@ class Courses {
      *      )
      */
     private $users;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="register_date", type="datetime", nullable=true)
+     */
+    private $register;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="update_date", type="datetime", nullable=true)
+     */
+    private $update;
+
+    /**
+     * @var \AppBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="update_by", referencedColumnName="id")
+     * })
+     */
+    private $updateby;
+    
     private $review;
     private $byEvaluation;
 
@@ -825,4 +850,53 @@ class Courses {
         return (string) $this->getTitle();
     }
 
+    /**
+     * Set currency
+     *
+     * @param \AppBundle\Entity\Currency $currency
+     *
+     * @return Courses
+     */
+    public function setCurrency(\AppBundle\Entity\Currency $currency = null) {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return \AppBundle\Entity\Currency
+     */
+    public function getCurrency() {
+        return $this->currency;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Courses
+     */
+    public function addUser(\AppBundle\Entity\User $user) {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user) {
+        $this->users->removeElement($user);
+    }
+
+
+
+  
+
+    
 }

@@ -1,0 +1,224 @@
+{% extends 'base_a.html.twig' %}       
+{% block stylesheets %}
+    <!-- App CSS -->
+    <link type="text/css" href="{{ asset('bundles/app/examples/css/morris.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage-admin') }}">Inicio</a></li>        
+    </ol>   
+    <div class="row mb-2 filters">
+        <div class="col-lg-3">
+            <h1>Home Admin</h1>
+        </div>
+    </div>
+
+    <div class="card-group">
+        <div class="card">
+            <div class="card-block text-xs-center">
+                <h4 class="mb-0"><strong>{{ usersAll }}</strong></h4>
+                <small class="text-muted-light">USUARIOS</small>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block text-xs-center">
+                <h4 class="text-success mb-0"><strong>{{ coursesAll }}</strong></h4>
+                <small class="text-muted-light">CURSOS</small>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Usuarios</h2>
+            <div class="card">
+                <div class="card-block">
+                    <h5 class="card-title">En el últimos año</h5>
+                    <div class="chart" id="donut-usuarios" style="width: 100%; height:230px;"></div>
+                </div>
+            </div>
+
+            {% if ( usersPorConfirmar |length > 0) %}
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="card-title">Por Confirmar</h4>
+                                <p class="card-subtitle"></p>
+                            </div>
+                            <div class="media-right media-middle">
+                                <a class="btn btn-sm btn-primary-outline" href="">Usuarios</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-fit mb-0">
+                        {% for urse in usersPorConfirmar %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body media-middle">
+                                        <a href="">{{ urse.name|title }} {{ urse.lastname|title }}</a>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <div class="text-xs-center">
+                                            <p><span class="tag tag-pill tag-danger mb-05">{{ urse.country| country_name |upper }}</span></p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                {# Muestra los Últimos 5 Usuarios Registrados#}
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="card-title">Últimos Registrados</h4>
+                                <p class="card-subtitle"></p>
+                            </div>
+                            <div class="media-right media-middle">
+                                <a class="btn btn-sm btn-primary-outline" href="student-my-courses.html">Usuarios</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-fit mb-0">
+                        {% for urse in users %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body media-middle">
+                                        <a href="student-take-course.html">{{ urse.name|title }} {{ urse.lastname|title }}</a>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <div class="text-xs-center">
+                                            <p><span class="tag tag-pill tag-success mb-05">{{ urse.country| country_name |upper }}</span></p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+
+        <div class="col-md-6">
+            <h2>Cursos</h2>
+            <div class="card">
+                <div class="card-block">
+                    <h5 class="card-title">Estatus</h5>
+                    <div class="chart" id="donut-cursos" style="width: 100%; height:230px;"></div>
+                </div>
+
+            </div>
+
+           
+
+            {% if (cousesPorAprobar|length > 0) %}
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="card-title">Por Aprobar</h4>
+                                <p class="card-subtitle"></p>
+                            </div>
+                            <div class="media-right media-middle">
+                                <a class="btn btn-sm btn-primary-outline" href="{{ path('courses_index_list') }}">Cursos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-fit mb-0">
+                        {% for course in cousesPorAprobar %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body media-middle">
+                                        <a href="{{ path('courses_view', { 'id': course.id }) }}">{{ course.title | title }}</a>
+                                    </div>
+                                    <div class="media-right media-middle">
+
+                                        <div class="text-xs-center">
+                                            <p><span class="tag tag-pill tag-danger mb-05">{{ course.cost }}</span></p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="card-title">Últimos Registrados</h4>
+                                <p class="card-subtitle"></p>
+                            </div>
+                            <div class="media-right media-middle">
+                                <a class="btn btn-sm btn-primary-outline" href="{{ path('courses_index_list') }}">Cursos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-fit mb-0">
+                        {% for course in courses %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body media-middle">
+                                        <a href="{{ path('courses_view', { 'id': course.id }) }}">{{ course.title | title }}</a>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <div class="text-xs-center">
+                                            <p><span class="tag tag-pill tag-success mb-05">{{ course.cost }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}                    
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Vendor JS -->
+    <script src="{{ asset('bundles/app/vendor/raphael.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/vendor/morris.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            Morris.Donut({
+                element: 'donut-cursos',
+                data: [{{ datosCursos|raw }}],
+                colors: ['#26B99A', '#34495E', '#ACADAC', '#BDAC22'],
+                formatter: function (y, data) {
+                    return '' + y
+                },
+                resize: true
+            });
+            
+             Morris.Donut({
+                element: 'donut-usuarios',
+                data: [{{ datosUsers|raw }}],
+                colors: ['#26B99A', '#34495E', '#ACADAC'],
+                formatter: function (y, data) {
+                    return '' + y
+                },
+                resize: true
+            });
+            
+            
+            
+        });
+    </script>
+{% endblock %}

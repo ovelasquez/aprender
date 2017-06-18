@@ -44,6 +44,60 @@ class DefaultController extends Controller {
     }
 
     /**
+     * @Route("/admin", name="homepage-admin")
+     * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_SUPER_ADMIN')") 
+     */
+    public function adminAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $courses = $em->getRepository('AppBundle:Courses')->findBy(array(), array('id' => 'DESC'));
+        $users = $em->getRepository('AppBundle:User')->findBy(array(), array('id' => 'DESC'));
+
+        
+        //Contamos todos los cursos / usuarios registrados
+        $coursesAll = count($courses);
+        $usersAll = count($users);
+
+        //Obtenemos los 5 ultimos cursos y usuarios registrados         
+        $courses = array_splice($courses, 0, 5);
+        $users = array_splice($users, 0, 5);
+
+        //Obtenemos los cursos que tengan status por aprobar      
+        $cousesPorAprobar = $em->getRepository('AppBundle:Courses')->findBy(array('status' => 0), array('id' => 'DESC'));
+        //Obtenemos los cursos que tengan status aprobado
+        $cousesAprobados = $em->getRepository('AppBundle:Courses')->findBy(array('status' => 1));
+        //Obtenemos los cursos que tengan status Rechazados
+        $cousesRechazados = $em->getRepository('AppBundle:Courses')->findBy(array('status' => -1));
+        
+        //Obtenemos los usuarios que tengan status por confirmar cuenta      
+        $usersPorConfirmar = $em->getRepository('AppBundle:User')->findBy(array('enabled' => 0), array('id' => 'DESC'));       
+        
+        $datosCursos =  " {label: 'Registrados', value: " . $coursesAll . "},".
+                        " {label: 'Aprobar', value: "     . ($coursesAll - ( count($cousesPorAprobar) + count($cousesRechazados))) . "},".
+                        " {label: 'Por Aprobar', value: " . count($cousesPorAprobar) . "},".
+                        " {label: 'Rechazados', value: "  . count($cousesRechazados) . "},";
+        
+        $datosUsers =  " {label: 'Registrados', value: " . $usersAll . "},".
+                        " {label: 'Confirmados', value: "     . ($usersAll - count($usersPorConfirmar)) . "},".
+                        " {label: 'Por Confirmar', value: " . count($usersPorConfirmar) . "},";
+        
+            
+            
+       // dump($datosCursos); die();
+
+        return $this->render('default/admin.html.twig', [
+                    'courses' => $courses,
+                    'users' => $users,
+                    'coursesAll' => $coursesAll,
+                    'usersAll' => $usersAll,
+                    'cousesPorAprobar' => $cousesPorAprobar,
+                    'usersPorConfirmar' => $usersPorConfirmar,
+                    'datosCursos' => $datosCursos,            
+                    'datosUsers' => $datosUsers,            
+        ]);
+    }
+
+    /**
      * @Route("/home", name="frontpage")
      * @Method({"GET", "POST"})
      */
@@ -130,7 +184,7 @@ class DefaultController extends Controller {
      * @Method("GET")
      * 
      */
-    public function showCourseAction(Courses $course,Request $request) {
+    public function showCourseAction(Courses $course, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $registerForm = $this->createRegisterForm($course);
 

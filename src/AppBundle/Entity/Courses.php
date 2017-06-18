@@ -223,6 +223,31 @@ class Courses {
      *      )
      */
     private $users;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="register_date", type="datetime", nullable=true)
+     */
+    private $register;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="update_date", type="datetime", nullable=true)
+     */
+    private $update;
+
+    /**
+     * @var \AppBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="update_by", referencedColumnName="id")
+     * })
+     */
+    private $updateby;
+    
     private $review;
     private $byEvaluation;
 
@@ -825,7 +850,6 @@ class Courses {
         return (string) $this->getTitle();
     }
 
-
     /**
      * Set currency
      *
@@ -833,8 +857,7 @@ class Courses {
      *
      * @return Courses
      */
-    public function setCurrency(\AppBundle\Entity\Currency $currency = null)
-    {
+    public function setCurrency(\AppBundle\Entity\Currency $currency = null) {
         $this->currency = $currency;
 
         return $this;
@@ -845,8 +868,7 @@ class Courses {
      *
      * @return \AppBundle\Entity\Currency
      */
-    public function getCurrency()
-    {
+    public function getCurrency() {
         return $this->currency;
     }
 
@@ -857,8 +879,7 @@ class Courses {
      *
      * @return Courses
      */
-    public function addUser(\AppBundle\Entity\User $user)
-    {
+    public function addUser(\AppBundle\Entity\User $user) {
         $this->users[] = $user;
 
         return $this;
@@ -869,8 +890,79 @@ class Courses {
      *
      * @param \AppBundle\Entity\User $user
      */
-    public function removeUser(\AppBundle\Entity\User $user)
-    {
+    public function removeUser(\AppBundle\Entity\User $user) {
         $this->users->removeElement($user);
+    }
+
+    /**
+     * Set register
+     *
+     * @param \DateTime $register
+     *
+     * @return Courses
+     */
+    public function setRegister($register)
+    {
+        $this->register = $register;
+
+        return $this;
+    }
+
+    /**
+     * Get register
+     *
+     * @return \DateTime
+     */
+    public function getRegister()
+    {
+        return $this->register;
+    }
+
+    /**
+     * Set update
+     *
+     * @param \DateTime $update
+     *
+     * @return Courses
+     */
+    public function setUpdate($update)
+    {
+        $this->update = $update;
+
+        return $this;
+    }
+
+    /**
+     * Get update
+     *
+     * @return \DateTime
+     */
+    public function getUpdate()
+    {
+        return $this->update;
+    }
+
+    /**
+     * Set updateby
+     *
+     * @param \AppBundle\Entity\User $updateby
+     *
+     * @return Courses
+     */
+    public function setUpdateby(\AppBundle\Entity\User $updateby = null)
+    {
+        $this->updateby = $updateby;
+
+        return $this;
+    }
+
+    /**
+     * Get updateby
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUpdateby()
+    {
+        return $this->updateby;
     }
 }

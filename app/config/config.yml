@@ -9,6 +9,7 @@ parameters:
     locale: es
     photos_directory: '%kernel.root_dir%/../web/uploads/photos'
     locations: ['Espacio público' ,'Establecimiento privado' ]
+    notify_eamil: 'marianamff@gmail.com'
 
 framework:
     #esi:             ~

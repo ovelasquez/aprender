@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="card-block text-justify">
-                    <h4>Resumen</h4>
+                    <h4>Resumen:</h4>
                     {{ course.resume|capitalize }}
                 </div>
 
@@ -65,43 +65,78 @@
 
             </div>
 
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CANTIDAD DE ALUMNOS:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            Mínimos:
+                            <div class="input-group bootstrap-touchspin">                               
+                                {{ course.minstudent }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            Máximos:
+                            <div class="input-group bootstrap-touchspin">                                                              
+                                {{ course.maxstudent}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>    
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CONOCIMIENTO NECESARIO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{ course.knowledge| capitalize }}                      
+                    </fieldset> 
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">HERRAMIENTAS:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{ course.tool| capitalize }}                      
+                    </fieldset> 
+
+                </div>
+            </div>
+
+
             <!-- Lessons -->
-            <ul class="card list-group list-group-fit">
-                <li class="list-group-item">
-                    <div class="media">
-                        <div class="media-left">
-                            <div class="text-muted">1.</div>
-                        </div>
-                        <div class="media-body">
-                            <h4>Conocimiento Necesario:</h4>
-                            <p>
-                                {{ course.knowledge }}
-                            </p>
-                        </div>
-                        <div class="media-right">
-                            <small class="text-muted-light"></small>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="media">
-                        <div class="media-left">
-                            <div class="text-muted">2.</div>
-                        </div>
-                        <div class="media-body">
-                            <h4>Herramientas:</h4>
-                            <p>
-                                {{ course.tool }}
-                            </p>
-                        </div>
-                        <div class="media-right">
-                            <small class="text-muted-light"></small>
-                        </div>
-                    </div>
-                </li>
-
-            </ul>
-
             <div class="card">
                 <div class="card-header bg-white">
                     <div class="media">
@@ -272,25 +307,6 @@
                 </ul>
             </div>
 
-            <div class="card">
-                <div class="card-header bg-white">
-                    <div class="media">
-                        <div class="media-body media-middle">
-                            <h4 class="card-title">CANTIDAD DE ALUMNOS:</h4>
-                            <p class="card-subtitle"></p> 
-                        </div>
-                    </div>
-                    <div class="card__options">
-
-                    </div>
-                </div>
-                <div class="card-block">
-                    <fieldset class="form-group">                        
-                       Mínimo: {{course.minstudent}}  -  Máximo: {{course.maxstudent}}                            
-                    </fieldset> 
-                   
-                </div>
-            </div>
 
             <div class="card">
                 <div class="card-header bg-white">

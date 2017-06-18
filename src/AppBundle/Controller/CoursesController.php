@@ -268,18 +268,14 @@ class CoursesController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $time = (strtotime($course->getStartdate()));
-//            $inicio = date('Y-m-d', $time);
-//            $time = (strtotime($course->getEnddate()));
-//            $fin = date('Y-m-d', $time);
-//            $course->setStartdate(new \DateTime($inicio));
-//            $course->setEnddate(new \DateTime($fin));
 
             $course->setStartdate(\DateTime::createFromFormat('d/m/Y', $course->getStartdate()));
 
             $course->setEnddate(\DateTime::createFromFormat('d/m/Y', $course->getEnddate()));
 
             $course->setStatus(0); //Status por aprobar
+            
+            $course->setRegister(new \DateTime());
 
             $user = $this->getUser();
 
@@ -294,7 +290,7 @@ class CoursesController extends Controller {
             //Enviar Email al Instructor y al Estudiante
             $asunto = "Lest Know: Curso Postulación";
 
-            $this->sendEmail($asunto, $course, 'marianamff@gmail.com');
+            $this->sendEmail($asunto, $course, $this->getParameter('notify_eamil') );
 
             $this->addFlash('success', 'Cursos creado satisfactoriamente');
 
@@ -498,6 +494,9 @@ class CoursesController extends Controller {
 
             $course->setStartdate(\DateTime::createFromFormat('d/m/Y', $course->getStartdate()));
             $course->setEnddate(\DateTime::createFromFormat('d/m/Y', $course->getEnddate()));
+            
+             $course->setUpdate(new \DateTime());
+             $course->setUpdateby($this->getUser());
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -521,7 +520,7 @@ class CoursesController extends Controller {
     public function sendEmail($asunto, $course, $email) {
         $message = \Swift_Message::newInstance()
                 ->setSubject($asunto)
-                ->setFrom('marianamff@gmail.com')
+                ->setFrom($this->getParameter('notify_eamil'))
                 ->setTo([$course->getUser()->getEmail(), $email])
                 ->setBody(
                 $this->renderView(
@@ -583,12 +582,12 @@ class CoursesController extends Controller {
             if ($request->request->get("app") !== null && $course->getStatus() === 0):
                 $course->setStatus(1);
                 //Enviar Email Notificando la Aprobacion o Rechazo del Curso            
-                $this->sendEmail("Lest Know: Postulación de Curso Aprobado", $course, "marianamff@gmail.com");
+                $this->sendEmail("Lest Know: Postulación de Curso Aprobado", $course, $this->getParameter('notify_eamil'));
 
             elseif ($request->request->get("disapp") !== null && $course->getStatus() === 0):
                 $course->setStatus(-1);
                 //Enviar Email Notificando la Aprobacion o Rechazo del Curso            
-                $this->sendEmail("Lest Know: Postulación de Curso Rechazada", $course, "marianamff@gmail.com");
+                $this->sendEmail("Lest Know: Postulación de Curso Rechazada", $course, $this->getParameter('notify_eamil'));
 
             elseif ($request->request->get("desact") !== null):
                 $course->setStatus(0);
@@ -632,19 +631,7 @@ class CoursesController extends Controller {
         if ($form->isSubmitted() && $form->isValid() && $this->isRegistered($course) === false) {
 
             if ($course->getCost()->getPrice() == 0) {
-
                 $em = $this->getDoctrine()->getManager();
-
-                /* $usercourse = new UserCourses();
-                  $usercourse->setUser($user);
-                  $usercourse->setCourse($course);
-                  $usercourse->setStatus(-1);
-
-
-                  $em->persist($usercourse);
-                  $em->flush($usercourse);
-                 */
-
                 $usercourse = new UserCourses();
                 $usercourse->setUser($this->getUser());
                 $usercourse->setCourse($course);
