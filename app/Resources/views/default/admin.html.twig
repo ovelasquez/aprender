@@ -10,10 +10,11 @@
     </ol>   
     <div class="row mb-2 filters">
         <div class="col-lg-3">
-            <h1>Home Admin</h1>
+            <h1>Dashboard</h1>
         </div>
     </div>
 
+    {#
     <div class="card-group">
         <div class="card">
             <div class="card-block text-xs-center">
@@ -29,7 +30,7 @@
         </div>
 
     </div>
-
+#}
 
 
 
@@ -39,7 +40,7 @@
             <h2>Usuarios</h2>
             <div class="card">
                 <div class="card-block">
-                    <h5 class="card-title">En el últimos año</h5>
+                    <h5 class="card-title">Estatus</h5>
                     <div class="chart" id="donut-usuarios" style="width: 100%; height:230px;"></div>
                 </div>
             </div>
@@ -121,7 +122,7 @@
 
             </div>
 
-           
+
 
             {% if (cousesPorAprobar|length > 0) %}
                 <div class="card">
@@ -206,8 +207,8 @@
                 },
                 resize: true
             });
-            
-             Morris.Donut({
+
+            Morris.Donut({
                 element: 'donut-usuarios',
                 data: [{{ datosUsers|raw }}],
                 colors: ['#26B99A', '#34495E', '#ACADAC'],
@@ -216,9 +217,9 @@
                 },
                 resize: true
             });
-            
-            
-            
+
+
+
         });
     </script>
 {% endblock %}

@@ -57,16 +57,22 @@ class CoursesController extends Controller {
 
         $par = $this->getCriteria($request);
         $courses = $em->getRepository('AppBundle:Courses')->findAllBy($request->request->get('q'), $par, ' c.status, c.id ASC');
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($courses,  $request->query->get('page', 1), 10);
 
         $coursesCategories = $em->getRepository('AppBundle:Coursecategories')->findAll();
         $courseCosts = $em->getRepository('AppBundle:Coursecosts')->findAll();
 
         return $this->render('courses/list.html.twig', array(
-                    'courses' => $courses,
+                  //  'courses' => $courses,
+                    'pagination' => $pagination,
                     'coursesCategories' => $coursesCategories, 'courseCosts' => $courseCosts,
                     'selCategory' => $request->request->get('category'), 'selCost' => $request->request->get('cost'), 'selCountry' => $request->request->get('country'), 'selState' => $request->request->get('province'), 'q' => $request->request->get('q'),
         ));
     }
+    
+    
+    
 
     /**
      * Lists all course entities.

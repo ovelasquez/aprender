@@ -30,7 +30,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "symfony/var-dumper": "^3.2",
-        "oro/doctrine-extensions": "^1.1"
+        "oro/doctrine-extensions": "^1.1",
+        "knplabs/knp-paginator-bundle": "^2.6"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

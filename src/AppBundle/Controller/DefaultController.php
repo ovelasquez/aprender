@@ -73,7 +73,7 @@ class DefaultController extends Controller {
         $usersPorConfirmar = $em->getRepository('AppBundle:User')->findBy(array('enabled' => 0), array('id' => 'DESC'));       
         
         $datosCursos =  " {label: 'Registrados', value: " . $coursesAll . "},".
-                        " {label: 'Aprobar', value: "     . ($coursesAll - ( count($cousesPorAprobar) + count($cousesRechazados))) . "},".
+                        " {label: 'Aprobados', value: "     . ($coursesAll - ( count($cousesPorAprobar) + count($cousesRechazados))) . "},".
                         " {label: 'Por Aprobar', value: " . count($cousesPorAprobar) . "},".
                         " {label: 'Rechazados', value: "  . count($cousesRechazados) . "},";
         
