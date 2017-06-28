@@ -14,212 +14,251 @@
         </div>
     </div>
 
-    {#
-    <div class="card-group">
-        <div class="card">
-            <div class="card-block text-xs-center">
-                <h4 class="mb-0"><strong>{{ usersAll }}</strong></h4>
-                <small class="text-muted-light">USUARIOS</small>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-block text-xs-center">
-                <h4 class="text-success mb-0"><strong>{{ coursesAll }}</strong></h4>
-                <small class="text-muted-light">CURSOS</small>
-            </div>
-        </div>
 
+    <div class="row">
+        
+        <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="card-title">Pagos Recibidos</h4>
+                                    <p class="card-subtitle"></p>
+                                </div>
+                                <div class="media-right media-middle">
+                                    <a class="btn btn-sm btn-primary-outline" href="{{ path('payments_index') }}">Payments</a>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="list-group list-group-fit mb-0">
+                           
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body media-middle">
+                                            Bs. {{ sumaBolivares |number_format(2, ',', '.')  }}
+                                        </div>
+                                        <div class="media-right media-middle">
+
+                                            <div class="text-xs-center">
+                                                <p><span class="tag tag-pill tag-danger mb-05">Bolívares</span></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body media-middle">
+                                            $ {{ sumaDolares |number_format(2, ',', '.') }}
+                                        </div>
+                                        <div class="media-right media-middle">
+
+                                            <div class="text-xs-center">
+                                                <p><span class="tag tag-pill tag-danger mb-05">Dolares</span></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            
+                        </ul>
+                    </div>                                                      
     </div>
-#}
-
 
 
 
     <div class="row">
-        <div class="col-md-6">
-            <h2>Usuarios</h2>
-            <div class="card">
-                <div class="card-block">
-                    <h5 class="card-title">Estatus</h5>
-                    <div class="chart" id="donut-usuarios" style="width: 100%; height:230px;"></div>
-                </div>
-            </div>
-
-            {% if ( usersPorConfirmar |length > 0) %}
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <div class="media">
-                            <div class="media-body">
-                                <h4 class="card-title">Por Confirmar</h4>
-                                <p class="card-subtitle"></p>
-                            </div>
-                            <div class="media-right media-middle">
-                                <a class="btn btn-sm btn-primary-outline" href="">Usuarios</a>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="list-group list-group-fit mb-0">
-                        {% for urse in usersPorConfirmar %}
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-body media-middle">
-                                        <a href="">{{ urse.name|title }} {{ urse.lastname|title }}</a>
-                                    </div>
-                                    <div class="media-right media-middle">
-                                        <div class="text-xs-center">
-                                            <p><span class="tag tag-pill tag-danger mb-05">{{ urse.country| country_name |upper }}</span></p>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% else %}
-                {# Muestra los Últimos 5 Usuarios Registrados#}
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <div class="media">
-                            <div class="media-body">
-                                <h4 class="card-title">Últimos Registrados</h4>
-                                <p class="card-subtitle"></p>
-                            </div>
-                            <div class="media-right media-middle">
-                                <a class="btn btn-sm btn-primary-outline" href="student-my-courses.html">Usuarios</a>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="list-group list-group-fit mb-0">
-                        {% for urse in users %}
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-body media-middle">
-                                        <a href="student-take-course.html">{{ urse.name|title }} {{ urse.lastname|title }}</a>
-                                    </div>
-                                    <div class="media-right media-middle">
-                                        <div class="text-xs-center">
-                                            <p><span class="tag tag-pill tag-success mb-05">{{ urse.country| country_name |upper }}</span></p>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
+        <div class="col-md-12">
+            </br>
         </div>
 
 
-        <div class="col-md-6">
-            <h2>Cursos</h2>
-            <div class="card">
-                <div class="card-block">
-                    <h5 class="card-title">Estatus</h5>
-                    <div class="chart" id="donut-cursos" style="width: 100%; height:230px;"></div>
+        <div class="row">
+            <div class="col-md-6">
+           
+                <div class="card">
+                    <div class="card-block">
+                        <h5 class="card-title">Usuarios</h5>
+                        <div class="chart" id="donut-usuarios" style="width: 100%; height:230px;"></div>
+                    </div>
                 </div>
 
+                {% if ( usersPorConfirmar |length > 0) %}
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="card-title">Por Confirmar</h4>
+                                    <p class="card-subtitle"></p>
+                                </div>
+                                <div class="media-right media-middle">
+                                    <a class="btn btn-sm btn-primary-outline" href="">Usuarios</a>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="list-group list-group-fit mb-0">
+                            {% for urse in usersPorConfirmar %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body media-middle">
+                                            <a href="">{{ urse.name|title }} {{ urse.lastname|title }}</a>
+                                        </div>
+                                        <div class="media-right media-middle">
+                                            <div class="text-xs-center">
+                                                <p><span class="tag tag-pill tag-danger mb-05">{{ urse.country| country_name |upper }}</span></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    {# Muestra los Últimos 5 Usuarios Registrados#}
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="card-title">Últimos Registrados</h4>
+                                    <p class="card-subtitle"></p>
+                                </div>
+                                <div class="media-right media-middle">
+                                    <a class="btn btn-sm btn-primary-outline" href="student-my-courses.html">Usuarios</a>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="list-group list-group-fit mb-0">
+                            {% for urse in users %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body media-middle">
+                                            <a href="student-take-course.html">{{ urse.name|title }} {{ urse.lastname|title }}</a>
+                                        </div>
+                                        <div class="media-right media-middle">
+                                            <div class="text-xs-center">
+                                                <p><span class="tag tag-pill tag-success mb-05">{{ urse.country| country_name |upper }}</span></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
 
 
 
-            {% if (cousesPorAprobar|length > 0) %}
+            <div class="col-md-6">
+               
                 <div class="card">
-                    <div class="card-header bg-white">
-                        <div class="media">
-                            <div class="media-body">
-                                <h4 class="card-title">Por Aprobar</h4>
-                                <p class="card-subtitle"></p>
-                            </div>
-                            <div class="media-right media-middle">
-                                <a class="btn btn-sm btn-primary-outline" href="{{ path('courses_index_list') }}">Cursos</a>
+                    <div class="card-block">
+                        <h5 class="card-title">Cursos</h5>
+                        <div class="chart" id="donut-cursos" style="width: 100%; height:230px;"></div>
+                    </div>
+
+                </div>
+
+
+
+                {% if (cousesPorAprobar|length > 0) %}
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="card-title">Por Aprobar</h4>
+                                    <p class="card-subtitle"></p>
+                                </div>
+                                <div class="media-right media-middle">
+                                    <a class="btn btn-sm btn-primary-outline" href="{{ path('courses_index_list') }}">Cursos</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <ul class="list-group list-group-fit mb-0">
-                        {% for course in cousesPorAprobar %}
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-body media-middle">
-                                        <a href="{{ path('courses_view', { 'id': course.id }) }}">{{ course.title | title }}</a>
-                                    </div>
-                                    <div class="media-right media-middle">
+                        <ul class="list-group list-group-fit mb-0">
+                            {% for course in cousesPorAprobar %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body media-middle">
+                                            <a href="{{ path('courses_view', { 'id': course.id }) }}">{{ course.title | title }}</a>
+                                        </div>
+                                        <div class="media-right media-middle">
 
-                                        <div class="text-xs-center">
-                                            <p><span class="tag tag-pill tag-danger mb-05">{{ course.cost }}</span></p>
+                                            <div class="text-xs-center">
+                                                <p><span class="tag tag-pill tag-danger mb-05">{{ course.cost }}</span></p>
 
+                                            </div>
                                         </div>
                                     </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="card-title">Últimos Registrados</h4>
+                                    <p class="card-subtitle"></p>
                                 </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% else %}
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <div class="media">
-                            <div class="media-body">
-                                <h4 class="card-title">Últimos Registrados</h4>
-                                <p class="card-subtitle"></p>
-                            </div>
-                            <div class="media-right media-middle">
-                                <a class="btn btn-sm btn-primary-outline" href="{{ path('courses_index_list') }}">Cursos</a>
+                                <div class="media-right media-middle">
+                                    <a class="btn btn-sm btn-primary-outline" href="{{ path('courses_index_list') }}">Cursos</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <ul class="list-group list-group-fit mb-0">
-                        {% for course in courses %}
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-body media-middle">
-                                        <a href="{{ path('courses_view', { 'id': course.id }) }}">{{ course.title | title }}</a>
-                                    </div>
-                                    <div class="media-right media-middle">
-                                        <div class="text-xs-center">
-                                            <p><span class="tag tag-pill tag-success mb-05">{{ course.cost }}</span></p>
+                        <ul class="list-group list-group-fit mb-0">
+                            {% for course in courses %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body media-middle">
+                                            <a href="{{ path('courses_view', { 'id': course.id }) }}">{{ course.title | title }}</a>
+                                        </div>
+                                        <div class="media-right media-middle">
+                                            <div class="text-xs-center">
+                                                <p><span class="tag tag-pill tag-success mb-05">{{ course.cost }}</span></p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        {% endfor %}                    
-                    </ul>
-                </div>
-            {% endif %}
+                                </li>
+                            {% endfor %}                    
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
         </div>
+    {% endblock %}
 
-    </div>
-{% endblock %}
+    {% block javascripts %}
+        <!-- Vendor JS -->
+        <script src="{{ asset('bundles/app/vendor/raphael.min.js') }}"></script>
+        <script src="{{ asset('bundles/app/vendor/morris.min.js') }}"></script>
+        <script>
+            $(document).ready(function () {
+                Morris.Donut({
+                    element: 'donut-cursos',
+                    data: [{{ datosCursos|raw }}],
+                    colors: ['#26B99A', '#34495E', '#ACADAC', '#BDAC22'],
+                    formatter: function (y, data) {
+                        return '' + y
+                    },
+                    resize: true
+                });
 
-{% block javascripts %}
-    <!-- Vendor JS -->
-    <script src="{{ asset('bundles/app/vendor/raphael.min.js') }}"></script>
-    <script src="{{ asset('bundles/app/vendor/morris.min.js') }}"></script>
-    <script>
-        $(document).ready(function () {
-            Morris.Donut({
-                element: 'donut-cursos',
-                data: [{{ datosCursos|raw }}],
-                colors: ['#26B99A', '#34495E', '#ACADAC', '#BDAC22'],
-                formatter: function (y, data) {
-                    return '' + y
-                },
-                resize: true
+                Morris.Donut({
+                    element: 'donut-usuarios',
+                    data: [{{ datosUsers|raw }}],
+                    colors: ['#26B99A', '#34495E', '#ACADAC'],
+                    formatter: function (y, data) {
+                        return '' + y
+                    },
+                    resize: true
+                });
+
+
+
             });
-
-            Morris.Donut({
-                element: 'donut-usuarios',
-                data: [{{ datosUsers|raw }}],
-                colors: ['#26B99A', '#34495E', '#ACADAC'],
-                formatter: function (y, data) {
-                    return '' + y
-                },
-                resize: true
-            });
-
-
-
-        });
-    </script>
-{% endblock %}
+        </script>
+    {% endblock %}

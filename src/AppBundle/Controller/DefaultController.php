@@ -53,7 +53,7 @@ class DefaultController extends Controller {
         $courses = $em->getRepository('AppBundle:Courses')->findBy(array(), array('id' => 'DESC'));
         $users = $em->getRepository('AppBundle:User')->findBy(array(), array('id' => 'DESC'));
 
-        
+
         //Contamos todos los cursos / usuarios registrados
         $coursesAll = count($courses);
         $usersAll = count($users);
@@ -68,22 +68,32 @@ class DefaultController extends Controller {
         $cousesAprobados = $em->getRepository('AppBundle:Courses')->findBy(array('status' => 1));
         //Obtenemos los cursos que tengan status Rechazados
         $cousesRechazados = $em->getRepository('AppBundle:Courses')->findBy(array('status' => -1));
-        
+
         //Obtenemos los usuarios que tengan status por confirmar cuenta      
-        $usersPorConfirmar = $em->getRepository('AppBundle:User')->findBy(array('enabled' => 0), array('id' => 'DESC'));       
-        
-        $datosCursos =  " {label: 'Registrados', value: " . $coursesAll . "},".
-                        " {label: 'Aprobados', value: "     . ($coursesAll - ( count($cousesPorAprobar) + count($cousesRechazados))) . "},".
-                        " {label: 'Por Aprobar', value: " . count($cousesPorAprobar) . "},".
-                        " {label: 'Rechazados', value: "  . count($cousesRechazados) . "},";
-        
-        $datosUsers =  " {label: 'Registrados', value: " . $usersAll . "},".
-                        " {label: 'Confirmados', value: "     . ($usersAll - count($usersPorConfirmar)) . "},".
-                        " {label: 'Por Confirmar', value: " . count($usersPorConfirmar) . "},";
-        
-            
-            
-       // dump($datosCursos); die();
+        $usersPorConfirmar = $em->getRepository('AppBundle:User')->findBy(array('enabled' => 0), array('id' => 'DESC'));
+
+        $datosCursos = " {label: 'Registrados', value: " . $coursesAll . "}," .
+                " {label: 'Aprobados', value: " . ($coursesAll - ( count($cousesPorAprobar) + count($cousesRechazados))) . "}," .
+                " {label: 'Por Aprobar', value: " . count($cousesPorAprobar) . "}," .
+                " {label: 'Rechazados', value: " . count($cousesRechazados) . "},";
+
+        $datosUsers = " {label: 'Registrados', value: " . $usersAll . "}," .
+                " {label: 'Confirmados', value: " . ($usersAll - count($usersPorConfirmar)) . "}," .
+                " {label: 'Por Confirmar', value: " . count($usersPorConfirmar) . "},";
+
+        //Obtenemos los pagos en moneda dolar      
+        $pagos = $em->getRepository('AppBundle:Payments')->findAll();
+        $sumaDolares = 0;
+        $sumaBolivares = 0;
+        foreach ($pagos as &$valor) {
+            if ('USD' === $valor->getCurrency()) {
+                $sumaDolares = $valor->getAmount() + $sumaDolares;
+            } else {
+                $sumaBolivares = $valor->getAmount() + $sumaBolivares;
+            }
+        }
+
+       // dump($sumaDolares);die();
 
         return $this->render('default/admin.html.twig', [
                     'courses' => $courses,
@@ -92,8 +102,11 @@ class DefaultController extends Controller {
                     'usersAll' => $usersAll,
                     'cousesPorAprobar' => $cousesPorAprobar,
                     'usersPorConfirmar' => $usersPorConfirmar,
-                    'datosCursos' => $datosCursos,            
-                    'datosUsers' => $datosUsers,            
+                    'datosCursos' => $datosCursos,
+                    'datosUsers' => $datosUsers,
+                    'sumaBolivares' => $sumaBolivares,
+                    'sumaDolares' => $sumaDolares,
+                    
         ]);
     }
 
