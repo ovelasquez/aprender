@@ -8,52 +8,48 @@
         {% endif %}
     <h1 class="h2 mb-0 mt-1">{{ user.name }} {{ user.lastname }}</h1>
     <p class="lead text-muted mb-0">{{ user.province }}, {{ user.country | country_name |upper }}</p>
-    <div class="tag tag-primary">INSTRUCTOR</div>
-    <hr>
-    <h5 class="text-muted">Valoración</h5>
-    <div class="rating">
-        <i class="material-icons text-success">star</i>
-        <i class="material-icons text-success">star</i>
-        <i class="material-icons text-success">star</i>
-        <i class="material-icons text-muted-light">star_border</i>
-        <i class="material-icons text-muted-light">star_border</i>
-    </div>
+    {% if is_granted("ROLE_USUARIO") %} 
+        <div class="tag tag-primary">INSTRUCTOR</div>
+        <hr>
+        <h5 class="text-muted">Valoración</h5>
+        <div class="rating">
+            <i class="material-icons text-success">star</i>
+            <i class="material-icons text-success">star</i>
+            <i class="material-icons text-success">star</i>
+            <i class="material-icons text-muted-light">star_border</i>
+            <i class="material-icons text-muted-light">star_border</i>
+        </div>
+    {% else %}    
+        <div class="tag tag-primary">ADMINISTRADOR</div>
+        <hr>
+    {% endif %}   
 </div>
-<hr>
-<h5 class="page-heading text-xs-center text-muted">Cursos postulados</h5>
-
-
-
-<div class="card-columns">
-
-
-    {% for course in courses %}
-        <div class="card">
-            <div class="card-header bg-white">
-                <div class="media">
-                    <div class="media-left media-middle">
-
-                        {% if course.photo!='' %}
-                            <a href="{{ path('courses_edit', { 'id': course.id }) }}"><img src="{{ asset('uploads/photos/') }}{{course.photo}}" width="80" class="rounded"/></a>
-                            {% endif %}
-
-                    </div>
-                    <div class="media-body media-middle">
-                        <h4 class="card-title"><a href="{{ path('courses_edit', { 'id': course.id }) }}">{{ course.title | title }}</a></h4>
-                        <div class="rating">
-                            <i class="material-icons">star</i>
-                            <i class="material-icons">star</i>
-                            <i class="material-icons">star</i>
-                            <i class="material-icons">star</i>
-                            <i class="material-icons">star_border</i>
+{% if is_granted("ROLE_USUARIO") %} 
+    <hr>
+    <h5 class="page-heading text-xs-center text-muted">Cursos postulados</h5>
+    <div class="card-columns">
+        {% for course in courses %}
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            {% if course.photo!='' %}
+                                <a href="{{ path('courses_edit', { 'id': course.id }) }}"><img src="{{ asset('uploads/photos/') }}{{course.photo}}" width="80" class="rounded"/></a>
+                                {% endif %}
+                        </div>
+                        <div class="media-body media-middle">
+                            <h4 class="card-title"><a href="{{ path('courses_edit', { 'id': course.id }) }}">{{ course.title | title }}</a></h4>
+                            <div class="rating">
+                                <i class="material-icons">star</i>
+                                <i class="material-icons">star</i>
+                                <i class="material-icons">star</i>
+                                <i class="material-icons">star</i>
+                                <i class="material-icons">star_border</i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    {% endfor %}
-
-
-
-</div>
+        {% endfor %}
+    </div>
+{% endif %}   
