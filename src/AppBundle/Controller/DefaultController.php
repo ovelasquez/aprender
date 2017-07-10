@@ -13,34 +13,40 @@ class DefaultController extends Controller {
 
     /**
      * @Route("/", name="homepage")
+     * @Security("has_role('ROLE_USUARIO')") 
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        //$courses = $em->getRepository('AppBundle:Courses')->findBy(array("status" => '1'), array("id" => "desc"));
+        
+        if (in_array("ROLE_SUPER_ADMIN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('homepage-admin');
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            //$courses = $em->getRepository('AppBundle:Courses')->findBy(array("status" => '1'), array("id" => "desc"));
 
-        $par = array();
-        $par[] = array("status", ">=", 1);
-        //$par[] = array("enddate", ">", date("Y-m-d"));
-        $courses = $em->getRepository('AppBundle:Courses')->findAllBy('', $par);
+            $par = array();
+            $par[] = array("status", ">=", 1);
+            //$par[] = array("enddate", ">", date("Y-m-d"));
+            $courses = $em->getRepository('AppBundle:Courses')->findAllBy('', $par);
 
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+                // replace this example code with whatever you need
+                return $this->render('default/index.html.twig', [
+                            'base_dir' => realpath($this->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+                ]);
+            }
+
+            //
+            $coursesToApprove = $em->getRepository('AppBundle:UserCourses')->findMyCoursesToApprove($this->getUser()->getId());
+            $userCourses = $em->getRepository('AppBundle:UserCourses')->findAllMyCourses($this->getUser()->getId());
+
             // replace this example code with whatever you need
-            return $this->render('default/index.html.twig', [
+            return $this->render('default/estudiante.html.twig', [
                         'base_dir' => realpath($this->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+                        'courses' => $courses,
+                        'userCourses' => $userCourses,
+                        'countToApprove' => count($coursesToApprove),
             ]);
         }
-
-        //
-        $coursesToApprove = $em->getRepository('AppBundle:UserCourses')->findMyCoursesToApprove($this->getUser()->getId());
-        $userCourses = $em->getRepository('AppBundle:UserCourses')->findAllMyCourses($this->getUser()->getId());
-
-        // replace this example code with whatever you need
-        return $this->render('default/estudiante.html.twig', [
-                    'base_dir' => realpath($this->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
-                    'courses' => $courses,
-                    'userCourses' => $userCourses,
-                    'countToApprove' => count($coursesToApprove),
-        ]);
     }
 
     /**
@@ -93,8 +99,6 @@ class DefaultController extends Controller {
             }
         }
 
-       // dump($sumaDolares);die();
-
         return $this->render('default/admin.html.twig', [
                     'courses' => $courses,
                     'users' => $users,
@@ -106,7 +110,6 @@ class DefaultController extends Controller {
                     'datosUsers' => $datosUsers,
                     'sumaBolivares' => $sumaBolivares,
                     'sumaDolares' => $sumaDolares,
-                    
         ]);
     }
 

@@ -156,35 +156,21 @@
                 {% endfor %}
             </tbody>
         </table>
-
         <ul>
             <li>
                 <a href="{{ path('courses_new') }}">Create a new course</a>
             </li>
         </ul>
-
-
     </div>
 {% endblock %}
 {% block javascripts %}
-
     <script>
-
         $(function () {
-
             $('#country').find("option:first").html("País").change(function () {
                 $('#state').find("option:first").html("Provincia");
             });
             $('#state').find("option:first").html("Provincia");
 
         });
-
     </script>
-
 {% endblock %}
-
-
-
-
-
-

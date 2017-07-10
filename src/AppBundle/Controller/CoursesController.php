@@ -52,27 +52,18 @@ class CoursesController extends Controller {
      * @Security("has_role('ROLE_SUPER_ADMIN')") 
      */
     public function listAction(Request $request) {
-
         $em = $this->getDoctrine()->getManager();
-
         $par = $this->getCriteria($request);
         $courses = $em->getRepository('AppBundle:Courses')->findAllBy($request->request->get('q'), $par, ' c.status, c.id ASC');
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate($courses,  $request->query->get('page', 1), 10);
-
         $coursesCategories = $em->getRepository('AppBundle:Coursecategories')->findAll();
         $courseCosts = $em->getRepository('AppBundle:Coursecosts')->findAll();
-
         return $this->render('courses/list.html.twig', array(
-                  //  'courses' => $courses,
-                    'pagination' => $pagination,
-                    'coursesCategories' => $coursesCategories, 'courseCosts' => $courseCosts,
+                    'courses' => $courses,
+                    'coursesCategories' => $coursesCategories,
+                    'courseCosts' => $courseCosts,
                     'selCategory' => $request->request->get('category'), 'selCost' => $request->request->get('cost'), 'selCountry' => $request->request->get('country'), 'selState' => $request->request->get('province'), 'q' => $request->request->get('q'),
         ));
     }
-    
-    
-    
 
     /**
      * Lists all course entities.
@@ -83,15 +74,12 @@ class CoursesController extends Controller {
      */
     public function indexallAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-
         $par = $this->getCriteria($request);
         $par[] = array("status", "=", 1);
         $par[] = array("enddate", ">", date("Y-m-d"));
         $courses = $em->getRepository('AppBundle:Courses')->findAllBy($request->request->get('q'), $par);
-
         $coursesCategories = $em->getRepository('AppBundle:Coursecategories')->findAll();
         $courseCosts = $em->getRepository('AppBundle:Coursecosts')->findAll();
-
         return $this->render('courses/indexall.html.twig', array(
                     'courses' => $courses,
                     'coursesCategories' => $coursesCategories, 'courseCosts' => $courseCosts,
@@ -108,9 +96,7 @@ class CoursesController extends Controller {
      */
     public function indexcompletedAction() {
         $em = $this->getDoctrine()->getManager();
-
         $courses = $em->getRepository('AppBundle:UserCourses')->findAllOrderedByUserCompleted($this->getUser()->getId());
-
         return $this->render('courses/indexcompleted.html.twig', array(
                     'courses' => $courses,
         ));
@@ -125,29 +111,21 @@ class CoursesController extends Controller {
      */
     public function indexmycoursesAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-
         $par = $this->getCriteriaV($request);
-        
-       // dump($par, $request->request->get('q') ); die();
-      
+        // dump($par, $request->request->get('q') ); die();
         $courses = $em->getRepository('AppBundle:UserCourses')->findAllMyCourses($this->getUser()->getId(), $par, $request->request->get('q'));
-
         $coursesEv = $em->getRepository('AppBundle:UserCourses')->findMyCoursesToApprove($this->getUser()->getId());
-
         $arrCourEva = array();
         foreach ($coursesEv as $cou):
             $arrCourEva[] = $cou["id"];
         endforeach;
-
         foreach ($courses as $cou):
             if (in_array($cou->getId(), $arrCourEva)): $cou->setByEvaluation(1);
             else: $cou->setByEvaluation(0);
             endif;
         endforeach;
-
         $coursesCategories = $em->getRepository('AppBundle:Coursecategories')->findAll();
         $courseCosts = $em->getRepository('AppBundle:Coursecosts')->findAll();
-
         $coursesN = array();
         if (count($courses) == 0):
             $par = array();
@@ -155,9 +133,6 @@ class CoursesController extends Controller {
             $par[] = array("enddate", ">", date("Y-m-d"));
             $coursesN = $em->getRepository('AppBundle:Courses')->findAllBy('', $par);
         endif;
-
-        
-
         return $this->render('courses/indexmycourses.html.twig', array(
                     'courses' => $courses,
                     'coursesN' => $coursesN,
@@ -175,9 +150,7 @@ class CoursesController extends Controller {
      */
     public function indexcompletedqualifyAction() {
         $em = $this->getDoctrine()->getManager();
-
         $courses = $em->getRepository('AppBundle:UserCourses')->findMyCoursesToApprove($this->getUser()->getId());
-
         return $this->render('courses/indexcompletedqualify.html.twig', array(
                     'courses' => $courses,
         ));
@@ -192,10 +165,7 @@ class CoursesController extends Controller {
      */
     public function indexcompletedqualifyStAction() {
         $em = $this->getDoctrine()->getManager();
-
         $students = $em->getRepository('AppBundle:UserCourses')->findMyStudentToApprove($this->getUser()->getId());
-
-        //dump($students); die();
         return $this->render('courses/indexcompletedstqualify.html.twig', array(
                     'students' => $students,
         ));
@@ -209,10 +179,8 @@ class CoursesController extends Controller {
      * @Security("has_role('ROLE_USUARIO')") 
      */
     public function registeredAction() {
-
         $user = $this->getUser();
         $courses = $user->getCourses()->toArray();
-
         return $this->render('courses/registered.html.twig', array(
                     'courses' => $courses,
         ));
@@ -230,7 +198,6 @@ class CoursesController extends Controller {
         $user = $this->getUser();
         $courses = $em->getRepository('AppBundle:Courses')->findBy(array('user' => $user->getId()));
         $course = null;
-
         if ($id === null && count($courses) > 0) {
             $course = $courses[0];
             $users = ($courses[0]->getUsers() !== null) ? $courses[0]->getUsers()->toArray() : array();
@@ -240,17 +207,13 @@ class CoursesController extends Controller {
         } else {
             $users = array();
         }
-
         $usersInf = $usersA = array();
-
         foreach ($users as $value) {
             $usersA[] = $value->getId();
         }
-
         if (is_array($usersA)):
             $usersInf = $em->getRepository('AppBundle:UserCourses')->findAllOrderedByUsers(implode(",", $usersA), $course);
         endif;
-
         return $this->render('courses/users.html.twig', array(
                     'courses' => $courses,
                     'users' => $usersInf,
@@ -272,7 +235,6 @@ class CoursesController extends Controller {
         $course = new Courses();
         $form = $this->createForm('AppBundle\Form\CoursesType', $course, array('locations' => $this->getParameter("locations"),));
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $course->setStartdate(\DateTime::createFromFormat('d/m/Y', $course->getStartdate()));
@@ -280,7 +242,7 @@ class CoursesController extends Controller {
             $course->setEnddate(\DateTime::createFromFormat('d/m/Y', $course->getEnddate()));
 
             $course->setStatus(0); //Status por aprobar
-            
+
             $course->setRegister(new \DateTime());
 
             $user = $this->getUser();
@@ -296,7 +258,7 @@ class CoursesController extends Controller {
             //Enviar Email al Instructor y al Estudiante
             $asunto = "Lest Know: Curso Postulación";
 
-            $this->sendEmail($asunto, $course, $this->getParameter('notify_eamil') );
+            $this->sendEmail($asunto, $course, $this->getParameter('notify_eamil'));
 
             $this->addFlash('success', 'Cursos creado satisfactoriamente');
 
@@ -317,14 +279,11 @@ class CoursesController extends Controller {
      * @Security("has_role('ROLE_USUARIO')") 
      */
     public function showAction(Courses $course) {
-
         $deleteForm = $this->createDeleteForm($course);
         $registerForm = $this->createRegisterForm($course);
         $etiqueta = '';
         $clase = '';
-        $calificar= FALSE;
-
-
+        $calificar = FALSE;
         if ($this->getUser()->getRoles()[0] === 'ROLE_ADMIN' || $course->getUser()->getId() == $this->getUser()->getId()) { // El Usuario es Administrador 0 Instructor
             switch ($course->getStatus()) {
                 case (0): $etiqueta = "Por Aprobación";
@@ -341,9 +300,7 @@ class CoursesController extends Controller {
                     break;
             }
         } else {
-
             // El Usuario es un Estudiante
-
             if (1 == $course->getStatus()) { // Curso Aprobado
                 $infoReview = FALSE;
                 $status = 0;
@@ -364,26 +321,23 @@ class CoursesController extends Controller {
                         case (1):
                             //Estudiante Suscrito 
 
-                            if ($this->isRegistered($course)) {                                                                                           
- 
+                            if ($this->isRegistered($course)) {
+
                                 if (($course->isCompleted())) {
-                                    
+
                                     $etiqueta = "  Suscrito - Curso Finalizado ";
                                     $clase = "text-white bg-success rounded";
-                                    $calificar= TRUE;
-                                    
-                                } else {                                   
-                                    
-                                     if ($course->isActiveToRegister()) {
-                                         
+                                    $calificar = TRUE;
+                                } else {
+
+                                    if ($course->isActiveToRegister()) {
+
                                         $etiqueta = "  Suscrito  ";
                                         $clase = "text-white bg-primary rounded";
-                                        
                                     } else {
-                                        
+
                                         $etiqueta = "  Suscrito - Curso en Ejecución ";
                                         $clase = "text-white bg-primary rounded";
-                                        
                                     }
                                 }
                             }
@@ -399,12 +353,12 @@ class CoursesController extends Controller {
                 }
             }
         }
-      
+
         return $this->render('courses/show.html.twig', array(
                     'course' => $course,
-                    'delete_form' => $deleteForm->createView(),                    
-                    'register_form' => ($this->isRegistered($course) === false ) ? $registerForm->createView() : null,                   
-                    'isevaluated' => ($this->isEvaluated($course) !== false ) ? $this->isEvaluated($course) : null,                   
+                    'delete_form' => $deleteForm->createView(),
+                    'register_form' => ($this->isRegistered($course) === false ) ? $registerForm->createView() : null,
+                    'isevaluated' => ($this->isEvaluated($course) !== false ) ? $this->isEvaluated($course) : null,
                     'etiqueta' => $etiqueta,
                     'clase' => $clase,
                     'calificar' => $calificar,
@@ -421,9 +375,7 @@ class CoursesController extends Controller {
     public function viewAction(Courses $course) {
         //$deleteForm = $this->createDeleteForm($course);
         $editStatusForm = $this->createReviewForm($course);
-
         $infoReview = $this->isEvaluated($course);
-
         return $this->render('courses/view.html.twig', array(
                     'course' => $course,
                     //'delete_form' => $deleteForm->createView(),
@@ -442,14 +394,10 @@ class CoursesController extends Controller {
      * @Security("has_role('ROLE_USUARIO')") 
      */
     public function showinsAction(Courses $course) {
-
         $deleteForm = $this->createDeleteForm($course);
         $registerForm = $this->createRegisterForm($course);
-
         $infoReview = $this->isEvaluated($course);
-
         $users = ($course->getUsers() !== null) ? $course->getUsers()->toArray() : array();
-
         $usersInf = $usersA = array();
         foreach ($users as $value) {
             $usersA[] = $value->getId();
@@ -477,7 +425,6 @@ class CoursesController extends Controller {
      * @Security("has_role('ROLE_USUARIO') or has_role('ROLE_SUPER_ADMIN')") 
      */
     public function editAction(Request $request, Courses $course) {
-
         //Verificamos si el Curso es del Estudiante que està tratando de editar
         if ($this->getUser()->getRoles()[0] === 'ROLE_USUARIO' && $course->getUser()->getId() != $this->getUser()->getId()) {
 
@@ -500,9 +447,9 @@ class CoursesController extends Controller {
 
             $course->setStartdate(\DateTime::createFromFormat('d/m/Y', $course->getStartdate()));
             $course->setEnddate(\DateTime::createFromFormat('d/m/Y', $course->getEnddate()));
-            
-             $course->setUpdate(new \DateTime());
-             $course->setUpdateby($this->getUser());
+
+            $course->setUpdate(new \DateTime());
+            $course->setUpdateby($this->getUser());
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -580,7 +527,6 @@ class CoursesController extends Controller {
     public function reviewAction(Request $request, Courses $course) {
         $form = $this->createReviewForm($course);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();

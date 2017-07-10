@@ -21,11 +21,17 @@ class PaymentsRepository extends EntityRepository {
     public function findByCourseUser($user) {
         $query = $this->getEntityManager()
                 ->createQuery(
-                'SELECT c as course,SUM(p.amount) as tota,count(p) as tots FROM AppBundle:Courses c LEFT JOIN AppBundle:Payments p WITH p.course=c.id  WHERE c.user =:user and p.id is not NULL group by c.id '
+                'SELECT c as course, SUM(p.amount) as tota, count(p) as tots 
+                    FROM AppBundle:Courses c 
+                    LEFT JOIN AppBundle:Payments p 
+                    WITH p.course=c.id  
+                    WHERE c.user =:user and p.id is not NULL 
+                    group by c.id'
         );
         $query->setParameter('user', $user);
 
         $entities = $query->getResult();
+        
         return $entities;
     }
 

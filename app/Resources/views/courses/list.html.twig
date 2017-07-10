@@ -1,5 +1,9 @@
 {% extends 'base_a.html.twig' %}
-
+{% block stylesheets %}
+    <!-- Datatables -->    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css">
+    <link href="{{ asset('bundles/app/examples/css/datatables.min.css')}}" rel="stylesheet">
+{% endblock %}
 {% block body %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage-admin') }}">Inicio</a></li>
@@ -13,7 +17,8 @@
         <div class="col-lg-9">
             <form class="" action="{{ path('courses_index_list') }}" method="post" >
                 <div class="col-lg-8 fields-filter">
-                    <div class="col-lg-3" style=" padding: 0.1rem;"><select class="form-control"  name="category"  style=" padding: 0.1rem;">
+                    <div class="col-lg-3" style=" padding: 0.1rem;">
+                        <select class="form-control"  name="category"  style=" padding: 0.1rem;">
                             <option value=''>Categoría</option>
                             {% for category in coursesCategories %}
                                 <option value="{{category.id}}" {%if category.id== selCategory%}selected{%endif%}>{{category.name}}</option>
@@ -43,95 +48,126 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div >
-
-
-                {%if (pagination.getTotalItemCount|length==0)%}
-                    <p class="alert alert-warning"> No hay cursos
-                    </p>
-                {%else%}
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
+            <div >               
+               
+                    <table id="datatable-fixed-header" class="table table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>País</th>
+                                <th>Provincia</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in courses  %}
                                 <tr>
-                                    <th>{{ knp_pagination_sortable(pagination, '#', 'a.id') }}</th>
-                                    <th>Imagen</th>
-                                    <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Nombre', 'a.title') }}</th>
-                                    <th{% if pagination.isSorted('a.country') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'País', 'a.country') }}</th>
-                                    <th{% if pagination.isSorted('a.province') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Provincia', 'a.province') }}</th>
-                                    <th{% if pagination.isSorted('a.startdate') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Inicio', 'a.startdate') }}</th>
-                                    <th{% if pagination.isSorted('a.enddate') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Fin', 'a.enddate') }}</th>
-                                    <th{% if pagination.isSorted('a.status') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Estatus', 'a.status') }}</th>
+                                    <td class="text-center">{{  loop.index  }}</td>
+                                    <td><img src="{{ asset('uploads/photos/') }}{{course.photo}}" width="60" class="rounded"/></td>
+                                    <td><a href="{{ path('courses_view', { 'id': course.id }) }}" >{{ course.title|title }}</a></td>
+                                    <td> <span class="bfh-countries" data-country="{{course.country}}" data-flags="true"></span></td>
+                                    <td> <span class="bfh-states" data-country="{{course.country}}" data-state="{{course.province}}"></span></td>
+                                    <td class="text-center">{% if course.startdate %}{{ course.startdate|date('d/m/y') }}{% endif %}</td>
+                                    <td class="text-center">{% if course.enddate %}{{ course.enddate|date('d/m/y') }}{% endif %}</td>
+                                    <td class="text-center">
+
+                                        {%if course.status==1%}
+                                            <div class="list-status text-success"><i class="material-icons ">check</i> <span > Aprobado </span></div>  
+                                        {%endif%}
+
+                                        {%if course.status==0%}
+                                            <div class="list-status text-warning"><i class="material-icons ">warning</i> <span > Por aprobar </span></div>    
+                                        {%endif%}
+
+                                        {%if course.status==-1%}
+                                            <div class="list-status text-danger"><i class="material-icons ">clear</i> <span > Rechazado </span></div>    
+                                        {%endif%}
+
+                                        {%if course.status==2%}
+                                            <div class="list-status text-primary"><i class="material-icons ">timer_off</i> <span > Finalizado </span></div>    
+                                        {%endif%}
+
+
+                                    </td>
+
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% for course in pagination  %}
-                                    <tr>
-                                        <td class="text-center">{{  loop.index  }}</td>
-                                        <td><img src="{{ asset('uploads/photos/') }}{{course.photo}}" width="60" class="rounded"/></td>
-                                        <td><a href="{{ path('courses_view', { 'id': course.id }) }}" >{{ course.title|title }}</a></td>
-                                        <td> <span class="bfh-countries" data-country="{{course.country}}" data-flags="true"></span></td>
-                                        <td> <span class="bfh-states" data-country="{{course.country}}" data-state="{{course.province}}"></span></td>
-                                        <td class="text-center">{% if course.startdate %}{{ course.startdate|date('d/m/y') }}{% endif %}</td>
-                                        <td class="text-center">{% if course.enddate %}{{ course.enddate|date('d/m/y') }}{% endif %}</td>
-                                        <td class="text-center">
+                            {% endfor %}
 
-                                            {%if course.status==1%}
-                                                <div class="list-status text-success"><i class="material-icons ">check</i> <span > Aprobado </span></div>  
-                                            {%endif%}
-
-                                            {%if course.status==0%}
-                                                <div class="list-status text-warning"><i class="material-icons ">warning</i> <span > Por aprobar </span></div>    
-                                            {%endif%}
-
-                                            {%if course.status==-1%}
-                                                <div class="list-status text-danger"><i class="material-icons ">clear</i> <span > Rechazado </span></div>    
-                                            {%endif%}
-
-                                            {%if course.status==2%}
-                                                <div class="list-status text-primary"><i class="material-icons ">timer_off</i> <span > Finalizado </span></div>    
-                                            {%endif%}
-
-
-                                        </td>
-
-                                    </tr>
-                                {% endfor %}
-
-                            </tbody>
-                        </table>
-                        <div class="navigation">{{ knp_pagination_render(pagination) }}</div>
-                    </div>
-
-                {% endif %}
-
+                        </tbody>
+                    </table>
+               
             </div>
-
         </div>
-
     </div>
-
-
 {% endblock %}
 
+
 {% block javascripts %}
+    <script src="{{ asset('bundles/app/vendor/moment.min.js')}}" ></script>
+    <script src="{{ asset('bundles/app/vendor/bootstrap-daterangepicker/daterangepicker.js')}}" ></script>   
 
-    <script>
+    <!-- Datatables -->
+    <script src="{{ asset('bundles/app/vendor/jquery.dataTables.js')}}"></script>
+    <script src="{{ asset('bundles/app/vendor/dataTables.bootstrap.js')}}"></script>
 
+    <script type="text/javascript">
         $(function () {
+            $('input[id="form_daterange"]').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 1,
+                timePicker24Hour: true,
+                locale: {
+                    format: 'YYYY/MM/DD H:mm:ss'
+                }
+            });
+        });
+    </script>
 
+    <script type="text/javascript">
+        $(function () {
             $('#country').find("option:first").html("País").change(function () {
                 $('#state').find("option:first").html("Provincia");
             });
             $('#state').find("option:first").html("Provincia");
-
         });
-
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $('#datatable-fixed-header').DataTable(
+                    {
+                        language: {
+                            "sProcessing": "Procesando...",
+                            "sLengthMenu": "Mostrar _MENU_ registros",
+                            "sZeroRecords": "No se encontraron resultados",
+                            "sEmptyTable": "Ningún dato disponible en esta tabla",
+                            "sInfo": "Del _START_ al _END_ de un total de _TOTAL_ registros",
+                            "sInfoEmpty": "Del 0 al 0 de un total de 0 registros",
+                            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sSearch": "Buscar:",
+                            "sUrl": "",
+                            "sInfoThousands": ",",
+                            "sLoadingRecords": "Cargando...",
+                            "oPaginate": {
+                                "sFirst": "Primero",
+                                "sLast": "Último",
+                                "sNext": "Siguiente",
+                                "sPrevious": "Anterior"
+                            },
+                            "oAria": {
+                                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                            }
+                        }
+                    }
+            );
+        });
+    </script>
 {% endblock %}
-
-
-
 
 

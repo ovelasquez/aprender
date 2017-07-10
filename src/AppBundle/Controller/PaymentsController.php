@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\UserCourses;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Payment controller.
@@ -25,12 +26,95 @@ class PaymentsController extends Controller {
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
-
         $payments = $em->getRepository('AppBundle:Payments')->findBy(array("user" => $this->getUser()));
-
         return $this->render('payments/index.html.twig', array(
                     'payments' => $payments,
         ));
+    }
+
+    /**
+     * Lists all payment entities.
+     *
+     * @Route("/admin", name="payments_admin")
+     * @Method({"GET", "POST"})
+     */
+    public function adminAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $consulta = NULL;
+        $rangos = '';
+        $salida = '';
+
+        if ($request->isMethod('POST')) {
+            $var = $request->request->get('form');
+            $rango = explode("-", $var['daterange']);
+            $rango = str_replace("/", "-", $rango);
+
+            // $contador = 'SELECT currency, COUNT(c.id) FROM lkw_payments as c where c.status=:status and c.pdatetime BETWEEN (:desde) AND (:hasta) GROUP BY currency';
+            $datos = "SELECT p.id, c.id as course_id, c.title, u.id as user_id, u.name,u.last_name, p.status, p.pdatetime, p.currency, p.amount 
+                        FROM lkw_payments as p
+                        LEFT JOIN lkw_courses as c on c.id = p.course_id
+                        LEFT JOIN lkw_user as u on u.id = p.user_id
+                        WHERE p.status=:status and p.pdatetime BETWEEN (:desde) AND (:hasta)";
+            $parametros = array('status' => 'approved', 'desde' => trim($rango[0]), 'hasta' => trim($rango[1]));
+            //  $consulta = $this->ejecutarQuery($contador, $parametros);
+            $consultaDatos = $this->ejecutarQuery($datos, $parametros);
+            //dump($consultaDatos);     die();
+            /*
+              foreach ($consulta as &$valor) {
+              $salida = $salida . " {label: '" . ucwords($valor['currency']) . "', value:" . $valor['COUNT(c.id)'] . "},";
+              }
+
+             */
+        } else {
+             $datos = "SELECT p.id, c.id as course_id, c.title, u.id as user_id, u.name,u.last_name, p.status, p.pdatetime, p.currency, p.amount 
+                        FROM lkw_payments as p
+                        LEFT JOIN lkw_courses as c on c.id = p.course_id
+                        LEFT JOIN lkw_user as u on u.id = p.user_id
+                        WHERE p.status=:status ";
+            $parametros = array('status' => 'approved');           
+            $consultaDatos = $this->ejecutarQuery($datos, $parametros);
+        }
+
+
+        if (!$consulta) {
+            $hoy = new \DateTime('now');
+            $rangos = $hoy->format('Y/m/d H:i:s');
+            $rangos = $rangos . ' - ' . $rangos;
+        } else {
+            $rangos = $request->request->get('daterange');
+        }
+
+
+        //Creamos el formulario de Consulta
+        $form = $this->crearFormulario("payments_admin", $rangos);
+        $form->handleRequest($request);
+
+        return $this->render('payments/admin.html.twig', array(
+                    'payments' => $consultaDatos,
+                    'consultas' => '',
+                    'rango' => $rangos,
+                    'form' => $form->createView(),
+        ));
+    }
+
+    private function crearFormulario($url, $rangos) {
+        $form = $this->createFormBuilder()
+                ->setAction($this->generateUrl($url))
+                ->add('daterange', TextType::class, array(
+                    'label' => 'Rango de Fecha',
+                    'required' => true,
+                    'attr' => array('placeholder' => $rangos),
+                ))
+                ->getForm();
+        return $form;
+    }
+
+    private function ejecutarQuery($sql, $parametros) {
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($parametros);
+
+        return $stmt->fetchAll();
     }
 
     /**
@@ -41,18 +125,15 @@ class PaymentsController extends Controller {
      */
     public function statementAction() {
         $em = $this->getDoctrine()->getManager();
-
         $payments = $em->getRepository('AppBundle:Payments')->findByCourseUser($this->getUser());
-
+        
         $paymentsbyMonth = $em->getRepository('AppBundle:Payments')->findByCourseUserMonth($this->getUser());
-
+        
         $total = 0;
+       // dump($payments); die();
         foreach ($payments as $payment) {
             $total = $total + (int) $payment["tota"];
         }
-
-
-
         return $this->render('payments/statement.html.twig', array(
                     'payments' => $payments,
                     'total' => $total,
@@ -101,8 +182,6 @@ class PaymentsController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function registerpayAction(Request $request, $course_id) {
-        //dump($request);
-
         $ch = curl_init();
         $clientId = "ARvOCmpyGYFcaMCM3-FeCLi7hia0G51JLCoeGzBJeybvtlUgpmef-5B6PRBZFHH8BJvqiYdsiV2WjjE8";
         $secret = "EDYfinFWaXp7jR8ZxtkmwVzUHHVX0ta2D5byLZgCaFZDoG8wRXeUUllUBcJt40w_zQE5uZXwCj0N71vz";
@@ -121,13 +200,10 @@ class PaymentsController extends Controller {
             return $this->redirectToRoute('payments_new', array('course_id' => $course_id));
         else {
             $json = json_decode($result);
-            //dump($json);
         }
 
         $paymentID = $request->get("paymentId");
         $tokenID = $json->access_token;
-
-        //dump($request->get("paymentId"));
 
         $curl = curl_init('https://api.sandbox.paypal.com/v1/payments/payment/' . $paymentID);
         curl_setopt($curl, CURLOPT_POST, false);
@@ -181,7 +257,7 @@ class PaymentsController extends Controller {
     public function sendEmail($asunto, $course, $email) {
         $message = \Swift_Message::newInstance()
                 ->setSubject($asunto)
-                ->setFrom('marianamff@gmail.com')
+                ->setFrom($this->getParameter('notify_eamil'))
                 ->setTo([$course->getUser()->getEmail(), $email])
                 ->setBody(
                 $this->renderView(
