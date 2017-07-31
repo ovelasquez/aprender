@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -22,15 +23,9 @@ class CoursesType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder
-                ->add('category', EntityType::class, array(
-                    'class' => 'AppBundle:Coursecategories',
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
-                                ->orderBy('u.name', 'ASC');
-                    },
-                    'placeholder' => 'Seleccione',
-                    'required' => true,
-                ))
+                ->add('category', EntityType::class, array('class' => 'AppBundle:Coursecategories', 'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('u')->orderBy('u.name', 'ASC');
+                    }, 'placeholder' => 'Seleccione', 'required' => true,))
                 ->add('title', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control', 'placeholder' => 'Escribe algo distinto, que llame la atención')))
                 ->add('description', TextareaType::class, array('required' => true, 'attr' => array('class' => 'form-control', 'placeholder' => 'En 140 caracteres escribe sobre tu curso. Esta descripción estará en la página principal.')))
                 ->add('resume', TextareaType::class, array('required' => true, 'attr' => array('class' => 'form-control', 'placeholder' => 'Este es el momento que todos esperan, en 500 caracteres dino más sobre todo lo que quieras dar.')))
@@ -50,7 +45,10 @@ class CoursesType extends AbstractType {
                 ->add('enddate', TextType::class)
                 ->add('hour', TextType::class)
                 ->add('days', HiddenType::class)
-                ->add('cost', null, array('required' => true, 'placeholder' => 'Seleccione', 'attr' => array('class' => 'form-control',)))
+                ->add('cost', NumberType::class, array(
+                     'required' => true, 'attr' => array('class' => 'form-control',)
+                ))
+                //->add('cost', null, array('required' => true, 'placeholder' => 'Costo del Curso', 'attr' => array('class' => 'form-control',)))
                 ->add('currency', EntityType::class, array(
                     'class' => 'AppBundle:Currency',
                     'query_builder' => function (EntityRepository $er) {

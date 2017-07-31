@@ -88,7 +88,12 @@
 
                                     </div>
                                     <div class="media-right media-bottom">
-                                        <div style="height:100px" class="text-lg-center media-bottom" ><h2 style="padding-top: 2rem;">{{ course.currency.name }} {{ course.cost.price }}</h2></div>
+                                        <div style="height:100px" class="text-lg-center media-bottom" ><h2 style="padding-top: 2rem;">{{ course.currency.name }} 
+                                                {% if course.currency.name == 'Bs' %}
+                                                    {{course.cost|number_format(2, ',', '.')}} 
+                                                {% else %}
+                                                    {{course.cost|number_format(2, '.', ',')}}                        
+                                                {% endif %}</h2></div>
                                         <div  style="height:50px; width: 150px;" class="text-xs-center">
                                             <div class="rating">
                                                 <i class="material-icons">{%if (course.review>=1)%}star{%else%}star_border{%endif%}</i>

@@ -184,10 +184,12 @@
                             </div>
                         </li>
                     </ul>
-
+                               
                 </div>
             </div>
+                                 <br> <br>
         </div>
+                                
 
 
         <div class="col-md-4">
@@ -322,7 +324,12 @@
                 </div>
                 <div class="card-block">
                     <fieldset class="form-group">                        
-                        {{course.cost}}                        
+                        {{ course.currency.name}} 
+                        {% if course.currency.name == 'Bs' %}
+                            {{course.cost|number_format(2, ',', '.')}} 
+                        {% else %}
+                            {{course.cost|number_format(2, '.', ',')}}                        
+                        {% endif %}
                     </fieldset> 
                 </div>
             </div>

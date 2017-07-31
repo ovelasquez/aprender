@@ -84,7 +84,6 @@ class PaymentsController extends Controller {
             $rangos = $request->request->get('daterange');
         }
 
-
         //Creamos el formulario de Consulta
         $form = $this->crearFormulario("payments_admin", $rangos);
         $form->handleRequest($request);
@@ -125,12 +124,11 @@ class PaymentsController extends Controller {
      */
     public function statementAction() {
         $em = $this->getDoctrine()->getManager();
-        $payments = $em->getRepository('AppBundle:Payments')->findByCourseUser($this->getUser());
-        
+        $payments = $em->getRepository('AppBundle:Payments')->findByCourseUser($this->getUser());        
         $paymentsbyMonth = $em->getRepository('AppBundle:Payments')->findByCourseUserMonth($this->getUser());
         
         $total = 0;
-       // dump($payments); die();
+        //dump($payments); die();
         foreach ($payments as $payment) {
             $total = $total + (int) $payment["tota"];
         }

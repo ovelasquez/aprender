@@ -186,15 +186,13 @@ class Courses {
      */
     private $currency;
 
-    /**
-     * @var \AppBundle\Entity\Coursecosts
+   /**
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Coursecosts")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cost_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="cost", type="decimal", precision=19, scale=2)
      */
     private $cost;
+
 
     /**
      * @var \AppBundle\Entity\Typespublications
@@ -247,7 +245,6 @@ class Courses {
      * })
      */
     private $updateby;
-    
     private $review;
     private $byEvaluation;
 
@@ -651,29 +648,7 @@ class Courses {
         return $this->days;
     }
 
-    /**
-     * Set cost
-     *
-     * @param \AppBundle\Entity\Coursecosts $cost
-     *
-     * @return Courses
-     */
-    public function setCost(\AppBundle\Entity\Coursecosts $cost = null) {
-        $this->cost = $cost;
-
-        return $this;
-    }
-
-    /**
-     * Get cost
-     *
-     * @return \AppBundle\Entity\Coursecategories
-     */
-    public function getCost() {
-        return $this->cost;
-    }
-
-    /**
+   /**
      * Set type
      *
      * @param \AppBundle\Entity\Coursecategories $type
@@ -901,8 +876,7 @@ class Courses {
      *
      * @return Courses
      */
-    public function setRegister($register)
-    {
+    public function setRegister($register) {
         $this->register = $register;
 
         return $this;
@@ -913,8 +887,7 @@ class Courses {
      *
      * @return \DateTime
      */
-    public function getRegister()
-    {
+    public function getRegister() {
         return $this->register;
     }
 
@@ -925,8 +898,7 @@ class Courses {
      *
      * @return Courses
      */
-    public function setUpdate($update)
-    {
+    public function setUpdate($update) {
         $this->update = $update;
 
         return $this;
@@ -937,8 +909,7 @@ class Courses {
      *
      * @return \DateTime
      */
-    public function getUpdate()
-    {
+    public function getUpdate() {
         return $this->update;
     }
 
@@ -949,8 +920,7 @@ class Courses {
      *
      * @return Courses
      */
-    public function setUpdateby(\AppBundle\Entity\User $updateby = null)
-    {
+    public function setUpdateby(\AppBundle\Entity\User $updateby = null) {
         $this->updateby = $updateby;
 
         return $this;
@@ -961,8 +931,32 @@ class Courses {
      *
      * @return \AppBundle\Entity\User
      */
-    public function getUpdateby()
-    {
+    public function getUpdateby() {
         return $this->updateby;
     }
+    
+     /**
+     * Set cost
+     *
+     * @param string $cost
+     *
+     * @return Oscar
+     */
+    public function setCost($cost)
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * Get cost
+     *
+     * @return string
+     */
+    public function getCost()
+    {
+        return $this->cost;
+    }
+
 }
