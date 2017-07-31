@@ -1,0 +1,96 @@
+{% extends 'base_a.html.twig' %}
+{% block stylesheets %}   
+    <!-- Datatables -->    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css">
+    <link href="{{ asset('bundles/app/examples/css/datatables.min.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage-admin') }}">Inicio</a></li>        
+        <li class="breadcrumb-item">Usuarios</li>
+    </ol>
+    <h1>Lista de Usuarios</h1>
+
+    <table id="datatable-fixed-header" class="table table-striped table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Foto</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>                                
+                <th>País</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ loop.index  }}</a></td>
+                <td><img class="img-responsive avatar-view"   height="60" width="60" src="{{ asset('uploads/photos/')}}{{ user.photo }}" alt="{{ user.name }} {{ user.lastName }}" title="{{ user.name }} {{ user.lastName }}"></td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastName }}</td>                
+                <td>{{ user.country }}</td>
+                <td>{{ user.province }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('user_new') }}">Create a new user</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block javascripts %}
+ 
+
+    <!-- Datatables -->
+    <script src="{{ asset('bundles/app/vendor/jquery.dataTables.js')}}"></script>
+    <script src="{{ asset('bundles/app/vendor/dataTables.bootstrap.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#datatable-fixed-header').DataTable(
+                    {
+                        language: {
+                            "sProcessing": "Procesando...",
+                            "sLengthMenu": "Mostrar _MENU_ registros",
+                            "sZeroRecords": "No se encontraron resultados",
+                            "sEmptyTable": "Ningún dato disponible en esta tabla",
+                            "sInfo": "Del _START_ al _END_ de un total de _TOTAL_ registros",
+                            "sInfoEmpty": "Del 0 al 0 de un total de 0 registros",
+                            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sSearch": "Buscar:",
+                            "sUrl": "",
+                            "sInfoThousands": ",",
+                            "sLoadingRecords": "Cargando...",
+                            "oPaginate": {
+                                "sFirst": "Primero",
+                                "sLast": "Último",
+                                "sNext": "Siguiente",
+                                "sPrevious": "Anterior"
+                            },
+                            "oAria": {
+                                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                            }
+                        }
+                    }
+            );
+        });
+    </script>
+{% endblock %}

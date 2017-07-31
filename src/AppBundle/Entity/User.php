@@ -82,13 +82,13 @@ class User extends BaseUser
      */
     private $timezone;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="subnews", type="integer", nullable=true)
-     */
-    private $subnews;
     
+        /**
+     * @var boolean
+     *
+     * @ORM\Column(name="subnews", type="boolean", nullable=true)
+     */
+    private $subnews = false;    
     
     /**
      * @var \AppBundle\Entity\Coursecategories
@@ -372,21 +372,19 @@ class User extends BaseUser
     {
         return $this->timezone;
     }
-
+    
     /**
      * Set subnews
      *
-     * @param string $subnews
+     * @param boolean $subnews
      *
      * @return User
      */
     public function setSubnews($subnews)
     {
         $this->subnews = $subnews;
-
         return $this;
     }
-
     /**
      * Get subnews
      *
@@ -394,10 +392,9 @@ class User extends BaseUser
      */
     public function getSubnews()
     {
-        return (boolean)$this->subnews;
+        return $this->subnews;
     }
-    
-    
+           
     /**
      * Set coursecategories
      *

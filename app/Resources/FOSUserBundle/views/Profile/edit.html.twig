@@ -14,8 +14,6 @@
             {% include "FOSUserBundle:Profile:edit_content.html.twig" %}
         </div>
     </div>
-
-
 {% endblock fos_user_content %}
 {% block javascripts %}
     <script>
@@ -61,14 +59,8 @@
                 $('#fos_user_profile_form_photoupdate').val('{{app.user.namephoto}}');
 
                 //$("#form_course_edit").submit();
-
             });
-
-
             $('#fos_user_profile_form_photoupdate').val('{{app.user.namephoto}}');
-
-
-
             //Pais
             $('#fos_user_profile_form_country').find("option:first").html("País");
             $('#fos_user_profile_form_country').change(function () {
@@ -82,12 +74,6 @@
             });
             $('#province').find("option:first").html("Seleccione");
             $("#fos_user_profile_form_province").remove();
-
-
-
-
         });
     </script>
-
-
 {% endblock %}
