@@ -53,7 +53,7 @@
                                     {% if (1!=course.status and not course.isCompleted) %}
                                         <a href="{{ path('courses_edit', { 'id': course.id }) }}">{{ course.title | title }}</a> 
                                     {% else%}
-                                        <a href="{{ path('courses_show', { 'id': course.id }) }}">{{ course.title | title }}</a> 
+                                        <a href="{{ path('courses_show_ins', { 'id': course.id }) }}">{{ course.title | title }}</a> 
                                     {% endif%}
                                 </div>
                                 <div class="media-right media-middle">

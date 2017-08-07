@@ -13,60 +13,105 @@
         <li class="breadcrumb-item"><a href="{{ path('courses_index') }}">Cursos</a></li>
         <li class="breadcrumb-item active">{{ course.title }}</li>
     </ol>   
-    
+
     <h1 class="page-heading h2">{{ course.title }}</h1>      
-  
+
     <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="embed-responsive embed-responsive-16by9">
-                    {% if course.video != ''%}
+
+                    {% if course.video is not null and course.video is not empty %}
                         <iframe class="embed-responsive-item" src="{{ course.video }}" allowfullscreen=""></iframe>
-                        {% else %}                        
+                    {% else %}                        
                         <img src="{{ asset('uploads/photos') }}/{{ course.photo }}" alt="Avatar" style = "width:100%">
                     {% endif %}
+
+                </div>
+                <div class="card-block text-justify">
+                    {{ course.description|capitalize }}
+                </div>
+
+                <div class="card-block text-justify">
+                    <h4>Resumen:</h4>
+                    {{ course.resume|capitalize }}
+                </div>
+
+                <div class="card-block text-justify">
+                    <h4>Categoría:</h4>
+                    {{ course.category|capitalize }}
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CANTIDAD DE ALUMNOS:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
                 </div>
                 <div class="card-block">
-                    {{ course.description }}
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            Mínimos:
+                            <div class="input-group bootstrap-touchspin">                               
+                                {{ course.minstudent }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6'> 
+                        <div class="form-group">
+                            Máximos:
+                            <div class="input-group bootstrap-touchspin">                                                              
+                                {{ course.maxstudent}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>   
+
+            <!-- Lessons -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">CONOCIMIENTO NECESARIO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{ course.knowledge| capitalize }}                      
+                    </fieldset> 
+
                 </div>
             </div>
 
-            <!-- Lessons -->
-            <ul class="card list-group list-group-fit">
-                <li class="list-group-item">
+            <div class="card">
+                <div class="card-header bg-white">
                     <div class="media">
-                        <div class="media-left">
-                            <div class="text-muted">1.</div>
-                        </div>
-                        <div class="media-body">
-                            <h4>Conocimiento Necesario</h4>
-                            <p>
-                                {{ course.knowledge }}
-                            </p>
-                        </div>
-                        <div class="media-right">
-                            <small class="text-muted-light"></small>
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">HERRAMIENTAS:</h4>
+                            <p class="card-subtitle"></p> 
                         </div>
                     </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="media">
-                        <div class="media-left">
-                            <div class="text-muted">2.</div>
-                        </div>
-                        <div class="media-body">
-                            <h4>Herramientas</h4>
-                            <p>
-                                {{ course.tool }}
-                            </p>
-                        </div>
-                        <div class="media-right">
-                            <small class="text-muted-light"></small>
-                        </div>
-                    </div>
-                </li>
+                    <div class="card__options">
 
-            </ul>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{ course.tool| capitalize }}                      
+                    </fieldset> 
+
+                </div>
+            </div>
 
             <div class="card">
                 <div class="card-header bg-white">
@@ -210,9 +255,55 @@
 
                 </ul>
             </div>
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            <h4 class="card-title">COSTO DEL CURSO:</h4>
+                            <p class="card-subtitle"></p> 
+                        </div>
+                    </div>
+                    <div class="card__options">
+
+                    </div>
+                </div>
+                <div class="card-block">
+                    <fieldset class="form-group">                        
+                        {{ course.currency.name}} 
+                        {% if course.currency.name == 'Bs' %}
+                            {{course.cost|number_format(2, ',', '.')}} 
+                        {% else %}
+                            {{course.cost|number_format(2, '.', ',')}}                        
+                        {% endif %}
+                    </fieldset> 
+                </div>
+            </div>
+
+            {% if (course.user.id ==  app.user.id ) %}
+
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <div class="media">
+                            <div class="media-body media-middle">
+                                <h4 class="card-title">TIPO DE PUBLICACIÓN:</h4>
+                                <p class="card-subtitle"></p> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block">                    
+                        <fieldset class="form-group">
+                            {{course.type}}                          
+                        </fieldset>
+                    </div>
+                </div>
+
+            {% endif %}
+
+
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Ratings</h4>
+                    <h4 class="card-title">CALIFICACIÓN</h4>
                 </div>
                 <div class="card-block">
                     <div class="rating">
@@ -271,6 +362,9 @@
         </div>
 
     </div>
+    <br>
+    <br>
+    <br>
 
 
 {% endblock %}
