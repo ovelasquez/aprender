@@ -376,6 +376,17 @@ class CoursesController extends Controller {
         //$deleteForm = $this->createDeleteForm($course);
         $editStatusForm = $this->createReviewForm($course);
         $infoReview = $this->isEvaluated($course);
+
+        $users = ($course->getUsers() !== null) ? $course->getUsers()->toArray() : array();
+        $usersInf = $usersA = array();
+        foreach ($users as $value) {
+            $usersA[] = $value->getId();
+        }
+        $em = $this->getDoctrine()->getManager();
+        if (is_array($usersA)):
+            $usersInf = $em->getRepository('AppBundle:UserCourses')->findAllOrderedByUsers(implode(",", $usersA), $course);
+        endif;
+
         return $this->render('courses/view.html.twig', array(
                     'course' => $course,
                     //'delete_form' => $deleteForm->createView(),
@@ -383,6 +394,7 @@ class CoursesController extends Controller {
                     //'register_form' => ($this->isRegistered($course) === false && $course->isActiveToRegister()) ? $registerForm->createView() : null,
                     'registered' => ($this->isRegistered($course) === true ) ? 1 : 0,
                     'isevaluated' => ($infoReview !== false ) ? $infoReview : null,
+                    'usersInf' => $usersInf,
         ));
     }
 

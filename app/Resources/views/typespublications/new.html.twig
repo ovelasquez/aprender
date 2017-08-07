@@ -1,16 +1,82 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_a.html.twig' %}
+
+{% block stylesheets %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css">{% endblock %}
 
 {% block body %}
-    <h1>Typespublication creation</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a href="{{ path('homepage-admin') }}"> Inicio </a> </li>        
+        <li class="breadcrumb-item"> <a href="{{ path('typespublications_index') }}"> Tipo de Publicaciones</a> </li>
+        <li class="breadcrumb-item active"> Crear </li>
+    </ol>   
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('typespublications_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title text-primary-light">Tipo de Publicaciones</h4>
+            </div>
+            <div class="card-block p-2 bg-white">
+                {{ form_start(form) }} 
+
+                <div class="form-group row">
+                    <label for="website" class="col-sm-3 col-form-label">Nombre</label>
+                    <div class="col-sm-8 col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="material-icons md-18 text-muted">android</i>
+                            </span>
+                            {{ form_widget(form.name,{'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="website" class="col-sm-3 col-form-label">Moneda</label>
+                    <div class="col-sm-8 col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="material-icons md-18 text-muted">monetization_on</i>
+
+                            </span>
+                            {{ form_widget(form.currency,{'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="website" class="col-sm-3 col-form-label">Precio</label>
+                    <div class="col-sm-8 col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="material-icons md-18 text-muted">functions</i>
+
+                            </span>
+                            {{ form_widget(form.price,{'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block p-2 bg-white">
+
+                    <div class="form-group row">
+                        <div class="col-lg-4 offset-lg-4">
+                            <div class="">
+                                <div >
+                                    <input type="submit" value="Crear" id="save"  class="btn  btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>  
+                {{ form_end(form) }}
+            </div>
+        </div>   
+    </div>   
+
+{% endblock %}
+
+{% block javascripts %}
+
+
 {% endblock %}

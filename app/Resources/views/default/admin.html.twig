@@ -180,7 +180,14 @@
                                         <div class="media-right media-middle">
 
                                             <div class="text-xs-center">
-                                                <p><span class="tag tag-pill tag-danger mb-05">{{ course.cost }}</span></p>
+                                                <p><span class="tag tag-pill tag-success mb-05">
+                                                        {{ course.currency.name}}
+                                                        {% if course.currency.name == 'Bs' %}
+                                                            {{course.cost|number_format(2, ',', '.')}} 
+                                                        {% else %}
+                                                            {{course.cost|number_format(2, '.', ',')}}                        
+                                                        {% endif %}
+                                                    </span></p>
 
                                             </div>
                                         </div>
@@ -212,7 +219,7 @@
                                         <div class="media-right media-middle">
                                             <div class="text-xs-center">
                                                 <p><span class="tag tag-pill tag-success mb-05">
-                                                        {{ course.currency.name}} 
+                                                        {{ course.currency.name}}
                                                         {% if course.currency.name == 'Bs' %}
                                                             {{course.cost|number_format(2, ',', '.')}} 
                                                         {% else %}

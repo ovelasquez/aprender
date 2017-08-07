@@ -1,43 +1,81 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_a.html.twig' %}
+{% block stylesheets %}   
+    <!-- Datatables -->    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css">
+    <link href="{{ asset('bundles/app/examples/css/datatables.min.css')}}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-    <h1>Typespublications list</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage-admin') }}">Inicio</a></li>        
+        <li class="breadcrumb-item active">Tipo de Publicaciones</li>
+    </ol>
+    <h1>Lista de Tipo de Publicaciones</h1>
 
-   <table class="table">
+    <table id="datatable-fixed-header" class="table table-striped table-hover table-sm">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>Currency</th>
-                <th>Price</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Moneda</th>
+                <th>Precio</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-        {% for typespublication in typespublications %}
-            <tr>
-                <td><a href="{{ path('typespublications_show', { 'id': typespublication.id }) }}">{{ typespublication.id }}</a></td>
-                <td>{{ typespublication.name }}</td>
-                <td>{{ typespublication.currency }}</td>     
-                <td>{{ typespublication.price }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('typespublications_show', { 'id': typespublication.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('typespublications_edit', { 'id': typespublication.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for typespublication in typespublications %}
+                <tr>
+                    <td><a href="{{ path('typespublications_show', { 'id': typespublication.id }) }}">{{ typespublication.id }}</a></td>
+                    <td>{{ typespublication.name }}</td>
+                    <td>{{ typespublication.currency }}</td>     
+                    <td>{{ typespublication.price }}</td>
+                    <td>                         
+                        <a  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ver" href="{{ path('typespublications_show', { 'id': typespublication.id }) }}"><i class="fa fa-eye"></i></a>
+                        <a  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" href="{{ path('typespublications_edit', { 'id': typespublication.id }) }}"><i class="fa fa-pencil"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('typespublications_new') }}">Create a new typespublication</a>
-        </li>
-    </ul>
+    <a  class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Vuevo" href="{{ path('typespublications_new') }}"> Crear Tipo de Publicación </a>
+
+{% endblock %}
+{% block javascripts %}
+    <!-- Datatables -->
+    <script src="{{ asset('bundles/app/vendor/jquery.dataTables.js')}}"></script>
+    <script src="{{ asset('bundles/app/vendor/dataTables.bootstrap.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#datatable-fixed-header').DataTable(
+                    {
+                        language: {
+                            "sProcessing": "Procesando...",
+                            "sLengthMenu": "Mostrar _MENU_ registros",
+                            "sZeroRecords": "No se encontraron resultados",
+                            "sEmptyTable": "Ningún dato disponible en esta tabla",
+                            "sInfo": "Del _START_ al _END_ de un total de _TOTAL_ registros",
+                            "sInfoEmpty": "Del 0 al 0 de un total de 0 registros",
+                            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sSearch": "Buscar:",
+                            "sUrl": "",
+                            "sInfoThousands": ",",
+                            "sLoadingRecords": "Cargando...",
+                            "oPaginate": {
+                                "sFirst": "Primero",
+                                "sLast": "Último",
+                                "sNext": "Siguiente",
+                                "sPrevious": "Anterior"
+                            },
+                            "oAria": {
+                                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                            }
+                        }
+                    }
+            );
+        });
+    </script>
 {% endblock %}
