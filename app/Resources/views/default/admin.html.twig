@@ -16,52 +16,52 @@
 
 
     <div class="row">
-        
+
         <div class="card">
-                        <div class="card-header bg-white">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h4 class="card-title">Pagos Recibidos</h4>
-                                    <p class="card-subtitle"></p>
-                                </div>
-                                <div class="media-right media-middle">
-                                    <a class="btn btn-sm btn-primary-outline" href="{{ path('payments_admin') }}">Payments</a>
-                                </div>
+            <div class="card-header bg-white">
+                <div class="media">
+                    <div class="media-body">
+                        <h4 class="card-title">Pagos Recibidos</h4>
+                        <p class="card-subtitle"></p>
+                    </div>
+                    <div class="media-right media-middle">
+                        <a class="btn btn-sm btn-primary-outline" href="{{ path('payments_admin') }}">Payments</a>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-fit mb-0">                           
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            Bs. {{ sumaBolivares |number_format(2, ',', '.')  }}
+                        </div>
+                        <div class="media-right media-middle">
+
+                            <div class="text-xs-center">
+                                <p><span class="tag tag-pill tag-danger mb-05">Bolívares</span></p>
+
                             </div>
                         </div>
-                        <ul class="list-group list-group-fit mb-0">                           
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="media-body media-middle">
-                                            Bs. {{ sumaBolivares |number_format(2, ',', '.')  }}
-                                        </div>
-                                        <div class="media-right media-middle">
+                    </div>
+                </li>
 
-                                            <div class="text-xs-center">
-                                                <p><span class="tag tag-pill tag-danger mb-05">Bolívares</span></p>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-body media-middle">
+                            $ {{ sumaDolares |number_format(2, ',', '.') }}
+                        </div>
+                        <div class="media-right media-middle">
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="media-body media-middle">
-                                            $ {{ sumaDolares |number_format(2, ',', '.') }}
-                                        </div>
-                                        <div class="media-right media-middle">
+                            <div class="text-xs-center">
+                                <p><span class="tag tag-pill tag-danger mb-05">Dolares</span></p>
 
-                                            <div class="text-xs-center">
-                                                <p><span class="tag tag-pill tag-danger mb-05">Dolares</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            
-                        </ul>
-                    </div>                                                      
+            </ul>
+        </div>                                                      
     </div>
 
 
@@ -74,7 +74,7 @@
 
         <div class="row">
             <div class="col-md-6">
-           
+
                 <div class="card">
                     <div class="card-block">                        
                         <h4 class="card-title">Usuarios</h4>
@@ -91,20 +91,20 @@
                                     <p class="card-subtitle"></p>
                                 </div>
                                 <div class="media-right media-middle">
-                                    <a class="btn btn-sm btn-primary-outline" href="">Usuarios</a>
+                                    <a class="btn btn-sm btn-primary-outline" href="{{ path('user_index') }}">Usuarios</a>
                                 </div>
                             </div>
                         </div>
                         <ul class="list-group list-group-fit mb-0">
-                            {% for urse in usersPorConfirmar %}
+                            {% for user in usersPorConfirmar %}
                                 <li class="list-group-item">
                                     <div class="media">
                                         <div class="media-body media-middle">
-                                            <a href="">{{ urse.name|title }} {{ urse.lastname|title }}</a>
+                                            <a href="{{ path('user_edit', { 'id': user.id }) }}">{{ user.name|title }} {{ user.lastname|title }}</a>
                                         </div>
                                         <div class="media-right media-middle">
                                             <div class="text-xs-center">
-                                                <p><span class="tag tag-pill tag-danger mb-05">{{ urse.country| country_name |upper }}</span></p>
+                                                <p><span class="tag tag-pill tag-danger mb-05">{{ user.country| country_name |upper }}</span></p>
 
                                             </div>
                                         </div>
@@ -148,19 +148,14 @@
                 {% endif %}
             </div>
 
-
-
             <div class="col-md-6">
-               
+
                 <div class="card">
                     <div class="card-block">
                         <h5 class="card-title">Cursos</h5>
                         <div class="chart" id="donut-cursos" style="width: 100%; height:230px;"></div>
                     </div>
-
                 </div>
-
-
 
                 {% if (cousesPorAprobar|length > 0) %}
                     <div class="card">
@@ -216,7 +211,14 @@
                                         </div>
                                         <div class="media-right media-middle">
                                             <div class="text-xs-center">
-                                                <p><span class="tag tag-pill tag-success mb-05">{{ course.cost }}</span></p>
+                                                <p><span class="tag tag-pill tag-success mb-05">
+                                                        {{ course.currency.name}} 
+                                                        {% if course.currency.name == 'Bs' %}
+                                                            {{course.cost|number_format(2, ',', '.')}} 
+                                                        {% else %}
+                                                            {{course.cost|number_format(2, '.', ',')}}                        
+                                                        {% endif %}
+                                                    </span></p>
                                             </div>
                                         </div>
                                     </div>

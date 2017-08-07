@@ -1,16 +1,245 @@
-{% extends 'base.html.twig' %}
-
+{% extends 'base_a.html.twig' %}
 {% block body %}
-    <h1>User creation</h1>
+    <ol class="breadcrumb">
+        {% if is_granted("ROLE_USUARIO") %}
+            <li class="breadcrumb-item"><a href="{{ path('instructor') }}">Inicio</a></li>
+            {% else %}
+            <li class="breadcrumb-item"><a href="{{ path('homepage-admin') }}">Inicio</a></li>
+            {% endif %}
+        <li class="breadcrumb-item"><a href="{{ path('user_index') }}">Usuarios</a></li>
+        <li class="breadcrumb-item active">Crear Cuenta</li>
+    </ol>
+    <div class="row">
+        <div class="col-lg-12">
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title text-primary-light">Cuenta</h4>
+                </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-    </ul>
+                <div class="card-block p-2 bg-white">
+                    {{ form_start(form) }}                    
+                    <div class="form-group row">
+                        <label for="avatar" class="col-sm-3 col-form-label">Foto de perfil</label>
+                        <div class="col-sm-9">
+                            <div class="media">
+                                <div class="media-left">
+                                    <div class="icon-block rounded">
+                                        <i class="material-icons text-muted-light md-36" id="icon-p">photo</i>
+
+                                    </div>
+                                </div>
+                                <div class="media-body media-middle">
+                                    <label class="custom-file m-0">
+                                        {{ form_widget(form.photo,{'attr':{'class':'w-75'} }) }}         
+                                        <span class="custom-file-control w-75"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Nombre completo</label>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_widget(form.name,{'attr': {'class': 'form-control','placeholder':"Nombre"}}) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_widget(form.lastName,{'attr': {'class': 'form-control','placeholder':"Apellido"}}) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="email" class="col-sm-3 col-form-label">Correo</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <i class="material-icons md-18 text-muted">mail</i>
+                                </span>
+                                {{ form_widget(form.email,{'attr': {'class': 'form-control','placeholder':""}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="website" class="col-sm-3 col-form-label">Usuario</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2">
+                                    <i class="material-icons md-18 text-muted">person</i>
+                                </span>
+                                {{ form_widget(form.username,{'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-3 col-form-label">Contraseña</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon3">
+                                    <i class="material-icons md-18 text-muted">lock</i>
+                                </span>
+                                {{ form_widget(form.plainPassword.first,{'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-3 col-form-label">Confirmar Contraseña</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon3">
+                                    <i class="material-icons md-18 text-muted">lock</i>
+                                </span>
+                                {{ form_widget(form.plainPassword.second,{'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="website" class="col-sm-3 col-form-label">Website</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2">
+                                    <i class="material-icons md-18 text-muted">language</i>
+                                </span>
+                                {{ form_widget(form.website,{'attr': {'class': 'form-control','placeholder':"http://www."}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="website" class="col-sm-3 col-form-label">Ingresa la url de un video en youtube o vimeo</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2">
+                                    <i class="material-icons md-18 text-muted">videocam</i>
+                                </span>
+                                {{ form_widget(form.video,{'attr': {'class': 'form-control','placeholder':"http://www."}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="website" class="col-sm-3 col-form-label">País</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2">
+                                    <i class="material-icons md-18 text-muted">public</i>
+                                </span>
+                                {{ form_widget(form.country,{'attr':{ 'class':'form-control bfh-countries', 'id':'appbundle_user_country', 'required':'required', 'data-country': user.country ,  'style':' padding: 0.1rem;' } }) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="province" class="form-group row">
+                        <label for="website" class="col-sm-3 col-form-label">Provincia</label>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2">
+                                    <i class="material-icons md-18 text-muted">place</i>
+                                </span>                               
+                                {{ form_widget(form.province,{'attr':{ 'class':'form-control input-medium  bfh-states', 'required':'required', 'data-country':'appbundle_user_country',  'data-state': user.province , 'style':' padding: 0.1rem;' } }) }}
+                                <select class="form-control input-medium  bfh-states" required="required" id="province" name="appbundle_user[province]" data-country="appbundle_user_country"  data-state={{ user.province }} style=" padding: 0.1rem;"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="coursecategories" class="col-sm-3 col-form-label">Categorías de Interes</label>
+                        <div class="col-sm-8 col-md-8">{{ form_widget(form.coursecategories,{'attr': {'class': 'contControl'}}) }}</div>
+                    </div>      
+
+                    <div class="form-group text-xs-center">
+                        <label class="custom-control custom-checkbox m-0">
+                            {{ form_widget(form.subnews,{'attr': {'class': 'custom-control-input'}}) }}
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Subscribirse al boletín</span>
+                        </label>  
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-lg-4 offset-lg-4">
+                            <div class="">
+                                <div >
+                                    <input type="submit" value="Enviar" id="save"  class="btn  btn-primary btn-block" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $("#appbundle_user_coursecategories input[type=checkbox]").addClass("custom-control-input").wrap("<label class='custom-control custom-checkbox m-0'></label>");
+            $("#appbundle_user_coursecategories input[type=checkbox]").after('<span class="custom-control-indicator"></span><span class="custom-control-description">Subscribe to Newsletter</span>');
+            $("#appbundle_user_coursecategories label.custom-checkbox").each(function () {
+                $(this).addClass("col-lg-3 col-md-6 col-sm-12");
+                $(this).find(".custom-control-description").html($(this).next("label").html());
+                $(this).prop("id", $(this).next("label").prop("id"));
+                $(this).next("label").remove();
+            });
+            $("#appbundle_user_photo").change(function () {
+                $("#icophoto").show();
+                $("#photo").remove();
+
+                var str = $('#appbundle_user_photo').val();
+                var n = str.indexOf("\\");
+                if (n !== -1) {
+                    str = str.split('\\');
+                } else {
+                    n = str.indexOf('/');
+                    if (n !== -1) {
+                        str = str.split('/');
+                    } else {
+                        str = [str];
+                    }
+                }
+                $(".custom-file-control").addClass("custom-file-control-o");
+                $(".custom-file-control").html(str[str.length - 1]);
+
+
+            });
+
+            $("#save").click(function () {
+
+                if ($("#photo").attr("src") !== undefined) {
+                    $('#appbundle_user_photo').prop("required", "");
+                } else {
+                    $('#appbundle_user_photo').prop("required", "required");
+                }
+
+               
+
+                //$("#form_course_edit").submit();
+            });
+            
+
+            //Pais
+            $('#appbundle_user_country').find("option:first").html("País");
+            $('#appbundle_user_country').change(function () {
+                $('#province').find("option:first").html("Provincia");
+
+                if ($('#province option').length <= 1) {
+                    $('#province').prop("required", "");
+                } else {
+                    $('#province').prop("required", "required");
+                }
+            });
+            $('#province').find("option:first").html("Seleccione");
+            $("#appbundle_user_province").remove();
+        });
+    </script>
 {% endblock %}
