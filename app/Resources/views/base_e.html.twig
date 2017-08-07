@@ -41,7 +41,12 @@
         <button class="navbar-toggler" type="button" data-toggle="sidebar"></button>
 
         <!-- Brand -->
-        <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% if is_granted("ROLE_USUARIO") %}
+            <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+            {% else %}
+            <a href="{{ path('homepage-admin') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+            {% endif %}
+
 
         <!-- Search -->
 
@@ -85,15 +90,15 @@
                     <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="false"><img src="{{ asset('uploads/photos') }}/{{app.user.namephoto}}" alt="Avatar" class="rounded-circle" height="40"></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="Preview">
 
-                        
+
                         <a class="dropdown-item" href="{{ path('fos_user_profile_edit') }}">
                             <i class="material-icons">person</i> Editar Cuenta
                         </a>
-                            
+
                         <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}">
                             <i class="material-icons">lock</i> Salir
                         </a>
-                        
+
                     </div>
                 </li>
                 <!-- // END User dropdown -->
@@ -153,11 +158,11 @@
                     <li class="sidebar-menu-item">
                         <a class="sidebar-menu-button" href="{{ path('payments_index') }}">
                             <i class="sidebar-menu-icon material-icons">monetization_on</i> Pagos 
-                            
+
                         </a>
                     </li>
 
-                    
+
                 </ul>
 
                 <!-- // END Components Menu -->

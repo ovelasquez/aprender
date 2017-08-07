@@ -28,6 +28,7 @@ class PhotoUploadListener {
 
     public function preUpdate(PreUpdateEventArgs $args) {
         $entity = $args->getEntity();
+        
 
         if ($entity instanceof User || $entity instanceof Courses) :
             $this->uploadFile($entity);
@@ -51,14 +52,20 @@ class PhotoUploadListener {
 
         $file = $entity->getPhoto();
 
+
         // only upload new files
         if (!$file instanceof UploadedFile) {
             return;
         }
+        
 
         $fileName = $this->uploader->upload($file);
+       
         
         $entity->setPhoto(new File($fileName, false));
+        
+         
+         
     }
 
 }

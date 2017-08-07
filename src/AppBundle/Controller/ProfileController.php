@@ -66,6 +66,7 @@ class ProfileController extends Controller
         }
         
         $fileOld = $user->getPhoto();
+       
 
         /** @var $dispatcher EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');

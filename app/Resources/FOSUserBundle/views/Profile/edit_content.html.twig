@@ -3,7 +3,7 @@
     <div class="card-header">
         <h4 class="card-title text-primary-light">Cuenta</h4>
     </div>
-    
+
     <div class="card-block p-2 bg-white">
         {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit','id': 'fos_user_profile_edit' } }) }}
         {% if not form.vars.valid %}
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-                            
+
         <div class="form-group row">
             <label for="name" class="col-sm-3 col-form-label">Nombre completo</label>
             <div class="col-sm-8">
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-                    
+
         <div class="form-group row">
             <label for="email" class="col-sm-3 col-form-label">Correo</label>
             <div class="col-sm-8 col-md-8">
@@ -69,7 +69,7 @@
                 </div>
             </div>
         </div>
-                
+
         <div class="form-group row">
             <label for="website" class="col-sm-3 col-form-label">Usuario</label>
             <div class="col-sm-8 col-md-8">
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </div>
-                
+
         <div class="form-group row">
             <label for="password" class="col-sm-3 col-form-label">Contraseña</label>
             <div class="col-sm-8 col-md-8">
@@ -93,7 +93,7 @@
                 </div>
             </div>
         </div>
-                    
+
         <div class="form-group row">
             <label for="password" class="col-sm-3 col-form-label">Confirmar Contraseña</label>
             <div class="col-sm-8 col-md-8">
@@ -156,7 +156,7 @@
                 </div>
             </div>
         </div>
-                
+
         <div class="form-group row">
             <label for="coursecategories" class="col-sm-3 col-form-label">Categorías de Interes</label>
             <div class="col-sm-8 col-md-8">{{ form_widget(form.coursecategories,{'attr': {'class': 'contControl'}}) }}</div>

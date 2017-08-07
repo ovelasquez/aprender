@@ -131,6 +131,7 @@
                             {{ form_errors(form.resume) }}
                             {{ form_widget(form.resume,{ 'attr': {'class': 'form-control col-md-10','maxlength':500,'size':10,'style':'height: 200px;','placeholder':'Este es el momento que todos esperan, en 500 caracteres dinos más sobre todo lo que quieres dar.'} }) }}                   
                         </fieldset></div>
+
                     <div class="card" style="border: none; box-shadow: none"><fieldset class="form-group">   
                             <div class="card-header bg-white" style="border: none; padding-left: 0; padding-right: 0">
                                 {{ form_label(form.photo, 'Carga una imagen:') }}
@@ -142,7 +143,8 @@
                                             <p>{{tooltips.photo|raw}}</p>
                                         </div>
                                     </div>
-                                </div></div>
+                                </div>
+                            </div>
 
 
                             <div class="media">
@@ -499,7 +501,7 @@
 
         $(function () {
 
-          //  orderSelect($("#appbundle_courses_category"))
+            //  orderSelect($("#appbundle_courses_category"))
 
             $(".day-week").click(function () {
                 if (!$(this).hasClass("active")) {

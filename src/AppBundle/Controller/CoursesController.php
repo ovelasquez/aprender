@@ -276,7 +276,7 @@ class CoursesController extends Controller {
      *
      * @Route("/{id}", name="courses_show")
      * @Method("GET")
-     * @Security("has_role('ROLE_USUARIO')") 
+     * @Security("has_role('ROLE_USUARIO') or has_role('ROLE_SUPER_ADMIN')") 
      */
     public function showAction(Courses $course) {
         $deleteForm = $this->createDeleteForm($course);

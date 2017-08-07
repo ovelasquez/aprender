@@ -25,26 +25,20 @@
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
-            <tr>
-                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ loop.index  }}</a></td>
-                <td><img class="img-responsive avatar-view"   height="60" width="60" src="{{ asset('uploads/photos/')}}{{ user.photo }}" alt="{{ user.name }} {{ user.lastName }}" title="{{ user.name }} {{ user.lastName }}"></td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.lastName }}</td>                
-                <td>{{ user.country }}</td>
-                <td>{{ user.province }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ loop.index  }}</a></td>
+                    <td><img class="img-responsive avatar-view"   height="60" width="60" src="{{ asset('uploads/photos/')}}{{ user.photo }}" alt="{{ user.name }} {{ user.lastName }}" title="{{ user.name }} {{ user.lastName }}"></td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.lastName }}</td>                
+                    <td><span class="bfh-countries" data-country="{{ user.country }}" data-flags="true"></span></td>
+                    <td><span class="bfh-states" data-country="{{ user.country }}" data-state="{{ user.province }}"></span></td>
+                    <td>
+                        <a  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ver" href="{{ path('user_show', { 'id': user.id }) }}"><i class="fa fa-eye"></i></a>
+                        <a  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" href="{{ path('user_edit', { 'id': user.id }) }}"><i class="fa fa-pencil"></i></a>                       
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -55,7 +49,7 @@
     </ul>
 {% endblock %}
 {% block javascripts %}
- 
+
 
     <!-- Datatables -->
     <script src="{{ asset('bundles/app/vendor/jquery.dataTables.js')}}"></script>

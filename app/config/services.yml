@@ -18,13 +18,16 @@ services:
         class: AppBundle\Form\RegistrationType
         tags:
             - { name: form.type, alias: app_user_registration }
+                        
     app.form.edituser:
         class: AppBundle\Form\ProfileEditType
         tags:
             - { name: form.type, alias: app_user_profile }
+    
     app.photo_uploader:
         class: AppBundle\FileUploader
         arguments: ['%photos_directory%']
+    
     app.doctrine_photo_listener:
         class: AppBundle\EventListener\PhotoUploadListener
         arguments: ['@app.photo_uploader']
@@ -32,10 +35,12 @@ services:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postLoad }            
+   
     app.doctrine_course:
         class: AppBundle\EventListener\CourseListener        
         tags:
             - { name: doctrine.event_listener, event: postLoad }        
+    
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
