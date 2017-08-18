@@ -41,7 +41,11 @@
         <button class="navbar-toggler" type="button" data-toggle="sidebar"></button>
 
         <!-- Brand -->
-        <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% if is_granted("ROLE_USUARIO") %}       
+            <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% else %}    
+            <a href="{{ path('homepage-admin') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% endif %}     
 
         <!-- Search -->
         <form class="navbar-search-form hidden-sm-down"  method="post" action="{{ path('courses_indexall') }}">

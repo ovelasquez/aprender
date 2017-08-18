@@ -39,7 +39,11 @@
 
 
         <!-- Brand -->
-        <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% if is_granted("ROLE_USUARIO") %}       
+            <a href="{{ path('homepage') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% else %}    
+            <a href="{{ path('homepage-admin') }}" class="navbar-brand"><img src="{{ asset('bundles/app/images/logo.png') }}" alt="LetsKnow" ></a>
+        {% endif %}     
 
         <ul class="nav navbar-nav hidden-sm-down">
             <!--li class="nav-item">
